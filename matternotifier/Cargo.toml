@@ -1,9 +1,12 @@
 [package]
 name = "matternotifier"
 version = "0.1.0"
-authors = ["Guillaume Leroi <guillaume-externe.leroi@enedis.fr>"]
+authors = ["Guillaume Leroi <leroi.g@gmail.com>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+mm = { path = "../mm" }
+hyper = "~0.11"
+futures = "^0.1.23"
