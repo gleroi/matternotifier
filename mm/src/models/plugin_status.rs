@@ -53,17 +53,17 @@ impl PluginStatus {
 /// State of the plugin
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum State {
-    #[serde(rename = "null")]
-    Null,
-    #[serde(rename = "null")]
-    Null,
-    #[serde(rename = "null")]
-    Null,
-    #[serde(rename = "null")]
-    Null,
-    #[serde(rename = "null")]
-    Null,
-    #[serde(rename = "null")]
-    Null,
+    #[serde()]
+    NotRunning,
+    #[serde()]
+    Starting,
+    #[serde()]
+    Running,
+    #[serde()]
+    FailedToStart,
+    #[serde()]
+    FailedToStayRunning,
+    #[serde()]
+    Stopping,
 }
 

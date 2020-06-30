@@ -39,7 +39,7 @@ pub trait FilesApi {
     fn files_file_id_preview_get(&self, file_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
     fn files_file_id_public_get(&self, file_id: &str, h: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
     fn files_file_id_thumbnail_get(&self, file_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn files_post(&self, channel_id: Option<&str>, filename: Option<&str>, files: Option<std::path::PathBuf>, channel_id: Option<&str>, client_ids: Option<&str>) -> Box<dyn Future<Item = crate::models::InlineResponse201, Error = Error<serde_json::Value>>>;
+    fn files_post(&self, channel_id: Option<&str>, filename: Option<&str>, files: Option<std::path::PathBuf>, client_ids: Option<&str>) -> Box<dyn Future<Item = crate::models::InlineResponse201, Error = Error<serde_json::Value>>>;
 }
 
 impl<C: hyper::client::Connect>FilesApi for FilesApiClient<C> {
@@ -102,7 +102,7 @@ impl<C: hyper::client::Connect>FilesApi for FilesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn files_post(&self, channel_id: Option<&str>, filename: Option<&str>, files: Option<std::path::PathBuf>, channel_id: Option<&str>, client_ids: Option<&str>) -> Box<dyn Future<Item = crate::models::InlineResponse201, Error = Error<serde_json::Value>>> {
+    fn files_post(&self, channel_id: Option<&str>, filename: Option<&str>, files: Option<std::path::PathBuf>, client_ids: Option<&str>) -> Box<dyn Future<Item = crate::models::InlineResponse201, Error = Error<serde_json::Value>>> {
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/files".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

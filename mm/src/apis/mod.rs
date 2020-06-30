@@ -80,8 +80,6 @@ pub use self::integration_actions_api::{ IntegrationActionsApi, IntegrationActio
 mod jobs_api;
 pub use self::jobs_api::{ JobsApi, JobsApiClient };
 mod ldap_api;
-pub use self::ldap_api::{ LDAPApi, LDAPApiClient };
-mod ldap_api;
 pub use self::ldap_api::{ LdapApi, LdapApiClient };
 mod o_auth_api;
 pub use self::o_auth_api::{ OAuthApi, OAuthApiClient };

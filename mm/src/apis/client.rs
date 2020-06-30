@@ -18,7 +18,6 @@ pub struct APIClient {
     groups_api: Box<dyn crate::apis::GroupsApi>,
     integration_actions_api: Box<dyn crate::apis::IntegrationActionsApi>,
     jobs_api: Box<dyn crate::apis::JobsApi>,
-    ldap_api: Box<dyn crate::apis::LDAPApi>,
     ldap_api: Box<dyn crate::apis::LdapApi>,
     o_auth_api: Box<dyn crate::apis::OAuthApi>,
     open_graph_api: Box<dyn crate::apis::OpenGraphApi>,
@@ -57,7 +56,6 @@ impl APIClient {
             groups_api: Box::new(crate::apis::GroupsApiClient::new(rc.clone())),
             integration_actions_api: Box::new(crate::apis::IntegrationActionsApiClient::new(rc.clone())),
             jobs_api: Box::new(crate::apis::JobsApiClient::new(rc.clone())),
-            ldap_api: Box::new(crate::apis::LDAPApiClient::new(rc.clone())),
             ldap_api: Box::new(crate::apis::LdapApiClient::new(rc.clone())),
             o_auth_api: Box::new(crate::apis::OAuthApiClient::new(rc.clone())),
             open_graph_api: Box::new(crate::apis::OpenGraphApiClient::new(rc.clone())),
@@ -132,10 +130,6 @@ impl APIClient {
 
     pub fn jobs_api(&self) -> &dyn crate::apis::JobsApi{
         self.jobs_api.as_ref()
-    }
-
-    pub fn ldap_api(&self) -> &dyn crate::apis::LDAPApi{
-        self.ldap_api.as_ref()
     }
 
     pub fn ldap_api(&self) -> &dyn crate::apis::LdapApi{

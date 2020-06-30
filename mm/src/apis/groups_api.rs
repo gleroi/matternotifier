@@ -50,7 +50,6 @@ pub trait GroupsApi {
     fn groups_group_id_teams_team_id_link_post(&self, group_id: &str, team_id: &str) -> Box<dyn Future<Item = crate::models::GroupSyncableTeam, Error = Error<serde_json::Value>>>;
     fn groups_group_id_teams_team_id_patch_put(&self, group_id: &str, team_id: &str, inline_object74: crate::models::InlineObject74) -> Box<dyn Future<Item = crate::models::GroupSyncableTeam, Error = Error<serde_json::Value>>>;
     fn ldap_groups_remote_id_link_delete(&self, remote_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_groups_by_channels_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>, filter_allow_reference: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::Map>, Error = Error<serde_json::Value>>>;
     fn teams_team_id_groups_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>, filter_allow_reference: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::Group>, Error = Error<serde_json::Value>>>;
     fn users_user_id_groups_get(&self, user_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Group>, Error = Error<serde_json::Value>>>;
 }
@@ -247,24 +246,6 @@ impl<C: hyper::client::Connect>GroupsApi for GroupsApiClient<C> {
             .with_auth(__internal_request::Auth::Basic)
         ;
         req = req.with_path_param("remote_id".to_string(), remote_id.to_string());
-
-        req.execute(self.configuration.borrow())
-    }
-
-    fn teams_team_id_groups_by_channels_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>, filter_allow_reference: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::Map>, Error = Error<serde_json::Value>>> {
-        let mut req = __internal_request::Request::new(hyper::Method::Get, "/teams/{team_id}/groups_by_channels".to_string())
-            .with_auth(__internal_request::Auth::Basic)
-        ;
-        if let Some(ref s) = page {
-            req = req.with_query_param("page".to_string(), s.to_string());
-        }
-        if let Some(ref s) = per_page {
-            req = req.with_query_param("per_page".to_string(), s.to_string());
-        }
-        if let Some(ref s) = filter_allow_reference {
-            req = req.with_query_param("filter_allow_reference".to_string(), s.to_string());
-        }
-        req = req.with_path_param("team_id".to_string(), team_id.to_string());
 
         req.execute(self.configuration.borrow())
     }
