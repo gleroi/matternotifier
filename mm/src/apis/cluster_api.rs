@@ -33,11 +33,11 @@ impl<C: hyper::client::Connect> ClusterApiClient<C> {
 }
 
 pub trait ClusterApi {
-    fn cluster_status_get(&self, ) -> Box<dyn Future<Item = Vec<crate::models::ClusterInfo>, Error = Error<serde_json::Value>>>;
+    fn cluster_status_get(&self, ) -> Box<dyn Future<Output = Result<Vec<crate::models::ClusterInfo>, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>ClusterApi for ClusterApiClient<C> {
-    fn cluster_status_get(&self, ) -> Box<dyn Future<Item = Vec<crate::models::ClusterInfo>, Error = Error<serde_json::Value>>> {
+    fn cluster_status_get(&self, ) -> Box<dyn Future<Output = Result<Vec<crate::models::ClusterInfo>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/cluster/status".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

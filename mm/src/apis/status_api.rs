@@ -33,13 +33,13 @@ impl<C: hyper::client::Connect> StatusApiClient<C> {
 }
 
 pub trait StatusApi {
-    fn users_status_ids_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = Vec<crate::models::Status>, Error = Error<serde_json::Value>>>;
-    fn users_user_id_status_get(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::Status, Error = Error<serde_json::Value>>>;
-    fn users_user_id_status_put(&self, user_id: &str, inline_object25: crate::models::InlineObject25) -> Box<dyn Future<Item = crate::models::Status, Error = Error<serde_json::Value>>>;
+    fn users_status_ids_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<Vec<crate::models::Status>, Error<serde_json::Value>>>>;
+    fn users_user_id_status_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::Status, Error<serde_json::Value>>>>;
+    fn users_user_id_status_put(&self, user_id: &str, inline_object25: crate::models::InlineObject25) -> Box<dyn Future<Output = Result<crate::models::Status, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>StatusApi for StatusApiClient<C> {
-    fn users_status_ids_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = Vec<crate::models::Status>, Error = Error<serde_json::Value>>> {
+    fn users_status_ids_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<Vec<crate::models::Status>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/status/ids".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -48,7 +48,7 @@ impl<C: hyper::client::Connect>StatusApi for StatusApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_status_get(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::Status, Error = Error<serde_json::Value>>> {
+    fn users_user_id_status_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::Status, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/status".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -57,7 +57,7 @@ impl<C: hyper::client::Connect>StatusApi for StatusApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_status_put(&self, user_id: &str, inline_object25: crate::models::InlineObject25) -> Box<dyn Future<Item = crate::models::Status, Error = Error<serde_json::Value>>> {
+    fn users_user_id_status_put(&self, user_id: &str, inline_object25: crate::models::InlineObject25) -> Box<dyn Future<Output = Result<crate::models::Status, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/users/{user_id}/status".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

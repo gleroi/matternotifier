@@ -33,15 +33,15 @@ impl<C: hyper::client::Connect> PreferencesApiClient<C> {
 }
 
 pub trait PreferencesApi {
-    fn users_user_id_preferences_category_get(&self, user_id: &str, category: &str) -> Box<dyn Future<Item = Vec<crate::models::Preference>, Error = Error<serde_json::Value>>>;
-    fn users_user_id_preferences_category_name_preference_name_get(&self, user_id: &str, category: &str, preference_name: &str) -> Box<dyn Future<Item = crate::models::Preference, Error = Error<serde_json::Value>>>;
-    fn users_user_id_preferences_delete_post(&self, user_id: &str, preference: Vec<crate::models::Preference>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_preferences_get(&self, user_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Preference>, Error = Error<serde_json::Value>>>;
-    fn users_user_id_preferences_put(&self, user_id: &str, preference: Vec<crate::models::Preference>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
+    fn users_user_id_preferences_category_get(&self, user_id: &str, category: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Preference>, Error<serde_json::Value>>>>;
+    fn users_user_id_preferences_category_name_preference_name_get(&self, user_id: &str, category: &str, preference_name: &str) -> Box<dyn Future<Output = Result<crate::models::Preference, Error<serde_json::Value>>>>;
+    fn users_user_id_preferences_delete_post(&self, user_id: &str, preference: Vec<crate::models::Preference>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_preferences_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Preference>, Error<serde_json::Value>>>>;
+    fn users_user_id_preferences_put(&self, user_id: &str, preference: Vec<crate::models::Preference>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>PreferencesApi for PreferencesApiClient<C> {
-    fn users_user_id_preferences_category_get(&self, user_id: &str, category: &str) -> Box<dyn Future<Item = Vec<crate::models::Preference>, Error = Error<serde_json::Value>>> {
+    fn users_user_id_preferences_category_get(&self, user_id: &str, category: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Preference>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/preferences/{category}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -51,7 +51,7 @@ impl<C: hyper::client::Connect>PreferencesApi for PreferencesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_preferences_category_name_preference_name_get(&self, user_id: &str, category: &str, preference_name: &str) -> Box<dyn Future<Item = crate::models::Preference, Error = Error<serde_json::Value>>> {
+    fn users_user_id_preferences_category_name_preference_name_get(&self, user_id: &str, category: &str, preference_name: &str) -> Box<dyn Future<Output = Result<crate::models::Preference, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/preferences/{category}/name/{preference_name}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -62,7 +62,7 @@ impl<C: hyper::client::Connect>PreferencesApi for PreferencesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_preferences_delete_post(&self, user_id: &str, preference: Vec<crate::models::Preference>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_preferences_delete_post(&self, user_id: &str, preference: Vec<crate::models::Preference>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/preferences/delete".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -72,7 +72,7 @@ impl<C: hyper::client::Connect>PreferencesApi for PreferencesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_preferences_get(&self, user_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Preference>, Error = Error<serde_json::Value>>> {
+    fn users_user_id_preferences_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Preference>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/preferences".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -81,7 +81,7 @@ impl<C: hyper::client::Connect>PreferencesApi for PreferencesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_preferences_put(&self, user_id: &str, preference: Vec<crate::models::Preference>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_preferences_put(&self, user_id: &str, preference: Vec<crate::models::Preference>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/users/{user_id}/preferences".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

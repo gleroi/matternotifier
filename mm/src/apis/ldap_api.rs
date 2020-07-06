@@ -33,12 +33,12 @@ impl<C: hyper::client::Connect> LdapApiClient<C> {
 }
 
 pub trait LdapApi {
-    fn ldap_groups_get(&self, q: Option<&str>, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::LdapGroupsPaged>, Error = Error<serde_json::Value>>>;
-    fn ldap_groups_remote_id_link_post(&self, remote_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
+    fn ldap_groups_get(&self, q: Option<&str>, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::LdapGroupsPaged>, Error<serde_json::Value>>>>;
+    fn ldap_groups_remote_id_link_post(&self, remote_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>LdapApi for LdapApiClient<C> {
-    fn ldap_groups_get(&self, q: Option<&str>, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::LdapGroupsPaged>, Error = Error<serde_json::Value>>> {
+    fn ldap_groups_get(&self, q: Option<&str>, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::LdapGroupsPaged>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/ldap/groups".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -55,7 +55,7 @@ impl<C: hyper::client::Connect>LdapApi for LdapApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn ldap_groups_remote_id_link_post(&self, remote_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn ldap_groups_remote_id_link_post(&self, remote_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/ldap/groups/{remote_id}/link".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

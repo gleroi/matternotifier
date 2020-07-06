@@ -33,17 +33,17 @@ impl<C: hyper::client::Connect> SchemesApiClient<C> {
 }
 
 pub trait SchemesApi {
-    fn schemes_get(&self, scope: Option<&str>, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Scheme>, Error = Error<serde_json::Value>>>;
-    fn schemes_post(&self, inline_object85: crate::models::InlineObject85) -> Box<dyn Future<Item = crate::models::Scheme, Error = Error<serde_json::Value>>>;
-    fn schemes_scheme_id_channels_get(&self, scheme_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn schemes_scheme_id_delete(&self, scheme_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn schemes_scheme_id_get(&self, scheme_id: &str) -> Box<dyn Future<Item = crate::models::Scheme, Error = Error<serde_json::Value>>>;
-    fn schemes_scheme_id_patch_put(&self, scheme_id: &str, inline_object86: crate::models::InlineObject86) -> Box<dyn Future<Item = crate::models::Scheme, Error = Error<serde_json::Value>>>;
-    fn schemes_scheme_id_teams_get(&self, scheme_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Team>, Error = Error<serde_json::Value>>>;
+    fn schemes_get(&self, scope: Option<&str>, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Scheme>, Error<serde_json::Value>>>>;
+    fn schemes_post(&self, inline_object85: crate::models::InlineObject85) -> Box<dyn Future<Output = Result<crate::models::Scheme, Error<serde_json::Value>>>>;
+    fn schemes_scheme_id_channels_get(&self, scheme_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn schemes_scheme_id_delete(&self, scheme_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn schemes_scheme_id_get(&self, scheme_id: &str) -> Box<dyn Future<Output = Result<crate::models::Scheme, Error<serde_json::Value>>>>;
+    fn schemes_scheme_id_patch_put(&self, scheme_id: &str, inline_object86: crate::models::InlineObject86) -> Box<dyn Future<Output = Result<crate::models::Scheme, Error<serde_json::Value>>>>;
+    fn schemes_scheme_id_teams_get(&self, scheme_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Team>, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>SchemesApi for SchemesApiClient<C> {
-    fn schemes_get(&self, scope: Option<&str>, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Scheme>, Error = Error<serde_json::Value>>> {
+    fn schemes_get(&self, scope: Option<&str>, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Scheme>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/schemes".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -60,7 +60,7 @@ impl<C: hyper::client::Connect>SchemesApi for SchemesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn schemes_post(&self, inline_object85: crate::models::InlineObject85) -> Box<dyn Future<Item = crate::models::Scheme, Error = Error<serde_json::Value>>> {
+    fn schemes_post(&self, inline_object85: crate::models::InlineObject85) -> Box<dyn Future<Output = Result<crate::models::Scheme, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/schemes".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -69,7 +69,7 @@ impl<C: hyper::client::Connect>SchemesApi for SchemesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn schemes_scheme_id_channels_get(&self, scheme_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn schemes_scheme_id_channels_get(&self, scheme_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/schemes/{scheme_id}/channels".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -84,7 +84,7 @@ impl<C: hyper::client::Connect>SchemesApi for SchemesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn schemes_scheme_id_delete(&self, scheme_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn schemes_scheme_id_delete(&self, scheme_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/schemes/{scheme_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -93,7 +93,7 @@ impl<C: hyper::client::Connect>SchemesApi for SchemesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn schemes_scheme_id_get(&self, scheme_id: &str) -> Box<dyn Future<Item = crate::models::Scheme, Error = Error<serde_json::Value>>> {
+    fn schemes_scheme_id_get(&self, scheme_id: &str) -> Box<dyn Future<Output = Result<crate::models::Scheme, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/schemes/{scheme_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -102,7 +102,7 @@ impl<C: hyper::client::Connect>SchemesApi for SchemesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn schemes_scheme_id_patch_put(&self, scheme_id: &str, inline_object86: crate::models::InlineObject86) -> Box<dyn Future<Item = crate::models::Scheme, Error = Error<serde_json::Value>>> {
+    fn schemes_scheme_id_patch_put(&self, scheme_id: &str, inline_object86: crate::models::InlineObject86) -> Box<dyn Future<Output = Result<crate::models::Scheme, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/schemes/{scheme_id}/patch".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -112,7 +112,7 @@ impl<C: hyper::client::Connect>SchemesApi for SchemesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn schemes_scheme_id_teams_get(&self, scheme_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Team>, Error = Error<serde_json::Value>>> {
+    fn schemes_scheme_id_teams_get(&self, scheme_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Team>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/schemes/{scheme_id}/teams".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

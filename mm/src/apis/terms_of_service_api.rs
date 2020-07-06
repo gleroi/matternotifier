@@ -33,14 +33,14 @@ impl<C: hyper::client::Connect> TermsOfServiceApiClient<C> {
 }
 
 pub trait TermsOfServiceApi {
-    fn terms_of_service_get(&self, ) -> Box<dyn Future<Item = crate::models::TermsOfService, Error = Error<serde_json::Value>>>;
-    fn terms_of_service_post(&self, ) -> Box<dyn Future<Item = crate::models::TermsOfService, Error = Error<serde_json::Value>>>;
-    fn users_user_id_terms_of_service_get(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::UserTermsOfService, Error = Error<serde_json::Value>>>;
-    fn users_user_id_terms_of_service_post(&self, user_id: &str, inline_object23: crate::models::InlineObject23) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
+    fn terms_of_service_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::TermsOfService, Error<serde_json::Value>>>>;
+    fn terms_of_service_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::TermsOfService, Error<serde_json::Value>>>>;
+    fn users_user_id_terms_of_service_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::UserTermsOfService, Error<serde_json::Value>>>>;
+    fn users_user_id_terms_of_service_post(&self, user_id: &str, inline_object23: crate::models::InlineObject23) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>TermsOfServiceApi for TermsOfServiceApiClient<C> {
-    fn terms_of_service_get(&self, ) -> Box<dyn Future<Item = crate::models::TermsOfService, Error = Error<serde_json::Value>>> {
+    fn terms_of_service_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::TermsOfService, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/terms_of_service".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -48,7 +48,7 @@ impl<C: hyper::client::Connect>TermsOfServiceApi for TermsOfServiceApiClient<C> 
         req.execute(self.configuration.borrow())
     }
 
-    fn terms_of_service_post(&self, ) -> Box<dyn Future<Item = crate::models::TermsOfService, Error = Error<serde_json::Value>>> {
+    fn terms_of_service_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::TermsOfService, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/terms_of_service".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -56,7 +56,7 @@ impl<C: hyper::client::Connect>TermsOfServiceApi for TermsOfServiceApiClient<C> 
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_terms_of_service_get(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::UserTermsOfService, Error = Error<serde_json::Value>>> {
+    fn users_user_id_terms_of_service_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::UserTermsOfService, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/terms_of_service".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -65,7 +65,7 @@ impl<C: hyper::client::Connect>TermsOfServiceApi for TermsOfServiceApiClient<C> 
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_terms_of_service_post(&self, user_id: &str, inline_object23: crate::models::InlineObject23) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_terms_of_service_post(&self, user_id: &str, inline_object23: crate::models::InlineObject23) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/terms_of_service".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

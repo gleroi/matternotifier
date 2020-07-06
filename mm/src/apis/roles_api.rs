@@ -33,14 +33,14 @@ impl<C: hyper::client::Connect> RolesApiClient<C> {
 }
 
 pub trait RolesApi {
-    fn roles_name_role_name_get(&self, role_name: &str) -> Box<dyn Future<Item = crate::models::Role, Error = Error<serde_json::Value>>>;
-    fn roles_names_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = Vec<crate::models::Role>, Error = Error<serde_json::Value>>>;
-    fn roles_role_id_get(&self, role_id: &str) -> Box<dyn Future<Item = crate::models::Role, Error = Error<serde_json::Value>>>;
-    fn roles_role_id_patch_put(&self, role_id: &str, inline_object84: crate::models::InlineObject84) -> Box<dyn Future<Item = crate::models::Role, Error = Error<serde_json::Value>>>;
+    fn roles_name_role_name_get(&self, role_name: &str) -> Box<dyn Future<Output = Result<crate::models::Role, Error<serde_json::Value>>>>;
+    fn roles_names_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<Vec<crate::models::Role>, Error<serde_json::Value>>>>;
+    fn roles_role_id_get(&self, role_id: &str) -> Box<dyn Future<Output = Result<crate::models::Role, Error<serde_json::Value>>>>;
+    fn roles_role_id_patch_put(&self, role_id: &str, inline_object84: crate::models::InlineObject84) -> Box<dyn Future<Output = Result<crate::models::Role, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>RolesApi for RolesApiClient<C> {
-    fn roles_name_role_name_get(&self, role_name: &str) -> Box<dyn Future<Item = crate::models::Role, Error = Error<serde_json::Value>>> {
+    fn roles_name_role_name_get(&self, role_name: &str) -> Box<dyn Future<Output = Result<crate::models::Role, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/roles/name/{role_name}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -49,7 +49,7 @@ impl<C: hyper::client::Connect>RolesApi for RolesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn roles_names_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = Vec<crate::models::Role>, Error = Error<serde_json::Value>>> {
+    fn roles_names_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<Vec<crate::models::Role>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/roles/names".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -58,7 +58,7 @@ impl<C: hyper::client::Connect>RolesApi for RolesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn roles_role_id_get(&self, role_id: &str) -> Box<dyn Future<Item = crate::models::Role, Error = Error<serde_json::Value>>> {
+    fn roles_role_id_get(&self, role_id: &str) -> Box<dyn Future<Output = Result<crate::models::Role, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/roles/{role_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -67,7 +67,7 @@ impl<C: hyper::client::Connect>RolesApi for RolesApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn roles_role_id_patch_put(&self, role_id: &str, inline_object84: crate::models::InlineObject84) -> Box<dyn Future<Item = crate::models::Role, Error = Error<serde_json::Value>>> {
+    fn roles_role_id_patch_put(&self, role_id: &str, inline_object84: crate::models::InlineObject84) -> Box<dyn Future<Output = Result<crate::models::Role, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/roles/{role_id}/patch".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

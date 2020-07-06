@@ -33,53 +33,53 @@ impl<C: hyper::client::Connect> ChannelsApiClient<C> {
 }
 
 pub trait ChannelsApi {
-    fn channels_channel_id_convert_post(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_delete(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_get(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_member_counts_by_group_get(&self, channel_id: &str, include_timezones: Option<bool>) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_members_get(&self, channel_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::ChannelMember>, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_members_ids_post(&self, channel_id: &str, request_body: Vec<String>) -> Box<dyn Future<Item = Vec<crate::models::ChannelMember>, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_members_minus_group_members_get(&self, channel_id: &str, group_ids: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_members_post(&self, channel_id: &str, inline_object47: crate::models::InlineObject47) -> Box<dyn Future<Item = crate::models::ChannelMember, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_members_user_id_delete(&self, channel_id: &str, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_members_user_id_get(&self, channel_id: &str, user_id: &str) -> Box<dyn Future<Item = crate::models::ChannelMember, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_members_user_id_notify_props_put(&self, channel_id: &str, user_id: &str, channel_notify_props: crate::models::ChannelNotifyProps) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_members_user_id_roles_put(&self, channel_id: &str, user_id: &str, inline_object48: crate::models::InlineObject48) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_members_user_id_scheme_roles_put(&self, channel_id: &str, user_id: &str, inline_object49: crate::models::InlineObject49) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_moderations_get(&self, channel_id: &str) -> Box<dyn Future<Item = Vec<crate::models::ChannelModeration>, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_moderations_patch_put(&self, channel_id: &str, channel_moderation_patch: crate::models::ChannelModerationPatch) -> Box<dyn Future<Item = Vec<crate::models::ChannelModeration>, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_move_post(&self, channel_id: &str, inline_object44: crate::models::InlineObject44) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_patch_put(&self, channel_id: &str, inline_object42: crate::models::InlineObject42) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_pinned_get(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::PostList, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_privacy_put(&self, channel_id: &str, inline_object43: crate::models::InlineObject43) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_put(&self, channel_id: &str, inline_object41: crate::models::InlineObject41) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_restore_post(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_scheme_put(&self, channel_id: &str, inline_object51: crate::models::InlineObject51) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_stats_get(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::ChannelStats, Error = Error<serde_json::Value>>>;
-    fn channels_channel_id_timezones_get(&self, channel_id: &str) -> Box<dyn Future<Item = Vec<String>, Error = Error<serde_json::Value>>>;
-    fn channels_direct_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn channels_get(&self, not_associated_to_group: Option<&str>, page: Option<i32>, per_page: Option<i32>, exclude_default_channels: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn channels_group_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn channels_group_search_post(&self, inline_object40: crate::models::InlineObject40) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn channels_members_user_id_view_post(&self, user_id: &str, inline_object50: crate::models::InlineObject50) -> Box<dyn Future<Item = crate::models::InlineResponse2008, Error = Error<serde_json::Value>>>;
-    fn channels_post(&self, inline_object38: crate::models::InlineObject38) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn channels_search_post(&self, inline_object39: crate::models::InlineObject39) -> Box<dyn Future<Item = crate::models::InlineResponse2007, Error = Error<serde_json::Value>>>;
-    fn teams_name_team_name_channels_name_channel_name_get(&self, team_name: &str, channel_name: &str, include_deleted: Option<bool>) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_channels_autocomplete_get(&self, team_id: &str, name: &str) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_channels_deleted_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_channels_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_channels_ids_post(&self, team_id: &str, request_body: Vec<String>) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_channels_name_channel_name_get(&self, team_id: &str, channel_name: &str, include_deleted: Option<bool>) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_channels_search_archived_post(&self, team_id: &str, inline_object46: crate::models::InlineObject46) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_channels_search_autocomplete_get(&self, team_id: &str, name: &str) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_channels_search_post(&self, team_id: &str, inline_object45: crate::models::InlineObject45) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn users_user_id_channels_channel_id_unread_get(&self, user_id: &str, channel_id: &str) -> Box<dyn Future<Item = crate::models::ChannelUnread, Error = Error<serde_json::Value>>>;
-    fn users_user_id_teams_team_id_channels_get(&self, user_id: &str, team_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>>;
-    fn users_user_id_teams_team_id_channels_members_get(&self, user_id: &str, team_id: &str) -> Box<dyn Future<Item = Vec<crate::models::ChannelMember>, Error = Error<serde_json::Value>>>;
+    fn channels_channel_id_convert_post(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn channels_channel_id_delete(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn channels_channel_id_get(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn channels_channel_id_member_counts_by_group_get(&self, channel_id: &str, include_timezones: Option<bool>) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn channels_channel_id_members_get(&self, channel_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::ChannelMember>, Error<serde_json::Value>>>>;
+    fn channels_channel_id_members_ids_post(&self, channel_id: &str, request_body: Vec<String>) -> Box<dyn Future<Output = Result<Vec<crate::models::ChannelMember>, Error<serde_json::Value>>>>;
+    fn channels_channel_id_members_minus_group_members_get(&self, channel_id: &str, group_ids: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn channels_channel_id_members_post(&self, channel_id: &str, inline_object47: crate::models::InlineObject47) -> Box<dyn Future<Output = Result<crate::models::ChannelMember, Error<serde_json::Value>>>>;
+    fn channels_channel_id_members_user_id_delete(&self, channel_id: &str, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn channels_channel_id_members_user_id_get(&self, channel_id: &str, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::ChannelMember, Error<serde_json::Value>>>>;
+    fn channels_channel_id_members_user_id_notify_props_put(&self, channel_id: &str, user_id: &str, channel_notify_props: crate::models::ChannelNotifyProps) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn channels_channel_id_members_user_id_roles_put(&self, channel_id: &str, user_id: &str, inline_object48: crate::models::InlineObject48) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn channels_channel_id_members_user_id_scheme_roles_put(&self, channel_id: &str, user_id: &str, inline_object49: crate::models::InlineObject49) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn channels_channel_id_moderations_get(&self, channel_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::ChannelModeration>, Error<serde_json::Value>>>>;
+    fn channels_channel_id_moderations_patch_put(&self, channel_id: &str, channel_moderation_patch: crate::models::ChannelModerationPatch) -> Box<dyn Future<Output = Result<Vec<crate::models::ChannelModeration>, Error<serde_json::Value>>>>;
+    fn channels_channel_id_move_post(&self, channel_id: &str, inline_object44: crate::models::InlineObject44) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn channels_channel_id_patch_put(&self, channel_id: &str, inline_object42: crate::models::InlineObject42) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn channels_channel_id_pinned_get(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::PostList, Error<serde_json::Value>>>>;
+    fn channels_channel_id_privacy_put(&self, channel_id: &str, inline_object43: crate::models::InlineObject43) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn channels_channel_id_put(&self, channel_id: &str, inline_object41: crate::models::InlineObject41) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn channels_channel_id_restore_post(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn channels_channel_id_scheme_put(&self, channel_id: &str, inline_object51: crate::models::InlineObject51) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn channels_channel_id_stats_get(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::ChannelStats, Error<serde_json::Value>>>>;
+    fn channels_channel_id_timezones_get(&self, channel_id: &str) -> Box<dyn Future<Output = Result<Vec<String>, Error<serde_json::Value>>>>;
+    fn channels_direct_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn channels_get(&self, not_associated_to_group: Option<&str>, page: Option<i32>, per_page: Option<i32>, exclude_default_channels: Option<bool>) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn channels_group_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn channels_group_search_post(&self, inline_object40: crate::models::InlineObject40) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn channels_members_user_id_view_post(&self, user_id: &str, inline_object50: crate::models::InlineObject50) -> Box<dyn Future<Output = Result<crate::models::InlineResponse2008, Error<serde_json::Value>>>>;
+    fn channels_post(&self, inline_object38: crate::models::InlineObject38) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn channels_search_post(&self, inline_object39: crate::models::InlineObject39) -> Box<dyn Future<Output = Result<crate::models::InlineResponse2007, Error<serde_json::Value>>>>;
+    fn teams_name_team_name_channels_name_channel_name_get(&self, team_name: &str, channel_name: &str, include_deleted: Option<bool>) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn teams_team_id_channels_autocomplete_get(&self, team_id: &str, name: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn teams_team_id_channels_deleted_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn teams_team_id_channels_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn teams_team_id_channels_ids_post(&self, team_id: &str, request_body: Vec<String>) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn teams_team_id_channels_name_channel_name_get(&self, team_id: &str, channel_name: &str, include_deleted: Option<bool>) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>;
+    fn teams_team_id_channels_search_archived_post(&self, team_id: &str, inline_object46: crate::models::InlineObject46) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn teams_team_id_channels_search_autocomplete_get(&self, team_id: &str, name: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn teams_team_id_channels_search_post(&self, team_id: &str, inline_object45: crate::models::InlineObject45) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn users_user_id_channels_channel_id_unread_get(&self, user_id: &str, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::ChannelUnread, Error<serde_json::Value>>>>;
+    fn users_user_id_teams_team_id_channels_get(&self, user_id: &str, team_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>;
+    fn users_user_id_teams_team_id_channels_members_get(&self, user_id: &str, team_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::ChannelMember>, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
-    fn channels_channel_id_convert_post(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_convert_post(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels/{channel_id}/convert".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -88,7 +88,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_delete(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_delete(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/channels/{channel_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -97,7 +97,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_get(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_get(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/channels/{channel_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -106,7 +106,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_member_counts_by_group_get(&self, channel_id: &str, include_timezones: Option<bool>) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_member_counts_by_group_get(&self, channel_id: &str, include_timezones: Option<bool>) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/channels/{channel_id}/member_counts_by_group".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -119,7 +119,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_members_get(&self, channel_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::ChannelMember>, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_members_get(&self, channel_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::ChannelMember>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/channels/{channel_id}/members".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -134,7 +134,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_members_ids_post(&self, channel_id: &str, request_body: Vec<String>) -> Box<dyn Future<Item = Vec<crate::models::ChannelMember>, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_members_ids_post(&self, channel_id: &str, request_body: Vec<String>) -> Box<dyn Future<Output = Result<Vec<crate::models::ChannelMember>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels/{channel_id}/members/ids".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -144,7 +144,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_members_minus_group_members_get(&self, channel_id: &str, group_ids: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_members_minus_group_members_get(&self, channel_id: &str, group_ids: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/channels/{channel_id}/members_minus_group_members".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -161,7 +161,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_members_post(&self, channel_id: &str, inline_object47: crate::models::InlineObject47) -> Box<dyn Future<Item = crate::models::ChannelMember, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_members_post(&self, channel_id: &str, inline_object47: crate::models::InlineObject47) -> Box<dyn Future<Output = Result<crate::models::ChannelMember, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels/{channel_id}/members".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -171,7 +171,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_members_user_id_delete(&self, channel_id: &str, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_members_user_id_delete(&self, channel_id: &str, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/channels/{channel_id}/members/{user_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -181,7 +181,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_members_user_id_get(&self, channel_id: &str, user_id: &str) -> Box<dyn Future<Item = crate::models::ChannelMember, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_members_user_id_get(&self, channel_id: &str, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::ChannelMember, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/channels/{channel_id}/members/{user_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -191,7 +191,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_members_user_id_notify_props_put(&self, channel_id: &str, user_id: &str, channel_notify_props: crate::models::ChannelNotifyProps) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_members_user_id_notify_props_put(&self, channel_id: &str, user_id: &str, channel_notify_props: crate::models::ChannelNotifyProps) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/channels/{channel_id}/members/{user_id}/notify_props".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -202,7 +202,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_members_user_id_roles_put(&self, channel_id: &str, user_id: &str, inline_object48: crate::models::InlineObject48) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_members_user_id_roles_put(&self, channel_id: &str, user_id: &str, inline_object48: crate::models::InlineObject48) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/channels/{channel_id}/members/{user_id}/roles".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -213,7 +213,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_members_user_id_scheme_roles_put(&self, channel_id: &str, user_id: &str, inline_object49: crate::models::InlineObject49) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_members_user_id_scheme_roles_put(&self, channel_id: &str, user_id: &str, inline_object49: crate::models::InlineObject49) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/channels/{channel_id}/members/{user_id}/schemeRoles".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -224,7 +224,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_moderations_get(&self, channel_id: &str) -> Box<dyn Future<Item = Vec<crate::models::ChannelModeration>, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_moderations_get(&self, channel_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::ChannelModeration>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/channels/{channel_id}/moderations".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -233,7 +233,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_moderations_patch_put(&self, channel_id: &str, channel_moderation_patch: crate::models::ChannelModerationPatch) -> Box<dyn Future<Item = Vec<crate::models::ChannelModeration>, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_moderations_patch_put(&self, channel_id: &str, channel_moderation_patch: crate::models::ChannelModerationPatch) -> Box<dyn Future<Output = Result<Vec<crate::models::ChannelModeration>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/channels/{channel_id}/moderations/patch".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -243,7 +243,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_move_post(&self, channel_id: &str, inline_object44: crate::models::InlineObject44) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_move_post(&self, channel_id: &str, inline_object44: crate::models::InlineObject44) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels/{channel_id}/move".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -253,7 +253,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_patch_put(&self, channel_id: &str, inline_object42: crate::models::InlineObject42) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_patch_put(&self, channel_id: &str, inline_object42: crate::models::InlineObject42) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/channels/{channel_id}/patch".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -263,7 +263,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_pinned_get(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::PostList, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_pinned_get(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::PostList, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/channels/{channel_id}/pinned".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -272,7 +272,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_privacy_put(&self, channel_id: &str, inline_object43: crate::models::InlineObject43) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_privacy_put(&self, channel_id: &str, inline_object43: crate::models::InlineObject43) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/channels/{channel_id}/privacy".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -282,7 +282,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_put(&self, channel_id: &str, inline_object41: crate::models::InlineObject41) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_put(&self, channel_id: &str, inline_object41: crate::models::InlineObject41) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/channels/{channel_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -292,7 +292,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_restore_post(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_restore_post(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels/{channel_id}/restore".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -301,7 +301,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_scheme_put(&self, channel_id: &str, inline_object51: crate::models::InlineObject51) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_scheme_put(&self, channel_id: &str, inline_object51: crate::models::InlineObject51) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/channels/{channel_id}/scheme".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -311,7 +311,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_stats_get(&self, channel_id: &str) -> Box<dyn Future<Item = crate::models::ChannelStats, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_stats_get(&self, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::ChannelStats, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/channels/{channel_id}/stats".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -320,7 +320,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_channel_id_timezones_get(&self, channel_id: &str) -> Box<dyn Future<Item = Vec<String>, Error = Error<serde_json::Value>>> {
+    fn channels_channel_id_timezones_get(&self, channel_id: &str) -> Box<dyn Future<Output = Result<Vec<String>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/channels/{channel_id}/timezones".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -329,7 +329,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_direct_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn channels_direct_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels/direct".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -338,7 +338,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_get(&self, not_associated_to_group: Option<&str>, page: Option<i32>, per_page: Option<i32>, exclude_default_channels: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn channels_get(&self, not_associated_to_group: Option<&str>, page: Option<i32>, per_page: Option<i32>, exclude_default_channels: Option<bool>) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/channels".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -358,7 +358,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_group_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn channels_group_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels/group".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -367,7 +367,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_group_search_post(&self, inline_object40: crate::models::InlineObject40) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn channels_group_search_post(&self, inline_object40: crate::models::InlineObject40) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels/group/search".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -376,7 +376,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_members_user_id_view_post(&self, user_id: &str, inline_object50: crate::models::InlineObject50) -> Box<dyn Future<Item = crate::models::InlineResponse2008, Error = Error<serde_json::Value>>> {
+    fn channels_members_user_id_view_post(&self, user_id: &str, inline_object50: crate::models::InlineObject50) -> Box<dyn Future<Output = Result<crate::models::InlineResponse2008, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels/members/{user_id}/view".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -386,7 +386,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_post(&self, inline_object38: crate::models::InlineObject38) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn channels_post(&self, inline_object38: crate::models::InlineObject38) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -395,7 +395,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn channels_search_post(&self, inline_object39: crate::models::InlineObject39) -> Box<dyn Future<Item = crate::models::InlineResponse2007, Error = Error<serde_json::Value>>> {
+    fn channels_search_post(&self, inline_object39: crate::models::InlineObject39) -> Box<dyn Future<Output = Result<crate::models::InlineResponse2007, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/channels/search".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -404,7 +404,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_name_team_name_channels_name_channel_name_get(&self, team_name: &str, channel_name: &str, include_deleted: Option<bool>) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn teams_name_team_name_channels_name_channel_name_get(&self, team_name: &str, channel_name: &str, include_deleted: Option<bool>) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/teams/name/{team_name}/channels/name/{channel_name}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -417,7 +417,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_team_id_channels_autocomplete_get(&self, team_id: &str, name: &str) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn teams_team_id_channels_autocomplete_get(&self, team_id: &str, name: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/teams/{team_id}/channels/autocomplete".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -427,7 +427,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_team_id_channels_deleted_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn teams_team_id_channels_deleted_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/teams/{team_id}/channels/deleted".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -442,7 +442,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_team_id_channels_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn teams_team_id_channels_get(&self, team_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/teams/{team_id}/channels".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -457,7 +457,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_team_id_channels_ids_post(&self, team_id: &str, request_body: Vec<String>) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn teams_team_id_channels_ids_post(&self, team_id: &str, request_body: Vec<String>) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/teams/{team_id}/channels/ids".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -467,7 +467,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_team_id_channels_name_channel_name_get(&self, team_id: &str, channel_name: &str, include_deleted: Option<bool>) -> Box<dyn Future<Item = crate::models::Channel, Error = Error<serde_json::Value>>> {
+    fn teams_team_id_channels_name_channel_name_get(&self, team_id: &str, channel_name: &str, include_deleted: Option<bool>) -> Box<dyn Future<Output = Result<crate::models::Channel, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/teams/{team_id}/channels/name/{channel_name}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -480,7 +480,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_team_id_channels_search_archived_post(&self, team_id: &str, inline_object46: crate::models::InlineObject46) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn teams_team_id_channels_search_archived_post(&self, team_id: &str, inline_object46: crate::models::InlineObject46) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/teams/{team_id}/channels/search_archived".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -490,7 +490,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_team_id_channels_search_autocomplete_get(&self, team_id: &str, name: &str) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn teams_team_id_channels_search_autocomplete_get(&self, team_id: &str, name: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/teams/{team_id}/channels/search_autocomplete".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -500,7 +500,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_team_id_channels_search_post(&self, team_id: &str, inline_object45: crate::models::InlineObject45) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn teams_team_id_channels_search_post(&self, team_id: &str, inline_object45: crate::models::InlineObject45) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/teams/{team_id}/channels/search".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -510,7 +510,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_channels_channel_id_unread_get(&self, user_id: &str, channel_id: &str) -> Box<dyn Future<Item = crate::models::ChannelUnread, Error = Error<serde_json::Value>>> {
+    fn users_user_id_channels_channel_id_unread_get(&self, user_id: &str, channel_id: &str) -> Box<dyn Future<Output = Result<crate::models::ChannelUnread, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/channels/{channel_id}/unread".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -520,7 +520,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_teams_team_id_channels_get(&self, user_id: &str, team_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Channel>, Error = Error<serde_json::Value>>> {
+    fn users_user_id_teams_team_id_channels_get(&self, user_id: &str, team_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Channel>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/teams/{team_id}/channels".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -530,7 +530,7 @@ impl<C: hyper::client::Connect>ChannelsApi for ChannelsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_teams_team_id_channels_members_get(&self, user_id: &str, team_id: &str) -> Box<dyn Future<Item = Vec<crate::models::ChannelMember>, Error = Error<serde_json::Value>>> {
+    fn users_user_id_teams_team_id_channels_members_get(&self, user_id: &str, team_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::ChannelMember>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/teams/{team_id}/channels/members".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

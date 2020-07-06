@@ -33,11 +33,11 @@ impl<C: hyper::client::Connect> RootApiClient<C> {
 }
 
 pub trait RootApi {
-    fn notifications_ack_post(&self, ) -> Box<dyn Future<Item = crate::models::PushNotification, Error = Error<serde_json::Value>>>;
+    fn notifications_ack_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::PushNotification, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>RootApi for RootApiClient<C> {
-    fn notifications_ack_post(&self, ) -> Box<dyn Future<Item = crate::models::PushNotification, Error = Error<serde_json::Value>>> {
+    fn notifications_ack_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::PushNotification, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/notifications/ack".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

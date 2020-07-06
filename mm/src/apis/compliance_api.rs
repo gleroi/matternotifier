@@ -33,14 +33,14 @@ impl<C: hyper::client::Connect> ComplianceApiClient<C> {
 }
 
 pub trait ComplianceApi {
-    fn compliance_reports_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Compliance>, Error = Error<serde_json::Value>>>;
-    fn compliance_reports_post(&self, ) -> Box<dyn Future<Item = crate::models::Compliance, Error = Error<serde_json::Value>>>;
-    fn compliance_reports_report_id_download_get(&self, report_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn compliance_reports_report_id_get(&self, report_id: &str) -> Box<dyn Future<Item = crate::models::Compliance, Error = Error<serde_json::Value>>>;
+    fn compliance_reports_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Compliance>, Error<serde_json::Value>>>>;
+    fn compliance_reports_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::Compliance, Error<serde_json::Value>>>>;
+    fn compliance_reports_report_id_download_get(&self, report_id: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn compliance_reports_report_id_get(&self, report_id: &str) -> Box<dyn Future<Output = Result<crate::models::Compliance, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>ComplianceApi for ComplianceApiClient<C> {
-    fn compliance_reports_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Compliance>, Error = Error<serde_json::Value>>> {
+    fn compliance_reports_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Compliance>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/compliance/reports".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -54,7 +54,7 @@ impl<C: hyper::client::Connect>ComplianceApi for ComplianceApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn compliance_reports_post(&self, ) -> Box<dyn Future<Item = crate::models::Compliance, Error = Error<serde_json::Value>>> {
+    fn compliance_reports_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::Compliance, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/compliance/reports".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -62,7 +62,7 @@ impl<C: hyper::client::Connect>ComplianceApi for ComplianceApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn compliance_reports_report_id_download_get(&self, report_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn compliance_reports_report_id_download_get(&self, report_id: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/compliance/reports/{report_id}/download".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -72,7 +72,7 @@ impl<C: hyper::client::Connect>ComplianceApi for ComplianceApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn compliance_reports_report_id_get(&self, report_id: &str) -> Box<dyn Future<Item = crate::models::Compliance, Error = Error<serde_json::Value>>> {
+    fn compliance_reports_report_id_get(&self, report_id: &str) -> Box<dyn Future<Output = Result<crate::models::Compliance, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/compliance/reports/{report_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

@@ -33,11 +33,11 @@ impl<C: hyper::client::Connect> DataretentionApiClient<C> {
 }
 
 pub trait DataretentionApi {
-    fn data_retention_policy_get(&self, ) -> Box<dyn Future<Item = crate::models::DataRetentionPolicy, Error = Error<serde_json::Value>>>;
+    fn data_retention_policy_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::DataRetentionPolicy, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>DataretentionApi for DataretentionApiClient<C> {
-    fn data_retention_policy_get(&self, ) -> Box<dyn Future<Item = crate::models::DataRetentionPolicy, Error = Error<serde_json::Value>>> {
+    fn data_retention_policy_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::DataRetentionPolicy, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/data_retention/policy".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

@@ -33,19 +33,19 @@ impl<C: hyper::client::Connect> SAMLApiClient<C> {
 }
 
 pub trait SAMLApi {
-    fn saml_certificate_idp_delete(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn saml_certificate_idp_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn saml_certificate_private_delete(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn saml_certificate_private_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn saml_certificate_public_delete(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn saml_certificate_public_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn saml_certificate_status_get(&self, ) -> Box<dyn Future<Item = crate::models::SamlCertificateStatus, Error = Error<serde_json::Value>>>;
-    fn saml_metadata_get(&self, ) -> Box<dyn Future<Item = String, Error = Error<serde_json::Value>>>;
-    fn saml_metadatafromidp_post(&self, ) -> Box<dyn Future<Item = String, Error = Error<serde_json::Value>>>;
+    fn saml_certificate_idp_delete(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn saml_certificate_idp_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn saml_certificate_private_delete(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn saml_certificate_private_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn saml_certificate_public_delete(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn saml_certificate_public_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn saml_certificate_status_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::SamlCertificateStatus, Error<serde_json::Value>>>>;
+    fn saml_metadata_get(&self, ) -> Box<dyn Future<Output = Result<String, Error<serde_json::Value>>>>;
+    fn saml_metadatafromidp_post(&self, ) -> Box<dyn Future<Output = Result<String, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>SAMLApi for SAMLApiClient<C> {
-    fn saml_certificate_idp_delete(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn saml_certificate_idp_delete(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/saml/certificate/idp".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -53,7 +53,7 @@ impl<C: hyper::client::Connect>SAMLApi for SAMLApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn saml_certificate_idp_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn saml_certificate_idp_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/saml/certificate/idp".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -62,7 +62,7 @@ impl<C: hyper::client::Connect>SAMLApi for SAMLApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn saml_certificate_private_delete(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn saml_certificate_private_delete(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/saml/certificate/private".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -70,7 +70,7 @@ impl<C: hyper::client::Connect>SAMLApi for SAMLApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn saml_certificate_private_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn saml_certificate_private_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/saml/certificate/private".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -79,7 +79,7 @@ impl<C: hyper::client::Connect>SAMLApi for SAMLApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn saml_certificate_public_delete(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn saml_certificate_public_delete(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/saml/certificate/public".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -87,7 +87,7 @@ impl<C: hyper::client::Connect>SAMLApi for SAMLApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn saml_certificate_public_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn saml_certificate_public_post(&self, certificate: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/saml/certificate/public".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -96,7 +96,7 @@ impl<C: hyper::client::Connect>SAMLApi for SAMLApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn saml_certificate_status_get(&self, ) -> Box<dyn Future<Item = crate::models::SamlCertificateStatus, Error = Error<serde_json::Value>>> {
+    fn saml_certificate_status_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::SamlCertificateStatus, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/saml/certificate/status".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -104,7 +104,7 @@ impl<C: hyper::client::Connect>SAMLApi for SAMLApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn saml_metadata_get(&self, ) -> Box<dyn Future<Item = String, Error = Error<serde_json::Value>>> {
+    fn saml_metadata_get(&self, ) -> Box<dyn Future<Output = Result<String, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/saml/metadata".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -112,7 +112,7 @@ impl<C: hyper::client::Connect>SAMLApi for SAMLApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn saml_metadatafromidp_post(&self, ) -> Box<dyn Future<Item = String, Error = Error<serde_json::Value>>> {
+    fn saml_metadatafromidp_post(&self, ) -> Box<dyn Future<Output = Result<String, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/saml/metadatafromidp".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

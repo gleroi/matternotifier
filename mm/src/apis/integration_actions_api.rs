@@ -33,12 +33,12 @@ impl<C: hyper::client::Connect> IntegrationActionsApiClient<C> {
 }
 
 pub trait IntegrationActionsApi {
-    fn actions_dialogs_open_post(&self, inline_object88: crate::models::InlineObject88) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn actions_dialogs_submit_post(&self, inline_object89: crate::models::InlineObject89) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
+    fn actions_dialogs_open_post(&self, inline_object88: crate::models::InlineObject88) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn actions_dialogs_submit_post(&self, inline_object89: crate::models::InlineObject89) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>IntegrationActionsApi for IntegrationActionsApiClient<C> {
-    fn actions_dialogs_open_post(&self, inline_object88: crate::models::InlineObject88) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn actions_dialogs_open_post(&self, inline_object88: crate::models::InlineObject88) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/actions/dialogs/open".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -47,7 +47,7 @@ impl<C: hyper::client::Connect>IntegrationActionsApi for IntegrationActionsApiCl
         req.execute(self.configuration.borrow())
     }
 
-    fn actions_dialogs_submit_post(&self, inline_object89: crate::models::InlineObject89) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn actions_dialogs_submit_post(&self, inline_object89: crate::models::InlineObject89) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/actions/dialogs/submit".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

@@ -33,11 +33,11 @@ impl<C: hyper::client::Connect> OpenGraphApiClient<C> {
 }
 
 pub trait OpenGraphApi {
-    fn opengraph_post(&self, inline_object87: crate::models::InlineObject87) -> Box<dyn Future<Item = crate::models::OpenGraph, Error = Error<serde_json::Value>>>;
+    fn opengraph_post(&self, inline_object87: crate::models::InlineObject87) -> Box<dyn Future<Output = Result<crate::models::OpenGraph, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>OpenGraphApi for OpenGraphApiClient<C> {
-    fn opengraph_post(&self, inline_object87: crate::models::InlineObject87) -> Box<dyn Future<Item = crate::models::OpenGraph, Error = Error<serde_json::Value>>> {
+    fn opengraph_post(&self, inline_object87: crate::models::InlineObject87) -> Box<dyn Future<Output = Result<crate::models::OpenGraph, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/opengraph".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

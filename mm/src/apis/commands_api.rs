@@ -33,20 +33,20 @@ impl<C: hyper::client::Connect> CommandsApiClient<C> {
 }
 
 pub trait CommandsApi {
-    fn commands_command_id_delete(&self, command_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn commands_command_id_get(&self, command_id: &str) -> Box<dyn Future<Item = crate::models::Command, Error = Error<serde_json::Value>>>;
-    fn commands_command_id_move_put(&self, command_id: &str, inline_object78: crate::models::InlineObject78) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn commands_command_id_put(&self, command_id: &str, command: crate::models::Command) -> Box<dyn Future<Item = crate::models::Command, Error = Error<serde_json::Value>>>;
-    fn commands_command_id_regen_token_put(&self, command_id: &str) -> Box<dyn Future<Item = crate::models::InlineResponse20013, Error = Error<serde_json::Value>>>;
-    fn commands_execute_post(&self, inline_object79: crate::models::InlineObject79) -> Box<dyn Future<Item = crate::models::CommandResponse, Error = Error<serde_json::Value>>>;
-    fn commands_get(&self, team_id: Option<&str>, custom_only: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::Command>, Error = Error<serde_json::Value>>>;
-    fn commands_post(&self, inline_object77: crate::models::InlineObject77) -> Box<dyn Future<Item = crate::models::Command, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_commands_autocomplete_get(&self, team_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Command>, Error = Error<serde_json::Value>>>;
-    fn teams_team_id_commands_autocomplete_suggestions_get(&self, team_id: &str, user_input: &str) -> Box<dyn Future<Item = Vec<crate::models::AutocompleteSuggestion>, Error = Error<serde_json::Value>>>;
+    fn commands_command_id_delete(&self, command_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn commands_command_id_get(&self, command_id: &str) -> Box<dyn Future<Output = Result<crate::models::Command, Error<serde_json::Value>>>>;
+    fn commands_command_id_move_put(&self, command_id: &str, inline_object78: crate::models::InlineObject78) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn commands_command_id_put(&self, command_id: &str, command: crate::models::Command) -> Box<dyn Future<Output = Result<crate::models::Command, Error<serde_json::Value>>>>;
+    fn commands_command_id_regen_token_put(&self, command_id: &str) -> Box<dyn Future<Output = Result<crate::models::InlineResponse20013, Error<serde_json::Value>>>>;
+    fn commands_execute_post(&self, inline_object79: crate::models::InlineObject79) -> Box<dyn Future<Output = Result<crate::models::CommandResponse, Error<serde_json::Value>>>>;
+    fn commands_get(&self, team_id: Option<&str>, custom_only: Option<bool>) -> Box<dyn Future<Output = Result<Vec<crate::models::Command>, Error<serde_json::Value>>>>;
+    fn commands_post(&self, inline_object77: crate::models::InlineObject77) -> Box<dyn Future<Output = Result<crate::models::Command, Error<serde_json::Value>>>>;
+    fn teams_team_id_commands_autocomplete_get(&self, team_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Command>, Error<serde_json::Value>>>>;
+    fn teams_team_id_commands_autocomplete_suggestions_get(&self, team_id: &str, user_input: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::AutocompleteSuggestion>, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>CommandsApi for CommandsApiClient<C> {
-    fn commands_command_id_delete(&self, command_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn commands_command_id_delete(&self, command_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/commands/{command_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -55,7 +55,7 @@ impl<C: hyper::client::Connect>CommandsApi for CommandsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn commands_command_id_get(&self, command_id: &str) -> Box<dyn Future<Item = crate::models::Command, Error = Error<serde_json::Value>>> {
+    fn commands_command_id_get(&self, command_id: &str) -> Box<dyn Future<Output = Result<crate::models::Command, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/commands/{command_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -64,7 +64,7 @@ impl<C: hyper::client::Connect>CommandsApi for CommandsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn commands_command_id_move_put(&self, command_id: &str, inline_object78: crate::models::InlineObject78) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn commands_command_id_move_put(&self, command_id: &str, inline_object78: crate::models::InlineObject78) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/commands/{command_id}/move".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -74,7 +74,7 @@ impl<C: hyper::client::Connect>CommandsApi for CommandsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn commands_command_id_put(&self, command_id: &str, command: crate::models::Command) -> Box<dyn Future<Item = crate::models::Command, Error = Error<serde_json::Value>>> {
+    fn commands_command_id_put(&self, command_id: &str, command: crate::models::Command) -> Box<dyn Future<Output = Result<crate::models::Command, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/commands/{command_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -84,7 +84,7 @@ impl<C: hyper::client::Connect>CommandsApi for CommandsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn commands_command_id_regen_token_put(&self, command_id: &str) -> Box<dyn Future<Item = crate::models::InlineResponse20013, Error = Error<serde_json::Value>>> {
+    fn commands_command_id_regen_token_put(&self, command_id: &str) -> Box<dyn Future<Output = Result<crate::models::InlineResponse20013, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/commands/{command_id}/regen_token".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -93,7 +93,7 @@ impl<C: hyper::client::Connect>CommandsApi for CommandsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn commands_execute_post(&self, inline_object79: crate::models::InlineObject79) -> Box<dyn Future<Item = crate::models::CommandResponse, Error = Error<serde_json::Value>>> {
+    fn commands_execute_post(&self, inline_object79: crate::models::InlineObject79) -> Box<dyn Future<Output = Result<crate::models::CommandResponse, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/commands/execute".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -102,7 +102,7 @@ impl<C: hyper::client::Connect>CommandsApi for CommandsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn commands_get(&self, team_id: Option<&str>, custom_only: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::Command>, Error = Error<serde_json::Value>>> {
+    fn commands_get(&self, team_id: Option<&str>, custom_only: Option<bool>) -> Box<dyn Future<Output = Result<Vec<crate::models::Command>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/commands".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -116,7 +116,7 @@ impl<C: hyper::client::Connect>CommandsApi for CommandsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn commands_post(&self, inline_object77: crate::models::InlineObject77) -> Box<dyn Future<Item = crate::models::Command, Error = Error<serde_json::Value>>> {
+    fn commands_post(&self, inline_object77: crate::models::InlineObject77) -> Box<dyn Future<Output = Result<crate::models::Command, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/commands".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -125,7 +125,7 @@ impl<C: hyper::client::Connect>CommandsApi for CommandsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_team_id_commands_autocomplete_get(&self, team_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Command>, Error = Error<serde_json::Value>>> {
+    fn teams_team_id_commands_autocomplete_get(&self, team_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Command>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/teams/{team_id}/commands/autocomplete".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -134,7 +134,7 @@ impl<C: hyper::client::Connect>CommandsApi for CommandsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn teams_team_id_commands_autocomplete_suggestions_get(&self, team_id: &str, user_input: &str) -> Box<dyn Future<Item = Vec<crate::models::AutocompleteSuggestion>, Error = Error<serde_json::Value>>> {
+    fn teams_team_id_commands_autocomplete_suggestions_get(&self, team_id: &str, user_input: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::AutocompleteSuggestion>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/teams/{team_id}/commands/autocomplete_suggestions".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

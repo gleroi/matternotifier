@@ -33,66 +33,66 @@ impl<C: hyper::client::Connect> UsersApiClient<C> {
 }
 
 pub trait UsersApi {
-    fn bots_bot_user_id_convert_to_user_post(&self, bot_user_id: &str, inline_object93: crate::models::InlineObject93, set_system_admin: Option<bool>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_autocomplete_get(&self, name: &str, team_id: Option<&str>, channel_id: Option<&str>, limit: Option<i32>) -> Box<dyn Future<Item = crate::models::UserAutocomplete, Error = Error<serde_json::Value>>>;
-    fn users_delete(&self, ) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn users_email_email_get(&self, email: &str) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>>;
-    fn users_email_verify_post(&self, inline_object15: crate::models::InlineObject15) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_email_verify_send_post(&self, inline_object16: crate::models::InlineObject16) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_get(&self, page: Option<i32>, per_page: Option<i32>, in_team: Option<&str>, not_in_team: Option<&str>, in_channel: Option<&str>, not_in_channel: Option<&str>, in_group: Option<&str>, group_constrained: Option<bool>, without_team: Option<bool>, sort: Option<&str>) -> Box<dyn Future<Item = Vec<crate::models::User>, Error = Error<serde_json::Value>>>;
-    fn users_group_channels_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = crate::models::InlineResponse200, Error = Error<serde_json::Value>>>;
-    fn users_ids_post(&self, request_body: Vec<String>, since: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::User>, Error = Error<serde_json::Value>>>;
-    fn users_known_get(&self, ) -> Box<dyn Future<Item = crate::models::UsersStats, Error = Error<serde_json::Value>>>;
-    fn users_login_post(&self, inline_object: crate::models::InlineObject) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>>;
-    fn users_login_switch_post(&self, inline_object17: crate::models::InlineObject17) -> Box<dyn Future<Item = crate::models::InlineResponse2003, Error = Error<serde_json::Value>>>;
-    fn users_logout_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_mfa_post(&self, inline_object10: crate::models::InlineObject10) -> Box<dyn Future<Item = crate::models::InlineResponse2002, Error = Error<serde_json::Value>>>;
-    fn users_password_reset_post(&self, inline_object8: crate::models::InlineObject8) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_password_reset_send_post(&self, inline_object12: crate::models::InlineObject12) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_post(&self, inline_object1: crate::models::InlineObject1, t: Option<&str>, iid: Option<&str>) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>>;
-    fn users_search_post(&self, inline_object2: crate::models::InlineObject2) -> Box<dyn Future<Item = Vec<crate::models::User>, Error = Error<serde_json::Value>>>;
-    fn users_sessions_device_put(&self, inline_object14: crate::models::InlineObject14) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_sessions_revoke_all_post(&self, ) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn users_stats_get(&self, ) -> Box<dyn Future<Item = crate::models::UsersStats, Error = Error<serde_json::Value>>>;
-    fn users_tokens_disable_post(&self, inline_object20: crate::models::InlineObject20) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_tokens_enable_post(&self, inline_object21: crate::models::InlineObject21) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_tokens_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::UserAccessTokenSanitized>, Error = Error<serde_json::Value>>>;
-    fn users_tokens_revoke_post(&self, inline_object19: crate::models::InlineObject19) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_tokens_search_post(&self, inline_object22: crate::models::InlineObject22) -> Box<dyn Future<Item = Vec<crate::models::UserAccessTokenSanitized>, Error = Error<serde_json::Value>>>;
-    fn users_tokens_token_id_get(&self, token_id: &str) -> Box<dyn Future<Item = crate::models::UserAccessTokenSanitized, Error = Error<serde_json::Value>>>;
-    fn users_user_id_active_put(&self, user_id: &str, inline_object6: crate::models::InlineObject6) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_audits_get(&self, user_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Audit>, Error = Error<serde_json::Value>>>;
-    fn users_user_id_auth_put(&self, user_id: &str, user_auth_data: crate::models::UserAuthData) -> Box<dyn Future<Item = crate::models::UserAuthData, Error = Error<serde_json::Value>>>;
-    fn users_user_id_convert_to_bot_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_delete(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_demote_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_email_verify_member_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>>;
-    fn users_user_id_get(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>>;
-    fn users_user_id_image_default_get(&self, user_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn users_user_id_image_delete(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_image_get(&self, user_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn users_user_id_image_post(&self, user_id: &str, image: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_mfa_generate_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::InlineResponse2001, Error = Error<serde_json::Value>>>;
-    fn users_user_id_mfa_put(&self, user_id: &str, inline_object9: crate::models::InlineObject9) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_password_put(&self, user_id: &str, inline_object11: crate::models::InlineObject11) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_patch_put(&self, user_id: &str, inline_object4: crate::models::InlineObject4) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>>;
-    fn users_user_id_promote_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_put(&self, user_id: &str, inline_object3: crate::models::InlineObject3) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>>;
-    fn users_user_id_roles_put(&self, user_id: &str, inline_object5: crate::models::InlineObject5) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_sessions_get(&self, user_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Session>, Error = Error<serde_json::Value>>>;
-    fn users_user_id_sessions_revoke_all_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_sessions_revoke_post(&self, user_id: &str, inline_object13: crate::models::InlineObject13) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_terms_of_service_get(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::UserTermsOfService, Error = Error<serde_json::Value>>>;
-    fn users_user_id_terms_of_service_post(&self, user_id: &str, inline_object23: crate::models::InlineObject23) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn users_user_id_tokens_get(&self, user_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::UserAccessTokenSanitized>, Error = Error<serde_json::Value>>>;
-    fn users_user_id_tokens_post(&self, user_id: &str, inline_object18: crate::models::InlineObject18) -> Box<dyn Future<Item = crate::models::UserAccessToken, Error = Error<serde_json::Value>>>;
-    fn users_user_id_typing_post(&self, user_id: &str, inline_object24: Option<crate::models::InlineObject24>) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn users_username_username_get(&self, username: &str) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>>;
-    fn users_usernames_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = Vec<crate::models::User>, Error = Error<serde_json::Value>>>;
+    fn bots_bot_user_id_convert_to_user_post(&self, bot_user_id: &str, inline_object93: crate::models::InlineObject93, set_system_admin: Option<bool>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_autocomplete_get(&self, name: &str, team_id: Option<&str>, channel_id: Option<&str>, limit: Option<i32>) -> Box<dyn Future<Output = Result<crate::models::UserAutocomplete, Error<serde_json::Value>>>>;
+    fn users_delete(&self, ) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn users_email_email_get(&self, email: &str) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>;
+    fn users_email_verify_post(&self, inline_object15: crate::models::InlineObject15) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_email_verify_send_post(&self, inline_object16: crate::models::InlineObject16) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_get(&self, page: Option<i32>, per_page: Option<i32>, in_team: Option<&str>, not_in_team: Option<&str>, in_channel: Option<&str>, not_in_channel: Option<&str>, in_group: Option<&str>, group_constrained: Option<bool>, without_team: Option<bool>, sort: Option<&str>) -> Box<dyn Future<Output = Result<Vec<crate::models::User>, Error<serde_json::Value>>>>;
+    fn users_group_channels_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<crate::models::InlineResponse200, Error<serde_json::Value>>>>;
+    fn users_ids_post(&self, request_body: Vec<String>, since: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::User>, Error<serde_json::Value>>>>;
+    fn users_known_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::UsersStats, Error<serde_json::Value>>>>;
+    fn users_login_post(&self, inline_object: crate::models::InlineObject) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>;
+    fn users_login_switch_post(&self, inline_object17: crate::models::InlineObject17) -> Box<dyn Future<Output = Result<crate::models::InlineResponse2003, Error<serde_json::Value>>>>;
+    fn users_logout_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_mfa_post(&self, inline_object10: crate::models::InlineObject10) -> Box<dyn Future<Output = Result<crate::models::InlineResponse2002, Error<serde_json::Value>>>>;
+    fn users_password_reset_post(&self, inline_object8: crate::models::InlineObject8) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_password_reset_send_post(&self, inline_object12: crate::models::InlineObject12) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_post(&self, inline_object1: crate::models::InlineObject1, t: Option<&str>, iid: Option<&str>) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>;
+    fn users_search_post(&self, inline_object2: crate::models::InlineObject2) -> Box<dyn Future<Output = Result<Vec<crate::models::User>, Error<serde_json::Value>>>>;
+    fn users_sessions_device_put(&self, inline_object14: crate::models::InlineObject14) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_sessions_revoke_all_post(&self, ) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn users_stats_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::UsersStats, Error<serde_json::Value>>>>;
+    fn users_tokens_disable_post(&self, inline_object20: crate::models::InlineObject20) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_tokens_enable_post(&self, inline_object21: crate::models::InlineObject21) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_tokens_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::UserAccessTokenSanitized>, Error<serde_json::Value>>>>;
+    fn users_tokens_revoke_post(&self, inline_object19: crate::models::InlineObject19) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_tokens_search_post(&self, inline_object22: crate::models::InlineObject22) -> Box<dyn Future<Output = Result<Vec<crate::models::UserAccessTokenSanitized>, Error<serde_json::Value>>>>;
+    fn users_tokens_token_id_get(&self, token_id: &str) -> Box<dyn Future<Output = Result<crate::models::UserAccessTokenSanitized, Error<serde_json::Value>>>>;
+    fn users_user_id_active_put(&self, user_id: &str, inline_object6: crate::models::InlineObject6) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_audits_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Audit>, Error<serde_json::Value>>>>;
+    fn users_user_id_auth_put(&self, user_id: &str, user_auth_data: crate::models::UserAuthData) -> Box<dyn Future<Output = Result<crate::models::UserAuthData, Error<serde_json::Value>>>>;
+    fn users_user_id_convert_to_bot_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_delete(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_demote_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_email_verify_member_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>;
+    fn users_user_id_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>;
+    fn users_user_id_image_default_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn users_user_id_image_delete(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_image_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn users_user_id_image_post(&self, user_id: &str, image: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_mfa_generate_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::InlineResponse2001, Error<serde_json::Value>>>>;
+    fn users_user_id_mfa_put(&self, user_id: &str, inline_object9: crate::models::InlineObject9) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_password_put(&self, user_id: &str, inline_object11: crate::models::InlineObject11) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_patch_put(&self, user_id: &str, inline_object4: crate::models::InlineObject4) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>;
+    fn users_user_id_promote_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_put(&self, user_id: &str, inline_object3: crate::models::InlineObject3) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>;
+    fn users_user_id_roles_put(&self, user_id: &str, inline_object5: crate::models::InlineObject5) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_sessions_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Session>, Error<serde_json::Value>>>>;
+    fn users_user_id_sessions_revoke_all_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_sessions_revoke_post(&self, user_id: &str, inline_object13: crate::models::InlineObject13) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_terms_of_service_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::UserTermsOfService, Error<serde_json::Value>>>>;
+    fn users_user_id_terms_of_service_post(&self, user_id: &str, inline_object23: crate::models::InlineObject23) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn users_user_id_tokens_get(&self, user_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::UserAccessTokenSanitized>, Error<serde_json::Value>>>>;
+    fn users_user_id_tokens_post(&self, user_id: &str, inline_object18: crate::models::InlineObject18) -> Box<dyn Future<Output = Result<crate::models::UserAccessToken, Error<serde_json::Value>>>>;
+    fn users_user_id_typing_post(&self, user_id: &str, inline_object24: Option<crate::models::InlineObject24>) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn users_username_username_get(&self, username: &str) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>;
+    fn users_usernames_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<Vec<crate::models::User>, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
-    fn bots_bot_user_id_convert_to_user_post(&self, bot_user_id: &str, inline_object93: crate::models::InlineObject93, set_system_admin: Option<bool>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn bots_bot_user_id_convert_to_user_post(&self, bot_user_id: &str, inline_object93: crate::models::InlineObject93, set_system_admin: Option<bool>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/bots/{bot_user_id}/convert_to_user".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -105,7 +105,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_autocomplete_get(&self, name: &str, team_id: Option<&str>, channel_id: Option<&str>, limit: Option<i32>) -> Box<dyn Future<Item = crate::models::UserAutocomplete, Error = Error<serde_json::Value>>> {
+    fn users_autocomplete_get(&self, name: &str, team_id: Option<&str>, channel_id: Option<&str>, limit: Option<i32>) -> Box<dyn Future<Output = Result<crate::models::UserAutocomplete, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/autocomplete".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -123,7 +123,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_delete(&self, ) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn users_delete(&self, ) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/users".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -132,7 +132,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_email_email_get(&self, email: &str) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>> {
+    fn users_email_email_get(&self, email: &str) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/email/{email}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -141,7 +141,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_email_verify_post(&self, inline_object15: crate::models::InlineObject15) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_email_verify_post(&self, inline_object15: crate::models::InlineObject15) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/email/verify".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -150,7 +150,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_email_verify_send_post(&self, inline_object16: crate::models::InlineObject16) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_email_verify_send_post(&self, inline_object16: crate::models::InlineObject16) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/email/verify/send".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -159,7 +159,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_get(&self, page: Option<i32>, per_page: Option<i32>, in_team: Option<&str>, not_in_team: Option<&str>, in_channel: Option<&str>, not_in_channel: Option<&str>, in_group: Option<&str>, group_constrained: Option<bool>, without_team: Option<bool>, sort: Option<&str>) -> Box<dyn Future<Item = Vec<crate::models::User>, Error = Error<serde_json::Value>>> {
+    fn users_get(&self, page: Option<i32>, per_page: Option<i32>, in_team: Option<&str>, not_in_team: Option<&str>, in_channel: Option<&str>, not_in_channel: Option<&str>, in_group: Option<&str>, group_constrained: Option<bool>, without_team: Option<bool>, sort: Option<&str>) -> Box<dyn Future<Output = Result<Vec<crate::models::User>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -197,7 +197,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_group_channels_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = crate::models::InlineResponse200, Error = Error<serde_json::Value>>> {
+    fn users_group_channels_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<crate::models::InlineResponse200, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/group_channels".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -206,7 +206,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_ids_post(&self, request_body: Vec<String>, since: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::User>, Error = Error<serde_json::Value>>> {
+    fn users_ids_post(&self, request_body: Vec<String>, since: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::User>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/ids".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -218,7 +218,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_known_get(&self, ) -> Box<dyn Future<Item = crate::models::UsersStats, Error = Error<serde_json::Value>>> {
+    fn users_known_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::UsersStats, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/known".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -226,7 +226,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_login_post(&self, inline_object: crate::models::InlineObject) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>> {
+    fn users_login_post(&self, inline_object: crate::models::InlineObject) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/login".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -235,7 +235,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_login_switch_post(&self, inline_object17: crate::models::InlineObject17) -> Box<dyn Future<Item = crate::models::InlineResponse2003, Error = Error<serde_json::Value>>> {
+    fn users_login_switch_post(&self, inline_object17: crate::models::InlineObject17) -> Box<dyn Future<Output = Result<crate::models::InlineResponse2003, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/login/switch".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -244,7 +244,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_logout_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_logout_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/logout".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -252,7 +252,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_mfa_post(&self, inline_object10: crate::models::InlineObject10) -> Box<dyn Future<Item = crate::models::InlineResponse2002, Error = Error<serde_json::Value>>> {
+    fn users_mfa_post(&self, inline_object10: crate::models::InlineObject10) -> Box<dyn Future<Output = Result<crate::models::InlineResponse2002, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/mfa".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -261,7 +261,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_password_reset_post(&self, inline_object8: crate::models::InlineObject8) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_password_reset_post(&self, inline_object8: crate::models::InlineObject8) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/password/reset".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -270,7 +270,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_password_reset_send_post(&self, inline_object12: crate::models::InlineObject12) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_password_reset_send_post(&self, inline_object12: crate::models::InlineObject12) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/password/reset/send".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -279,7 +279,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_post(&self, inline_object1: crate::models::InlineObject1, t: Option<&str>, iid: Option<&str>) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>> {
+    fn users_post(&self, inline_object1: crate::models::InlineObject1, t: Option<&str>, iid: Option<&str>) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -294,7 +294,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_search_post(&self, inline_object2: crate::models::InlineObject2) -> Box<dyn Future<Item = Vec<crate::models::User>, Error = Error<serde_json::Value>>> {
+    fn users_search_post(&self, inline_object2: crate::models::InlineObject2) -> Box<dyn Future<Output = Result<Vec<crate::models::User>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/search".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -303,7 +303,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_sessions_device_put(&self, inline_object14: crate::models::InlineObject14) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_sessions_device_put(&self, inline_object14: crate::models::InlineObject14) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/users/sessions/device".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -312,7 +312,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_sessions_revoke_all_post(&self, ) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn users_sessions_revoke_all_post(&self, ) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/sessions/revoke/all".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -321,7 +321,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_stats_get(&self, ) -> Box<dyn Future<Item = crate::models::UsersStats, Error = Error<serde_json::Value>>> {
+    fn users_stats_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::UsersStats, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/stats".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -329,7 +329,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_tokens_disable_post(&self, inline_object20: crate::models::InlineObject20) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_tokens_disable_post(&self, inline_object20: crate::models::InlineObject20) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/tokens/disable".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -338,7 +338,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_tokens_enable_post(&self, inline_object21: crate::models::InlineObject21) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_tokens_enable_post(&self, inline_object21: crate::models::InlineObject21) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/tokens/enable".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -347,7 +347,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_tokens_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::UserAccessTokenSanitized>, Error = Error<serde_json::Value>>> {
+    fn users_tokens_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::UserAccessTokenSanitized>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/tokens".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -361,7 +361,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_tokens_revoke_post(&self, inline_object19: crate::models::InlineObject19) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_tokens_revoke_post(&self, inline_object19: crate::models::InlineObject19) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/tokens/revoke".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -370,7 +370,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_tokens_search_post(&self, inline_object22: crate::models::InlineObject22) -> Box<dyn Future<Item = Vec<crate::models::UserAccessTokenSanitized>, Error = Error<serde_json::Value>>> {
+    fn users_tokens_search_post(&self, inline_object22: crate::models::InlineObject22) -> Box<dyn Future<Output = Result<Vec<crate::models::UserAccessTokenSanitized>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/tokens/search".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -379,7 +379,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_tokens_token_id_get(&self, token_id: &str) -> Box<dyn Future<Item = crate::models::UserAccessTokenSanitized, Error = Error<serde_json::Value>>> {
+    fn users_tokens_token_id_get(&self, token_id: &str) -> Box<dyn Future<Output = Result<crate::models::UserAccessTokenSanitized, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/tokens/{token_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -388,7 +388,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_active_put(&self, user_id: &str, inline_object6: crate::models::InlineObject6) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_active_put(&self, user_id: &str, inline_object6: crate::models::InlineObject6) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/users/{user_id}/active".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -398,7 +398,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_audits_get(&self, user_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Audit>, Error = Error<serde_json::Value>>> {
+    fn users_user_id_audits_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Audit>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/audits".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -407,7 +407,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_auth_put(&self, user_id: &str, user_auth_data: crate::models::UserAuthData) -> Box<dyn Future<Item = crate::models::UserAuthData, Error = Error<serde_json::Value>>> {
+    fn users_user_id_auth_put(&self, user_id: &str, user_auth_data: crate::models::UserAuthData) -> Box<dyn Future<Output = Result<crate::models::UserAuthData, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/users/{user_id}/auth".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -417,7 +417,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_convert_to_bot_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_convert_to_bot_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/convert_to_bot".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -426,7 +426,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_delete(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_delete(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/users/{user_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -435,7 +435,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_demote_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_demote_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/demote".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -444,7 +444,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_email_verify_member_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>> {
+    fn users_user_id_email_verify_member_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/email/verify/member".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -453,7 +453,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_get(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>> {
+    fn users_user_id_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -462,7 +462,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_image_default_get(&self, user_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn users_user_id_image_default_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/image/default".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -472,7 +472,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_image_delete(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_image_delete(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/users/{user_id}/image".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -481,7 +481,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_image_get(&self, user_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn users_user_id_image_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/image".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -491,7 +491,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_image_post(&self, user_id: &str, image: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_image_post(&self, user_id: &str, image: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/image".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -501,7 +501,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_mfa_generate_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::InlineResponse2001, Error = Error<serde_json::Value>>> {
+    fn users_user_id_mfa_generate_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::InlineResponse2001, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/mfa/generate".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -510,7 +510,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_mfa_put(&self, user_id: &str, inline_object9: crate::models::InlineObject9) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_mfa_put(&self, user_id: &str, inline_object9: crate::models::InlineObject9) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/users/{user_id}/mfa".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -520,7 +520,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_password_put(&self, user_id: &str, inline_object11: crate::models::InlineObject11) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_password_put(&self, user_id: &str, inline_object11: crate::models::InlineObject11) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/users/{user_id}/password".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -530,7 +530,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_patch_put(&self, user_id: &str, inline_object4: crate::models::InlineObject4) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>> {
+    fn users_user_id_patch_put(&self, user_id: &str, inline_object4: crate::models::InlineObject4) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/users/{user_id}/patch".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -540,7 +540,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_promote_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_promote_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/promote".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -549,7 +549,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_put(&self, user_id: &str, inline_object3: crate::models::InlineObject3) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>> {
+    fn users_user_id_put(&self, user_id: &str, inline_object3: crate::models::InlineObject3) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/users/{user_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -559,7 +559,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_roles_put(&self, user_id: &str, inline_object5: crate::models::InlineObject5) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_roles_put(&self, user_id: &str, inline_object5: crate::models::InlineObject5) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/users/{user_id}/roles".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -569,7 +569,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_sessions_get(&self, user_id: &str) -> Box<dyn Future<Item = Vec<crate::models::Session>, Error = Error<serde_json::Value>>> {
+    fn users_user_id_sessions_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<Vec<crate::models::Session>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/sessions".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -578,7 +578,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_sessions_revoke_all_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_sessions_revoke_all_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/sessions/revoke/all".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -587,7 +587,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_sessions_revoke_post(&self, user_id: &str, inline_object13: crate::models::InlineObject13) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_sessions_revoke_post(&self, user_id: &str, inline_object13: crate::models::InlineObject13) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/sessions/revoke".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -597,7 +597,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_terms_of_service_get(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::UserTermsOfService, Error = Error<serde_json::Value>>> {
+    fn users_user_id_terms_of_service_get(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::UserTermsOfService, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/terms_of_service".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -606,7 +606,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_terms_of_service_post(&self, user_id: &str, inline_object23: crate::models::InlineObject23) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_terms_of_service_post(&self, user_id: &str, inline_object23: crate::models::InlineObject23) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/terms_of_service".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -616,7 +616,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_tokens_get(&self, user_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::UserAccessTokenSanitized>, Error = Error<serde_json::Value>>> {
+    fn users_user_id_tokens_get(&self, user_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::UserAccessTokenSanitized>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/tokens".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -631,7 +631,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_tokens_post(&self, user_id: &str, inline_object18: crate::models::InlineObject18) -> Box<dyn Future<Item = crate::models::UserAccessToken, Error = Error<serde_json::Value>>> {
+    fn users_user_id_tokens_post(&self, user_id: &str, inline_object18: crate::models::InlineObject18) -> Box<dyn Future<Output = Result<crate::models::UserAccessToken, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/tokens".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -641,7 +641,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_typing_post(&self, user_id: &str, inline_object24: Option<crate::models::InlineObject24>) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn users_user_id_typing_post(&self, user_id: &str, inline_object24: Option<crate::models::InlineObject24>) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/typing".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -652,7 +652,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_username_username_get(&self, username: &str) -> Box<dyn Future<Item = crate::models::User, Error = Error<serde_json::Value>>> {
+    fn users_username_username_get(&self, username: &str) -> Box<dyn Future<Output = Result<crate::models::User, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/username/{username}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -661,7 +661,7 @@ impl<C: hyper::client::Connect>UsersApi for UsersApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_usernames_post(&self, request_body: Vec<String>) -> Box<dyn Future<Item = Vec<crate::models::User>, Error = Error<serde_json::Value>>> {
+    fn users_usernames_post(&self, request_body: Vec<String>) -> Box<dyn Future<Output = Result<Vec<crate::models::User>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/usernames".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

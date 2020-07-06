@@ -33,13 +33,13 @@ impl<C: hyper::client::Connect> BrandApiClient<C> {
 }
 
 pub trait BrandApi {
-    fn brand_image_delete(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn brand_image_get(&self, ) -> Box<dyn Future<Item = String, Error = Error<serde_json::Value>>>;
-    fn brand_image_post(&self, image: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
+    fn brand_image_delete(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn brand_image_get(&self, ) -> Box<dyn Future<Output = Result<String, Error<serde_json::Value>>>>;
+    fn brand_image_post(&self, image: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>BrandApi for BrandApiClient<C> {
-    fn brand_image_delete(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn brand_image_delete(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/brand/image".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -47,7 +47,7 @@ impl<C: hyper::client::Connect>BrandApi for BrandApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn brand_image_get(&self, ) -> Box<dyn Future<Item = String, Error = Error<serde_json::Value>>> {
+    fn brand_image_get(&self, ) -> Box<dyn Future<Output = Result<String, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/brand/image".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -55,7 +55,7 @@ impl<C: hyper::client::Connect>BrandApi for BrandApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn brand_image_post(&self, image: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn brand_image_post(&self, image: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/brand/image".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

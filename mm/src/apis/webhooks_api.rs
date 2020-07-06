@@ -33,21 +33,21 @@ impl<C: hyper::client::Connect> WebhooksApiClient<C> {
 }
 
 pub trait WebhooksApi {
-    fn hooks_incoming_get(&self, page: Option<i32>, per_page: Option<i32>, team_id: Option<&str>) -> Box<dyn Future<Item = Vec<crate::models::IncomingWebhook>, Error = Error<serde_json::Value>>>;
-    fn hooks_incoming_hook_id_delete(&self, hook_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn hooks_incoming_hook_id_get(&self, hook_id: &str) -> Box<dyn Future<Item = crate::models::IncomingWebhook, Error = Error<serde_json::Value>>>;
-    fn hooks_incoming_hook_id_put(&self, hook_id: &str, inline_object66: crate::models::InlineObject66) -> Box<dyn Future<Item = crate::models::IncomingWebhook, Error = Error<serde_json::Value>>>;
-    fn hooks_incoming_post(&self, inline_object65: crate::models::InlineObject65) -> Box<dyn Future<Item = crate::models::IncomingWebhook, Error = Error<serde_json::Value>>>;
-    fn hooks_outgoing_get(&self, page: Option<i32>, per_page: Option<i32>, team_id: Option<&str>, channel_id: Option<&str>) -> Box<dyn Future<Item = Vec<crate::models::OutgoingWebhook>, Error = Error<serde_json::Value>>>;
-    fn hooks_outgoing_hook_id_delete(&self, hook_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn hooks_outgoing_hook_id_get(&self, hook_id: &str) -> Box<dyn Future<Item = crate::models::OutgoingWebhook, Error = Error<serde_json::Value>>>;
-    fn hooks_outgoing_hook_id_put(&self, hook_id: &str, inline_object68: crate::models::InlineObject68) -> Box<dyn Future<Item = crate::models::OutgoingWebhook, Error = Error<serde_json::Value>>>;
-    fn hooks_outgoing_hook_id_regen_token_post(&self, hook_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn hooks_outgoing_post(&self, inline_object67: crate::models::InlineObject67) -> Box<dyn Future<Item = crate::models::OutgoingWebhook, Error = Error<serde_json::Value>>>;
+    fn hooks_incoming_get(&self, page: Option<i32>, per_page: Option<i32>, team_id: Option<&str>) -> Box<dyn Future<Output = Result<Vec<crate::models::IncomingWebhook>, Error<serde_json::Value>>>>;
+    fn hooks_incoming_hook_id_delete(&self, hook_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn hooks_incoming_hook_id_get(&self, hook_id: &str) -> Box<dyn Future<Output = Result<crate::models::IncomingWebhook, Error<serde_json::Value>>>>;
+    fn hooks_incoming_hook_id_put(&self, hook_id: &str, inline_object66: crate::models::InlineObject66) -> Box<dyn Future<Output = Result<crate::models::IncomingWebhook, Error<serde_json::Value>>>>;
+    fn hooks_incoming_post(&self, inline_object65: crate::models::InlineObject65) -> Box<dyn Future<Output = Result<crate::models::IncomingWebhook, Error<serde_json::Value>>>>;
+    fn hooks_outgoing_get(&self, page: Option<i32>, per_page: Option<i32>, team_id: Option<&str>, channel_id: Option<&str>) -> Box<dyn Future<Output = Result<Vec<crate::models::OutgoingWebhook>, Error<serde_json::Value>>>>;
+    fn hooks_outgoing_hook_id_delete(&self, hook_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn hooks_outgoing_hook_id_get(&self, hook_id: &str) -> Box<dyn Future<Output = Result<crate::models::OutgoingWebhook, Error<serde_json::Value>>>>;
+    fn hooks_outgoing_hook_id_put(&self, hook_id: &str, inline_object68: crate::models::InlineObject68) -> Box<dyn Future<Output = Result<crate::models::OutgoingWebhook, Error<serde_json::Value>>>>;
+    fn hooks_outgoing_hook_id_regen_token_post(&self, hook_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn hooks_outgoing_post(&self, inline_object67: crate::models::InlineObject67) -> Box<dyn Future<Output = Result<crate::models::OutgoingWebhook, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
-    fn hooks_incoming_get(&self, page: Option<i32>, per_page: Option<i32>, team_id: Option<&str>) -> Box<dyn Future<Item = Vec<crate::models::IncomingWebhook>, Error = Error<serde_json::Value>>> {
+    fn hooks_incoming_get(&self, page: Option<i32>, per_page: Option<i32>, team_id: Option<&str>) -> Box<dyn Future<Output = Result<Vec<crate::models::IncomingWebhook>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/hooks/incoming".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -64,7 +64,7 @@ impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn hooks_incoming_hook_id_delete(&self, hook_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn hooks_incoming_hook_id_delete(&self, hook_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/hooks/incoming/{hook_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -73,7 +73,7 @@ impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn hooks_incoming_hook_id_get(&self, hook_id: &str) -> Box<dyn Future<Item = crate::models::IncomingWebhook, Error = Error<serde_json::Value>>> {
+    fn hooks_incoming_hook_id_get(&self, hook_id: &str) -> Box<dyn Future<Output = Result<crate::models::IncomingWebhook, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/hooks/incoming/{hook_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -82,7 +82,7 @@ impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn hooks_incoming_hook_id_put(&self, hook_id: &str, inline_object66: crate::models::InlineObject66) -> Box<dyn Future<Item = crate::models::IncomingWebhook, Error = Error<serde_json::Value>>> {
+    fn hooks_incoming_hook_id_put(&self, hook_id: &str, inline_object66: crate::models::InlineObject66) -> Box<dyn Future<Output = Result<crate::models::IncomingWebhook, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/hooks/incoming/{hook_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -92,7 +92,7 @@ impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn hooks_incoming_post(&self, inline_object65: crate::models::InlineObject65) -> Box<dyn Future<Item = crate::models::IncomingWebhook, Error = Error<serde_json::Value>>> {
+    fn hooks_incoming_post(&self, inline_object65: crate::models::InlineObject65) -> Box<dyn Future<Output = Result<crate::models::IncomingWebhook, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/hooks/incoming".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -101,7 +101,7 @@ impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn hooks_outgoing_get(&self, page: Option<i32>, per_page: Option<i32>, team_id: Option<&str>, channel_id: Option<&str>) -> Box<dyn Future<Item = Vec<crate::models::OutgoingWebhook>, Error = Error<serde_json::Value>>> {
+    fn hooks_outgoing_get(&self, page: Option<i32>, per_page: Option<i32>, team_id: Option<&str>, channel_id: Option<&str>) -> Box<dyn Future<Output = Result<Vec<crate::models::OutgoingWebhook>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/hooks/outgoing".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -121,7 +121,7 @@ impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn hooks_outgoing_hook_id_delete(&self, hook_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn hooks_outgoing_hook_id_delete(&self, hook_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/hooks/outgoing/{hook_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -130,7 +130,7 @@ impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn hooks_outgoing_hook_id_get(&self, hook_id: &str) -> Box<dyn Future<Item = crate::models::OutgoingWebhook, Error = Error<serde_json::Value>>> {
+    fn hooks_outgoing_hook_id_get(&self, hook_id: &str) -> Box<dyn Future<Output = Result<crate::models::OutgoingWebhook, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/hooks/outgoing/{hook_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -139,7 +139,7 @@ impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn hooks_outgoing_hook_id_put(&self, hook_id: &str, inline_object68: crate::models::InlineObject68) -> Box<dyn Future<Item = crate::models::OutgoingWebhook, Error = Error<serde_json::Value>>> {
+    fn hooks_outgoing_hook_id_put(&self, hook_id: &str, inline_object68: crate::models::InlineObject68) -> Box<dyn Future<Output = Result<crate::models::OutgoingWebhook, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/hooks/outgoing/{hook_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -149,7 +149,7 @@ impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn hooks_outgoing_hook_id_regen_token_post(&self, hook_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn hooks_outgoing_hook_id_regen_token_post(&self, hook_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/hooks/outgoing/{hook_id}/regen_token".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -158,7 +158,7 @@ impl<C: hyper::client::Connect>WebhooksApi for WebhooksApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn hooks_outgoing_post(&self, inline_object67: crate::models::InlineObject67) -> Box<dyn Future<Item = crate::models::OutgoingWebhook, Error = Error<serde_json::Value>>> {
+    fn hooks_outgoing_post(&self, inline_object67: crate::models::InlineObject67) -> Box<dyn Future<Output = Result<crate::models::OutgoingWebhook, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/hooks/outgoing".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

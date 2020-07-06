@@ -33,20 +33,20 @@ impl<C: hyper::client::Connect> PluginsApiClient<C> {
 }
 
 pub trait PluginsApi {
-    fn plugins_get(&self, ) -> Box<dyn Future<Item = crate::models::InlineResponse20014, Error = Error<serde_json::Value>>>;
-    fn plugins_install_from_url_post(&self, plugin_download_url: &str, force: Option<&str>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn plugins_marketplace_get(&self, page: Option<i32>, per_page: Option<i32>, filter: Option<&str>, server_version: Option<&str>, local_only: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::MarketplacePlugin>, Error = Error<serde_json::Value>>>;
-    fn plugins_marketplace_post(&self, inline_object83: crate::models::InlineObject83) -> Box<dyn Future<Item = crate::models::PluginManifest, Error = Error<serde_json::Value>>>;
-    fn plugins_plugin_id_delete(&self, plugin_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn plugins_plugin_id_disable_post(&self, plugin_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn plugins_plugin_id_enable_post(&self, plugin_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn plugins_post(&self, plugin: std::path::PathBuf, force: Option<&str>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn plugins_statuses_get(&self, ) -> Box<dyn Future<Item = Vec<crate::models::PluginStatus>, Error = Error<serde_json::Value>>>;
-    fn plugins_webapp_get(&self, ) -> Box<dyn Future<Item = Vec<crate::models::PluginManifestWebapp>, Error = Error<serde_json::Value>>>;
+    fn plugins_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::InlineResponse20014, Error<serde_json::Value>>>>;
+    fn plugins_install_from_url_post(&self, plugin_download_url: &str, force: Option<&str>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn plugins_marketplace_get(&self, page: Option<i32>, per_page: Option<i32>, filter: Option<&str>, server_version: Option<&str>, local_only: Option<bool>) -> Box<dyn Future<Output = Result<Vec<crate::models::MarketplacePlugin>, Error<serde_json::Value>>>>;
+    fn plugins_marketplace_post(&self, inline_object83: crate::models::InlineObject83) -> Box<dyn Future<Output = Result<crate::models::PluginManifest, Error<serde_json::Value>>>>;
+    fn plugins_plugin_id_delete(&self, plugin_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn plugins_plugin_id_disable_post(&self, plugin_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn plugins_plugin_id_enable_post(&self, plugin_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn plugins_post(&self, plugin: std::path::PathBuf, force: Option<&str>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn plugins_statuses_get(&self, ) -> Box<dyn Future<Output = Result<Vec<crate::models::PluginStatus>, Error<serde_json::Value>>>>;
+    fn plugins_webapp_get(&self, ) -> Box<dyn Future<Output = Result<Vec<crate::models::PluginManifestWebapp>, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>PluginsApi for PluginsApiClient<C> {
-    fn plugins_get(&self, ) -> Box<dyn Future<Item = crate::models::InlineResponse20014, Error = Error<serde_json::Value>>> {
+    fn plugins_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::InlineResponse20014, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/plugins".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -54,7 +54,7 @@ impl<C: hyper::client::Connect>PluginsApi for PluginsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn plugins_install_from_url_post(&self, plugin_download_url: &str, force: Option<&str>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn plugins_install_from_url_post(&self, plugin_download_url: &str, force: Option<&str>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/plugins/install_from_url".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -66,7 +66,7 @@ impl<C: hyper::client::Connect>PluginsApi for PluginsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn plugins_marketplace_get(&self, page: Option<i32>, per_page: Option<i32>, filter: Option<&str>, server_version: Option<&str>, local_only: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::MarketplacePlugin>, Error = Error<serde_json::Value>>> {
+    fn plugins_marketplace_get(&self, page: Option<i32>, per_page: Option<i32>, filter: Option<&str>, server_version: Option<&str>, local_only: Option<bool>) -> Box<dyn Future<Output = Result<Vec<crate::models::MarketplacePlugin>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/plugins/marketplace".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -89,7 +89,7 @@ impl<C: hyper::client::Connect>PluginsApi for PluginsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn plugins_marketplace_post(&self, inline_object83: crate::models::InlineObject83) -> Box<dyn Future<Item = crate::models::PluginManifest, Error = Error<serde_json::Value>>> {
+    fn plugins_marketplace_post(&self, inline_object83: crate::models::InlineObject83) -> Box<dyn Future<Output = Result<crate::models::PluginManifest, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/plugins/marketplace".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -98,7 +98,7 @@ impl<C: hyper::client::Connect>PluginsApi for PluginsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn plugins_plugin_id_delete(&self, plugin_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn plugins_plugin_id_delete(&self, plugin_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/plugins/{plugin_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -107,7 +107,7 @@ impl<C: hyper::client::Connect>PluginsApi for PluginsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn plugins_plugin_id_disable_post(&self, plugin_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn plugins_plugin_id_disable_post(&self, plugin_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/plugins/{plugin_id}/disable".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -116,7 +116,7 @@ impl<C: hyper::client::Connect>PluginsApi for PluginsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn plugins_plugin_id_enable_post(&self, plugin_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn plugins_plugin_id_enable_post(&self, plugin_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/plugins/{plugin_id}/enable".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -125,7 +125,7 @@ impl<C: hyper::client::Connect>PluginsApi for PluginsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn plugins_post(&self, plugin: std::path::PathBuf, force: Option<&str>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn plugins_post(&self, plugin: std::path::PathBuf, force: Option<&str>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/plugins".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -137,7 +137,7 @@ impl<C: hyper::client::Connect>PluginsApi for PluginsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn plugins_statuses_get(&self, ) -> Box<dyn Future<Item = Vec<crate::models::PluginStatus>, Error = Error<serde_json::Value>>> {
+    fn plugins_statuses_get(&self, ) -> Box<dyn Future<Output = Result<Vec<crate::models::PluginStatus>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/plugins/statuses".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -145,7 +145,7 @@ impl<C: hyper::client::Connect>PluginsApi for PluginsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn plugins_webapp_get(&self, ) -> Box<dyn Future<Item = Vec<crate::models::PluginManifestWebapp>, Error = Error<serde_json::Value>>> {
+    fn plugins_webapp_get(&self, ) -> Box<dyn Future<Output = Result<Vec<crate::models::PluginManifestWebapp>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/plugins/webapp".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

@@ -33,15 +33,15 @@ impl<C: hyper::client::Connect> JobsApiClient<C> {
 }
 
 pub trait JobsApi {
-    fn jobs_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Job>, Error = Error<serde_json::Value>>>;
-    fn jobs_job_id_cancel_post(&self, job_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn jobs_job_id_get(&self, job_id: &str) -> Box<dyn Future<Item = crate::models::Job, Error = Error<serde_json::Value>>>;
-    fn jobs_post(&self, inline_object58: crate::models::InlineObject58) -> Box<dyn Future<Item = crate::models::Job, Error = Error<serde_json::Value>>>;
-    fn jobs_type_type_get(&self, _type: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Job>, Error = Error<serde_json::Value>>>;
+    fn jobs_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Job>, Error<serde_json::Value>>>>;
+    fn jobs_job_id_cancel_post(&self, job_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn jobs_job_id_get(&self, job_id: &str) -> Box<dyn Future<Output = Result<crate::models::Job, Error<serde_json::Value>>>>;
+    fn jobs_post(&self, inline_object58: crate::models::InlineObject58) -> Box<dyn Future<Output = Result<crate::models::Job, Error<serde_json::Value>>>>;
+    fn jobs_type_type_get(&self, _type: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Job>, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>JobsApi for JobsApiClient<C> {
-    fn jobs_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Job>, Error = Error<serde_json::Value>>> {
+    fn jobs_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Job>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/jobs".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -55,7 +55,7 @@ impl<C: hyper::client::Connect>JobsApi for JobsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn jobs_job_id_cancel_post(&self, job_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn jobs_job_id_cancel_post(&self, job_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/jobs/{job_id}/cancel".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -64,7 +64,7 @@ impl<C: hyper::client::Connect>JobsApi for JobsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn jobs_job_id_get(&self, job_id: &str) -> Box<dyn Future<Item = crate::models::Job, Error = Error<serde_json::Value>>> {
+    fn jobs_job_id_get(&self, job_id: &str) -> Box<dyn Future<Output = Result<crate::models::Job, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/jobs/{job_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -73,7 +73,7 @@ impl<C: hyper::client::Connect>JobsApi for JobsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn jobs_post(&self, inline_object58: crate::models::InlineObject58) -> Box<dyn Future<Item = crate::models::Job, Error = Error<serde_json::Value>>> {
+    fn jobs_post(&self, inline_object58: crate::models::InlineObject58) -> Box<dyn Future<Output = Result<crate::models::Job, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/jobs".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -82,7 +82,7 @@ impl<C: hyper::client::Connect>JobsApi for JobsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn jobs_type_type_get(&self, _type: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Job>, Error = Error<serde_json::Value>>> {
+    fn jobs_type_type_get(&self, _type: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Job>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/jobs/type/{type}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

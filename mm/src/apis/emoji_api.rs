@@ -33,18 +33,18 @@ impl<C: hyper::client::Connect> EmojiApiClient<C> {
 }
 
 pub trait EmojiApi {
-    fn emoji_autocomplete_get(&self, name: &str) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>>;
-    fn emoji_emoji_id_delete(&self, emoji_id: &str) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>>;
-    fn emoji_emoji_id_get(&self, emoji_id: &str) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>>;
-    fn emoji_emoji_id_image_get(&self, emoji_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn emoji_get(&self, page: Option<i32>, per_page: Option<i32>, sort: Option<&str>) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>>;
-    fn emoji_name_emoji_name_get(&self, emoji_name: &str) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>>;
-    fn emoji_post(&self, image: std::path::PathBuf, emoji: &str) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>>;
-    fn emoji_search_post(&self, inline_object64: crate::models::InlineObject64) -> Box<dyn Future<Item = Vec<crate::models::Emoji>, Error = Error<serde_json::Value>>>;
+    fn emoji_autocomplete_get(&self, name: &str) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>;
+    fn emoji_emoji_id_delete(&self, emoji_id: &str) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>;
+    fn emoji_emoji_id_get(&self, emoji_id: &str) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>;
+    fn emoji_emoji_id_image_get(&self, emoji_id: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn emoji_get(&self, page: Option<i32>, per_page: Option<i32>, sort: Option<&str>) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>;
+    fn emoji_name_emoji_name_get(&self, emoji_name: &str) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>;
+    fn emoji_post(&self, image: std::path::PathBuf, emoji: &str) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>;
+    fn emoji_search_post(&self, inline_object64: crate::models::InlineObject64) -> Box<dyn Future<Output = Result<Vec<crate::models::Emoji>, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>EmojiApi for EmojiApiClient<C> {
-    fn emoji_autocomplete_get(&self, name: &str) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>> {
+    fn emoji_autocomplete_get(&self, name: &str) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/emoji/autocomplete".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -53,7 +53,7 @@ impl<C: hyper::client::Connect>EmojiApi for EmojiApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn emoji_emoji_id_delete(&self, emoji_id: &str) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>> {
+    fn emoji_emoji_id_delete(&self, emoji_id: &str) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/emoji/{emoji_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -62,7 +62,7 @@ impl<C: hyper::client::Connect>EmojiApi for EmojiApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn emoji_emoji_id_get(&self, emoji_id: &str) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>> {
+    fn emoji_emoji_id_get(&self, emoji_id: &str) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/emoji/{emoji_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -71,7 +71,7 @@ impl<C: hyper::client::Connect>EmojiApi for EmojiApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn emoji_emoji_id_image_get(&self, emoji_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn emoji_emoji_id_image_get(&self, emoji_id: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/emoji/{emoji_id}/image".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -81,7 +81,7 @@ impl<C: hyper::client::Connect>EmojiApi for EmojiApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn emoji_get(&self, page: Option<i32>, per_page: Option<i32>, sort: Option<&str>) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>> {
+    fn emoji_get(&self, page: Option<i32>, per_page: Option<i32>, sort: Option<&str>) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/emoji".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -98,7 +98,7 @@ impl<C: hyper::client::Connect>EmojiApi for EmojiApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn emoji_name_emoji_name_get(&self, emoji_name: &str) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>> {
+    fn emoji_name_emoji_name_get(&self, emoji_name: &str) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/emoji/name/{emoji_name}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -107,7 +107,7 @@ impl<C: hyper::client::Connect>EmojiApi for EmojiApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn emoji_post(&self, image: std::path::PathBuf, emoji: &str) -> Box<dyn Future<Item = crate::models::Emoji, Error = Error<serde_json::Value>>> {
+    fn emoji_post(&self, image: std::path::PathBuf, emoji: &str) -> Box<dyn Future<Output = Result<crate::models::Emoji, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/emoji".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -117,7 +117,7 @@ impl<C: hyper::client::Connect>EmojiApi for EmojiApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn emoji_search_post(&self, inline_object64: crate::models::InlineObject64) -> Box<dyn Future<Item = Vec<crate::models::Emoji>, Error = Error<serde_json::Value>>> {
+    fn emoji_search_post(&self, inline_object64: crate::models::InlineObject64) -> Box<dyn Future<Output = Result<Vec<crate::models::Emoji>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/emoji/search".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

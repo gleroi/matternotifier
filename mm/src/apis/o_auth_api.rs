@@ -33,18 +33,18 @@ impl<C: hyper::client::Connect> OAuthApiClient<C> {
 }
 
 pub trait OAuthApi {
-    fn oauth_apps_app_id_delete(&self, app_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn oauth_apps_app_id_get(&self, app_id: &str) -> Box<dyn Future<Item = crate::models::OAuthApp, Error = Error<serde_json::Value>>>;
-    fn oauth_apps_app_id_info_get(&self, app_id: &str) -> Box<dyn Future<Item = crate::models::OAuthApp, Error = Error<serde_json::Value>>>;
-    fn oauth_apps_app_id_put(&self, app_id: &str, inline_object81: crate::models::InlineObject81) -> Box<dyn Future<Item = crate::models::OAuthApp, Error = Error<serde_json::Value>>>;
-    fn oauth_apps_app_id_regen_secret_post(&self, app_id: &str) -> Box<dyn Future<Item = crate::models::OAuthApp, Error = Error<serde_json::Value>>>;
-    fn oauth_apps_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::OAuthApp>, Error = Error<serde_json::Value>>>;
-    fn oauth_apps_post(&self, inline_object80: crate::models::InlineObject80) -> Box<dyn Future<Item = crate::models::OAuthApp, Error = Error<serde_json::Value>>>;
-    fn users_user_id_oauth_apps_authorized_get(&self, user_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::OAuthApp>, Error = Error<serde_json::Value>>>;
+    fn oauth_apps_app_id_delete(&self, app_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn oauth_apps_app_id_get(&self, app_id: &str) -> Box<dyn Future<Output = Result<crate::models::OAuthApp, Error<serde_json::Value>>>>;
+    fn oauth_apps_app_id_info_get(&self, app_id: &str) -> Box<dyn Future<Output = Result<crate::models::OAuthApp, Error<serde_json::Value>>>>;
+    fn oauth_apps_app_id_put(&self, app_id: &str, inline_object81: crate::models::InlineObject81) -> Box<dyn Future<Output = Result<crate::models::OAuthApp, Error<serde_json::Value>>>>;
+    fn oauth_apps_app_id_regen_secret_post(&self, app_id: &str) -> Box<dyn Future<Output = Result<crate::models::OAuthApp, Error<serde_json::Value>>>>;
+    fn oauth_apps_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::OAuthApp>, Error<serde_json::Value>>>>;
+    fn oauth_apps_post(&self, inline_object80: crate::models::InlineObject80) -> Box<dyn Future<Output = Result<crate::models::OAuthApp, Error<serde_json::Value>>>>;
+    fn users_user_id_oauth_apps_authorized_get(&self, user_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::OAuthApp>, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>OAuthApi for OAuthApiClient<C> {
-    fn oauth_apps_app_id_delete(&self, app_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn oauth_apps_app_id_delete(&self, app_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/oauth/apps/{app_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -53,7 +53,7 @@ impl<C: hyper::client::Connect>OAuthApi for OAuthApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn oauth_apps_app_id_get(&self, app_id: &str) -> Box<dyn Future<Item = crate::models::OAuthApp, Error = Error<serde_json::Value>>> {
+    fn oauth_apps_app_id_get(&self, app_id: &str) -> Box<dyn Future<Output = Result<crate::models::OAuthApp, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/oauth/apps/{app_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -62,7 +62,7 @@ impl<C: hyper::client::Connect>OAuthApi for OAuthApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn oauth_apps_app_id_info_get(&self, app_id: &str) -> Box<dyn Future<Item = crate::models::OAuthApp, Error = Error<serde_json::Value>>> {
+    fn oauth_apps_app_id_info_get(&self, app_id: &str) -> Box<dyn Future<Output = Result<crate::models::OAuthApp, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/oauth/apps/{app_id}/info".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -71,7 +71,7 @@ impl<C: hyper::client::Connect>OAuthApi for OAuthApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn oauth_apps_app_id_put(&self, app_id: &str, inline_object81: crate::models::InlineObject81) -> Box<dyn Future<Item = crate::models::OAuthApp, Error = Error<serde_json::Value>>> {
+    fn oauth_apps_app_id_put(&self, app_id: &str, inline_object81: crate::models::InlineObject81) -> Box<dyn Future<Output = Result<crate::models::OAuthApp, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/oauth/apps/{app_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -81,7 +81,7 @@ impl<C: hyper::client::Connect>OAuthApi for OAuthApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn oauth_apps_app_id_regen_secret_post(&self, app_id: &str) -> Box<dyn Future<Item = crate::models::OAuthApp, Error = Error<serde_json::Value>>> {
+    fn oauth_apps_app_id_regen_secret_post(&self, app_id: &str) -> Box<dyn Future<Output = Result<crate::models::OAuthApp, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/oauth/apps/{app_id}/regen_secret".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -90,7 +90,7 @@ impl<C: hyper::client::Connect>OAuthApi for OAuthApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn oauth_apps_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::OAuthApp>, Error = Error<serde_json::Value>>> {
+    fn oauth_apps_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::OAuthApp>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/oauth/apps".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -104,7 +104,7 @@ impl<C: hyper::client::Connect>OAuthApi for OAuthApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn oauth_apps_post(&self, inline_object80: crate::models::InlineObject80) -> Box<dyn Future<Item = crate::models::OAuthApp, Error = Error<serde_json::Value>>> {
+    fn oauth_apps_post(&self, inline_object80: crate::models::InlineObject80) -> Box<dyn Future<Output = Result<crate::models::OAuthApp, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/oauth/apps".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -113,7 +113,7 @@ impl<C: hyper::client::Connect>OAuthApi for OAuthApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_oauth_apps_authorized_get(&self, user_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::OAuthApp>, Error = Error<serde_json::Value>>> {
+    fn users_user_id_oauth_apps_authorized_get(&self, user_id: &str, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::OAuthApp>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/users/{user_id}/oauth/apps/authorized".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

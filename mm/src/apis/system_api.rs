@@ -33,36 +33,36 @@ impl<C: hyper::client::Connect> SystemApiClient<C> {
 }
 
 pub trait SystemApi {
-    fn analytics_old_get(&self, name: Option<&str>, team_id: Option<&str>) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn audits_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Audit>, Error = Error<serde_json::Value>>>;
-    fn caches_invalidate_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn config_client_get(&self, format: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn config_environment_get(&self, ) -> Box<dyn Future<Item = crate::models::EnvironmentConfig, Error = Error<serde_json::Value>>>;
-    fn config_get(&self, ) -> Box<dyn Future<Item = crate::models::Config, Error = Error<serde_json::Value>>>;
-    fn config_patch_put(&self, config: crate::models::Config) -> Box<dyn Future<Item = crate::models::Config, Error = Error<serde_json::Value>>>;
-    fn config_put(&self, config: crate::models::Config) -> Box<dyn Future<Item = crate::models::Config, Error = Error<serde_json::Value>>>;
-    fn config_reload_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn database_recycle_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn email_test_post(&self, config: crate::models::Config) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn file_s3_test_post(&self, config: crate::models::Config) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn image_get(&self, ) -> Box<dyn Future<Item = std::path::PathBuf, Error = Error<serde_json::Value>>>;
-    fn license_client_get(&self, format: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn license_delete(&self, ) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn license_post(&self, license: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn logs_get(&self, page: Option<i32>, logs_per_page: Option<&str>) -> Box<dyn Future<Item = Vec<String>, Error = Error<serde_json::Value>>>;
-    fn logs_post(&self, inline_object62: crate::models::InlineObject62) -> Box<dyn Future<Item = Vec<String>, Error = Error<serde_json::Value>>>;
-    fn redirect_location_get(&self, url: &str) -> Box<dyn Future<Item = crate::models::InlineResponse20010, Error = Error<serde_json::Value>>>;
-    fn server_busy_delete(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn server_busy_get(&self, ) -> Box<dyn Future<Item = crate::models::ServerBusy, Error = Error<serde_json::Value>>>;
-    fn server_busy_post(&self, seconds: Option<&str>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn site_url_test_post(&self, inline_object59: crate::models::InlineObject59) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn system_ping_get(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn system_timezones_get(&self, ) -> Box<dyn Future<Item = Vec<String>, Error = Error<serde_json::Value>>>;
-    fn trial_license_post(&self, inline_object61: crate::models::InlineObject61) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
+    fn analytics_old_get(&self, name: Option<&str>, team_id: Option<&str>) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn audits_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Audit>, Error<serde_json::Value>>>>;
+    fn caches_invalidate_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn config_client_get(&self, format: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn config_environment_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::EnvironmentConfig, Error<serde_json::Value>>>>;
+    fn config_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::Config, Error<serde_json::Value>>>>;
+    fn config_patch_put(&self, config: crate::models::Config) -> Box<dyn Future<Output = Result<crate::models::Config, Error<serde_json::Value>>>>;
+    fn config_put(&self, config: crate::models::Config) -> Box<dyn Future<Output = Result<crate::models::Config, Error<serde_json::Value>>>>;
+    fn config_reload_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn database_recycle_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn email_test_post(&self, config: crate::models::Config) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn file_s3_test_post(&self, config: crate::models::Config) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn image_get(&self, ) -> Box<dyn Future<Output = Result<std::path::PathBuf, Error<serde_json::Value>>>>;
+    fn license_client_get(&self, format: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn license_delete(&self, ) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn license_post(&self, license: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn logs_get(&self, page: Option<i32>, logs_per_page: Option<&str>) -> Box<dyn Future<Output = Result<Vec<String>, Error<serde_json::Value>>>>;
+    fn logs_post(&self, inline_object62: crate::models::InlineObject62) -> Box<dyn Future<Output = Result<Vec<String>, Error<serde_json::Value>>>>;
+    fn redirect_location_get(&self, url: &str) -> Box<dyn Future<Output = Result<crate::models::InlineResponse20010, Error<serde_json::Value>>>>;
+    fn server_busy_delete(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn server_busy_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::ServerBusy, Error<serde_json::Value>>>>;
+    fn server_busy_post(&self, seconds: Option<&str>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn site_url_test_post(&self, inline_object59: crate::models::InlineObject59) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn system_ping_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn system_timezones_get(&self, ) -> Box<dyn Future<Output = Result<Vec<String>, Error<serde_json::Value>>>>;
+    fn trial_license_post(&self, inline_object61: crate::models::InlineObject61) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
-    fn analytics_old_get(&self, name: Option<&str>, team_id: Option<&str>) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn analytics_old_get(&self, name: Option<&str>, team_id: Option<&str>) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/analytics/old".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -77,7 +77,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn audits_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Item = Vec<crate::models::Audit>, Error = Error<serde_json::Value>>> {
+    fn audits_get(&self, page: Option<i32>, per_page: Option<i32>) -> Box<dyn Future<Output = Result<Vec<crate::models::Audit>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/audits".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -91,7 +91,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn caches_invalidate_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn caches_invalidate_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/caches/invalidate".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -99,7 +99,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn config_client_get(&self, format: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn config_client_get(&self, format: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/config/client".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -109,7 +109,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn config_environment_get(&self, ) -> Box<dyn Future<Item = crate::models::EnvironmentConfig, Error = Error<serde_json::Value>>> {
+    fn config_environment_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::EnvironmentConfig, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/config/environment".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -117,7 +117,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn config_get(&self, ) -> Box<dyn Future<Item = crate::models::Config, Error = Error<serde_json::Value>>> {
+    fn config_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::Config, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/config".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -125,7 +125,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn config_patch_put(&self, config: crate::models::Config) -> Box<dyn Future<Item = crate::models::Config, Error = Error<serde_json::Value>>> {
+    fn config_patch_put(&self, config: crate::models::Config) -> Box<dyn Future<Output = Result<crate::models::Config, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/config/patch".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -134,7 +134,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn config_put(&self, config: crate::models::Config) -> Box<dyn Future<Item = crate::models::Config, Error = Error<serde_json::Value>>> {
+    fn config_put(&self, config: crate::models::Config) -> Box<dyn Future<Output = Result<crate::models::Config, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/config".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -143,7 +143,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn config_reload_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn config_reload_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/config/reload".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -151,7 +151,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn database_recycle_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn database_recycle_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/database/recycle".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -159,7 +159,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn email_test_post(&self, config: crate::models::Config) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn email_test_post(&self, config: crate::models::Config) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/email/test".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -168,7 +168,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn file_s3_test_post(&self, config: crate::models::Config) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn file_s3_test_post(&self, config: crate::models::Config) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/file/s3_test".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -177,7 +177,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn image_get(&self, ) -> Box<dyn Future<Item = std::path::PathBuf, Error = Error<serde_json::Value>>> {
+    fn image_get(&self, ) -> Box<dyn Future<Output = Result<std::path::PathBuf, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/image".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -185,7 +185,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn license_client_get(&self, format: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn license_client_get(&self, format: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/license/client".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -195,7 +195,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn license_delete(&self, ) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn license_delete(&self, ) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/license".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -204,7 +204,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn license_post(&self, license: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn license_post(&self, license: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/license".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -213,7 +213,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn logs_get(&self, page: Option<i32>, logs_per_page: Option<&str>) -> Box<dyn Future<Item = Vec<String>, Error = Error<serde_json::Value>>> {
+    fn logs_get(&self, page: Option<i32>, logs_per_page: Option<&str>) -> Box<dyn Future<Output = Result<Vec<String>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/logs".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -227,7 +227,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn logs_post(&self, inline_object62: crate::models::InlineObject62) -> Box<dyn Future<Item = Vec<String>, Error = Error<serde_json::Value>>> {
+    fn logs_post(&self, inline_object62: crate::models::InlineObject62) -> Box<dyn Future<Output = Result<Vec<String>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/logs".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -236,7 +236,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn redirect_location_get(&self, url: &str) -> Box<dyn Future<Item = crate::models::InlineResponse20010, Error = Error<serde_json::Value>>> {
+    fn redirect_location_get(&self, url: &str) -> Box<dyn Future<Output = Result<crate::models::InlineResponse20010, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/redirect_location".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -245,7 +245,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn server_busy_delete(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn server_busy_delete(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/server_busy".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -253,7 +253,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn server_busy_get(&self, ) -> Box<dyn Future<Item = crate::models::ServerBusy, Error = Error<serde_json::Value>>> {
+    fn server_busy_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::ServerBusy, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/server_busy".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -261,7 +261,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn server_busy_post(&self, seconds: Option<&str>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn server_busy_post(&self, seconds: Option<&str>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/server_busy".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -272,7 +272,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn site_url_test_post(&self, inline_object59: crate::models::InlineObject59) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn site_url_test_post(&self, inline_object59: crate::models::InlineObject59) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/site_url/test".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -281,7 +281,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn system_ping_get(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn system_ping_get(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/system/ping".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -289,7 +289,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn system_timezones_get(&self, ) -> Box<dyn Future<Item = Vec<String>, Error = Error<serde_json::Value>>> {
+    fn system_timezones_get(&self, ) -> Box<dyn Future<Output = Result<Vec<String>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/system/timezones".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -297,7 +297,7 @@ impl<C: hyper::client::Connect>SystemApi for SystemApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn trial_license_post(&self, inline_object61: crate::models::InlineObject61) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn trial_license_post(&self, inline_object61: crate::models::InlineObject61) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/trial-license".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

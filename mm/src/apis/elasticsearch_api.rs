@@ -33,12 +33,12 @@ impl<C: hyper::client::Connect> ElasticsearchApiClient<C> {
 }
 
 pub trait ElasticsearchApi {
-    fn elasticsearch_purge_indexes_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn elasticsearch_test_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
+    fn elasticsearch_purge_indexes_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn elasticsearch_test_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>ElasticsearchApi for ElasticsearchApiClient<C> {
-    fn elasticsearch_purge_indexes_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn elasticsearch_purge_indexes_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/elasticsearch/purge_indexes".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -46,7 +46,7 @@ impl<C: hyper::client::Connect>ElasticsearchApi for ElasticsearchApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn elasticsearch_test_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn elasticsearch_test_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/elasticsearch/test".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

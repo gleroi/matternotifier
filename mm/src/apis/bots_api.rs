@@ -33,22 +33,22 @@ impl<C: hyper::client::Connect> BotsApiClient<C> {
 }
 
 pub trait BotsApi {
-    fn bots_bot_user_id_assign_user_id_post(&self, bot_user_id: &str, user_id: &str) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>>;
-    fn bots_bot_user_id_convert_to_user_post(&self, bot_user_id: &str, inline_object93: crate::models::InlineObject93, set_system_admin: Option<bool>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn bots_bot_user_id_disable_post(&self, bot_user_id: &str) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>>;
-    fn bots_bot_user_id_enable_post(&self, bot_user_id: &str) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>>;
-    fn bots_bot_user_id_get(&self, bot_user_id: &str, include_deleted: Option<bool>) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>>;
-    fn bots_bot_user_id_icon_delete(&self, bot_user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn bots_bot_user_id_icon_get(&self, bot_user_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn bots_bot_user_id_icon_post(&self, bot_user_id: &str, image: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
-    fn bots_bot_user_id_put(&self, bot_user_id: &str, inline_object91: crate::models::InlineObject91) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>>;
-    fn bots_get(&self, page: Option<i32>, per_page: Option<i32>, include_deleted: Option<bool>, only_orphaned: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::Bot>, Error = Error<serde_json::Value>>>;
-    fn bots_post(&self, inline_object90: crate::models::InlineObject90) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>>;
-    fn users_user_id_convert_to_bot_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
+    fn bots_bot_user_id_assign_user_id_post(&self, bot_user_id: &str, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>;
+    fn bots_bot_user_id_convert_to_user_post(&self, bot_user_id: &str, inline_object93: crate::models::InlineObject93, set_system_admin: Option<bool>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn bots_bot_user_id_disable_post(&self, bot_user_id: &str) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>;
+    fn bots_bot_user_id_enable_post(&self, bot_user_id: &str) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>;
+    fn bots_bot_user_id_get(&self, bot_user_id: &str, include_deleted: Option<bool>) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>;
+    fn bots_bot_user_id_icon_delete(&self, bot_user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn bots_bot_user_id_icon_get(&self, bot_user_id: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>;
+    fn bots_bot_user_id_icon_post(&self, bot_user_id: &str, image: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
+    fn bots_bot_user_id_put(&self, bot_user_id: &str, inline_object91: crate::models::InlineObject91) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>;
+    fn bots_get(&self, page: Option<i32>, per_page: Option<i32>, include_deleted: Option<bool>, only_orphaned: Option<bool>) -> Box<dyn Future<Output = Result<Vec<crate::models::Bot>, Error<serde_json::Value>>>>;
+    fn bots_post(&self, inline_object90: crate::models::InlineObject90) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>;
+    fn users_user_id_convert_to_bot_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
-    fn bots_bot_user_id_assign_user_id_post(&self, bot_user_id: &str, user_id: &str) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>> {
+    fn bots_bot_user_id_assign_user_id_post(&self, bot_user_id: &str, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/bots/{bot_user_id}/assign/{user_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -58,7 +58,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn bots_bot_user_id_convert_to_user_post(&self, bot_user_id: &str, inline_object93: crate::models::InlineObject93, set_system_admin: Option<bool>) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn bots_bot_user_id_convert_to_user_post(&self, bot_user_id: &str, inline_object93: crate::models::InlineObject93, set_system_admin: Option<bool>) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/bots/{bot_user_id}/convert_to_user".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -71,7 +71,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn bots_bot_user_id_disable_post(&self, bot_user_id: &str) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>> {
+    fn bots_bot_user_id_disable_post(&self, bot_user_id: &str) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/bots/{bot_user_id}/disable".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -80,7 +80,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn bots_bot_user_id_enable_post(&self, bot_user_id: &str) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>> {
+    fn bots_bot_user_id_enable_post(&self, bot_user_id: &str) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/bots/{bot_user_id}/enable".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -89,7 +89,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn bots_bot_user_id_get(&self, bot_user_id: &str, include_deleted: Option<bool>) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>> {
+    fn bots_bot_user_id_get(&self, bot_user_id: &str, include_deleted: Option<bool>) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/bots/{bot_user_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -101,7 +101,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn bots_bot_user_id_icon_delete(&self, bot_user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn bots_bot_user_id_icon_delete(&self, bot_user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Delete, "/bots/{bot_user_id}/icon".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -110,7 +110,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn bots_bot_user_id_icon_get(&self, bot_user_id: &str) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn bots_bot_user_id_icon_get(&self, bot_user_id: &str) -> Box<dyn Future<Output = Result<(), Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/bots/{bot_user_id}/icon".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -120,7 +120,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn bots_bot_user_id_icon_post(&self, bot_user_id: &str, image: std::path::PathBuf) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn bots_bot_user_id_icon_post(&self, bot_user_id: &str, image: std::path::PathBuf) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/bots/{bot_user_id}/icon".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -130,7 +130,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn bots_bot_user_id_put(&self, bot_user_id: &str, inline_object91: crate::models::InlineObject91) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>> {
+    fn bots_bot_user_id_put(&self, bot_user_id: &str, inline_object91: crate::models::InlineObject91) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Put, "/bots/{bot_user_id}".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -140,7 +140,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn bots_get(&self, page: Option<i32>, per_page: Option<i32>, include_deleted: Option<bool>, only_orphaned: Option<bool>) -> Box<dyn Future<Item = Vec<crate::models::Bot>, Error = Error<serde_json::Value>>> {
+    fn bots_get(&self, page: Option<i32>, per_page: Option<i32>, include_deleted: Option<bool>, only_orphaned: Option<bool>) -> Box<dyn Future<Output = Result<Vec<crate::models::Bot>, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Get, "/bots".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -160,7 +160,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn bots_post(&self, inline_object90: crate::models::InlineObject90) -> Box<dyn Future<Item = crate::models::Bot, Error = Error<serde_json::Value>>> {
+    fn bots_post(&self, inline_object90: crate::models::InlineObject90) -> Box<dyn Future<Output = Result<crate::models::Bot, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/bots".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
@@ -169,7 +169,7 @@ impl<C: hyper::client::Connect>BotsApi for BotsApiClient<C> {
         req.execute(self.configuration.borrow())
     }
 
-    fn users_user_id_convert_to_bot_post(&self, user_id: &str) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn users_user_id_convert_to_bot_post(&self, user_id: &str) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/users/{user_id}/convert_to_bot".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;

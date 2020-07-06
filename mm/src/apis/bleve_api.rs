@@ -33,11 +33,11 @@ impl<C: hyper::client::Connect> BleveApiClient<C> {
 }
 
 pub trait BleveApi {
-    fn bleve_purge_indexes_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>>;
+    fn bleve_purge_indexes_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>;
 }
 
 impl<C: hyper::client::Connect>BleveApi for BleveApiClient<C> {
-    fn bleve_purge_indexes_post(&self, ) -> Box<dyn Future<Item = crate::models::StatusOk, Error = Error<serde_json::Value>>> {
+    fn bleve_purge_indexes_post(&self, ) -> Box<dyn Future<Output = Result<crate::models::StatusOk, Error<serde_json::Value>>>>{
         let mut req = __internal_request::Request::new(hyper::Method::Post, "/bleve/purge_indexes".to_string())
             .with_auth(__internal_request::Auth::Basic)
         ;
