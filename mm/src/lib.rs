@@ -172,4 +172,66 @@ impl Client {
             .text("user[remember_me]", "1");
         Ok(self.client.post(url).multipart(form).send()?)
     }
+
+    fn get_user(user_id: &str) -> Result<User, Box<dyn Error>> {
+        error("not implemented")
+    }
+}
+
+pub struct User {
+    id: String,
+    /// The time in milliseconds a user was created
+    create_at: i64,
+    /// The time in milliseconds a user was last updated
+    update_at: i64,
+    /// The time in milliseconds a user was deleted
+    delete_at: i64,
+
+    username: String,
+    first_name: String,
+    last_name: String,
+    nickname: String,
+    email: String,
+    email_verified: bool,
+    auth_service: String,
+    roles: String,
+    locale: String,
+    notify_props: UserNotifyProps,
+    //props	: object
+    last_password_update: i64,
+    last_picture_update: i64,
+    failed_attempts: i64,
+    mfa_active: bool,
+    timezone: Timezone,
+    // ID of accepted terms of service, if any. This field is not present if empty.
+    terms_of_service_id: String,
+    /// The time in milliseconds the user accepted the terms of service
+    terms_of_service_create_at: i64,
+}
+
+pub struct UserNotifyProps {
+    /// Set to "true" to enable email notifications, "false" to disable. Defaults to "true".
+    email: bool,
+    /// Set to "all" to receive push notifications for all activity, "mention" for mentions and direct messages only, and "none" to disable. Defaults to "mention".
+    push: String,
+    /// Set to "all" to receive desktop notifications for all activity, "mention" for mentions and direct messages only, and "none" to disable. Defaults to "all".
+    desktop: String,
+    /// Set to "true" to enable sound on desktop notifications, "false" to disable. Defaults to "true".
+    desktop_sound: bool,
+    /// A comma-separated list of words to count as mentions. Defaults to username and @username.
+    mention_keys: String,
+    /// Set to "true" to enable channel-wide notifications (@channel, @all, etc.), "false" to disable. Defaults to "true".
+    channel: bool,
+    /// Set to "true" to enable mentions for first name. Defaults to "true" if a first name is set, "false" otherwise.
+    first_name: bool,
+}
+
+pub struct Timezone {
+    /// Set to "true" to use the browser/system timezone, "false" to set manually. Defaults to "true".
+    useAutomaticTimezone: bool,
+
+    /// Value when setting manually the timezone, i.e. "Europe/Berlin".
+    manualTimezone: String,
+    /// This value is set automatically when the "useAutomaticTimezone" is set to "true".
+    automaticTimezone: String,
 }
