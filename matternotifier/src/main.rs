@@ -16,5 +16,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let chans = c.get_user_channels("me", &team.id)?;
         println!("channels are:\n{:?}", chans);
     }
+    // TODO
+    // - get post for a channel
+    // - websocket api
     Ok(())
 }
