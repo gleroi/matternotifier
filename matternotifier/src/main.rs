@@ -10,5 +10,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("token is {}", token);
     let me = c.get_user("me")?;
     println!("i am {:?}", me);
+    let teams = c.get_user_teams("me")?;
+    println!("my teams are:\n{:?}", teams);
+    for team in teams {
+        let chans = c.get_user_channels("me", &team.id)?;
+        println!("channels are:\n{:?}", chans);
+    }
     Ok(())
 }

@@ -242,67 +242,131 @@ impl Client {
         let user = resp.json::<User>()?;
         Ok(user)
     }
+
+    pub fn get_user_teams(&self, user_id: &str) -> Result<Vec<Team>, Box<dyn Error>> {
+        let url = self.url(&format!("/api/v4/users/{}/teams", user_id));
+        let resp = self.client.get(url).send()?;
+        let teams = resp.json::<Vec<Team>>()?;
+        Ok(teams)
+    }
+
+    pub fn get_user_channels(
+        &self,
+        user_id: &str,
+        team_id: &str,
+    ) -> Result<Vec<Channel>, Box<dyn Error>> {
+        let url = self.url(&format!(
+            "/api/v4/users/{}/teams/{}/channels",
+            user_id, team_id
+        ));
+        let resp = self.client.get(url).send()?;
+        let channels = resp.json::<Vec<Channel>>()?;
+        Ok(channels)
+    }
+}
+
+#[derive(Default, Debug, Deserialize)]
+pub struct Channel {
+    pub id: String,
+    /// The time in milliseconds a channel was created
+    pub create_at: i64,
+    /// The time in milliseconds a channel was last updated
+    pub update_at: i64,
+    /// The time in milliseconds a channel was deleted
+    pub delete_at: i64,
+    pub team_id: String,
+    #[serde(rename = "type")]
+    pub channel_type: String,
+    pub display_name: String,
+    pub name: String,
+    pub header: String,
+    pub purpose: String,
+    /// The time in milliseconds of the last post of a channel
+    pub last_post_at: i64,
+    pub total_msg_count: i64,
+    /// Deprecated in Mattermost 5.0 release
+    pub extra_update_at: i64,
+    pub creator_id: String,
+}
+
+#[derive(Default, Debug, Deserialize)]
+pub struct Team {
+    pub id: String,
+    /// The time in milliseconds a team was created
+    pub create_at: i64,
+    /// The time in milliseconds a team was last updated
+    pub update_at: i64,
+    /// The time in milliseconds a team was deleted
+    pub delete_at: i64,
+    pub display_name: String,
+    pub name: String,
+    pub description: String,
+    pub email: String,
+    #[serde(rename = "type")]
+    pub team_type: String,
+    pub allowed_domains: String,
+    pub invite_id: String,
+    pub allow_open_invite: bool,
 }
 
 #[derive(Default, Debug, Deserialize)]
 pub struct User {
-    id: String,
+    pub id: String,
     /// The time in milliseconds a user was created
-    create_at: i64,
+    pub create_at: i64,
     /// The time in milliseconds a user was last updated
-    update_at: i64,
+    pub update_at: i64,
     /// The time in milliseconds a user was deleted
-    delete_at: i64,
-    username: String,
-    first_name: String,
-    last_name: String,
-    nickname: String,
-    email: String,
-    email_verified: bool,
-    auth_service: String,
-    roles: String,
-    locale: String,
-    notify_props: UserNotifyProps,
+    pub delete_at: i64,
+    pub username: String,
+    pub first_name: String,
+    pub last_name: String,
+    pub nickname: String,
+    pub email: String,
+    pub email_verified: bool,
+    pub auth_service: String,
+    pub roles: String,
+    pub locale: String,
+    pub notify_props: UserNotifyProps,
     //props	: object
-    last_password_update: i64,
-    last_picture_update: Option<i64>,
-    failed_attempts: Option<i64>,
-    mfa_active: Option<bool>,
-    timezone: Timezone,
+    pub last_password_update: i64,
+    pub last_picture_update: Option<i64>,
+    pub failed_attempts: Option<i64>,
+    pub mfa_active: Option<bool>,
+    pub timezone: Timezone,
     // ID of accepted terms of service, if any. This field is not present if empty.
-    terms_of_service_id: Option<String>,
+    pub terms_of_service_id: Option<String>,
     /// The time in milliseconds the user accepted the terms of service
-    terms_of_service_create_at: Option<i64>,
+    pub terms_of_service_create_at: Option<i64>,
 }
 
 #[derive(Default, Debug, Deserialize)]
 pub struct UserNotifyProps {
     /// Set to "true" to enable email notifications, "false" to disable. Defaults to "true".
-    email: String,
+    pub email: String,
     /// Set to "all" to receive push notifications for all activity, "mention" for mentions and direct messages only, and "none" to disable. Defaults to "mention".
-    push: String,
+    pub push: String,
     /// Set to "all" to receive desktop notifications for all activity, "mention" for mentions and direct messages only, and "none" to disable. Defaults to "all".
-    desktop: String,
+    pub desktop: String,
     /// Set to "true" to enable sound on desktop notifications, "false" to disable. Defaults to "true".
-    desktop_sound: String,
+    pub desktop_sound: String,
     /// A comma-separated list of words to count as mentions. Defaults to username and @username.
-    mention_keys: String,
+    pub mention_keys: String,
     /// Set to "true" to enable channel-wide notifications (@channel, @all, etc.), "false" to disable. Defaults to "true".
-    channel: String,
+    pub channel: String,
     /// Set to "true" to enable mentions for first name. Defaults to "true" if a first name is set, "false" otherwise.
-    first_name: String,
+    pub first_name: String,
 }
 
 #[derive(Default, Debug, Deserialize)]
 pub struct Timezone {
     /// Set to "true" to use the browser/system timezone, "false" to set manually. Defaults to "true".
     #[serde(rename = "useAutomaticTimezone")]
-    use_automatic_timezone: String,
-
+    pub use_automatic_timezone: String,
     /// Value when setting manually the timezone, i.e. "Europe/Berlin".
     #[serde(rename = "manualTimezone")]
-    manual_timezone: String,
+    pub manual_timezone: String,
     /// This value is set automatically when the "useAutomaticTimezone" is set to "true".
     #[serde(rename = "automaticTimezone")]
-    automatic_timezone: String,
+    pub automatic_timezone: String,
 }
