@@ -133,14 +133,9 @@ impl Client {
                 .origin()
                 .unicode_serialization();
             let content = resp.text()?;
-            let resp = self.submit_gitlab_ldap_form(&origin, &content, username, password)?;
-            if !resp.status().is_redirection() {
-                return error(&format!(
-                    "expected a redirection, got {}\n{:?}",
-                    resp.status(),
-                    resp.text()?
-                ));
-            }
+            let resp = self
+                .submit_gitlab_ldap_form(&origin, &content, username, password)
+                .or_else(|_| self.submit_gitlab_form(&origin, &content, username, password))?;
             // now follow to gitlab/authorize and then to complete
             return self.call_gitlab_authorize(get_header_location(&resp)?, username, password);
         }
@@ -189,7 +184,15 @@ impl Client {
             .text("user[remember_me]", "1");
         let url = reqwest::Url::parse(origin)?.join(&url_path)?;
         let req = self.client.post(url).multipart(form);
-        Ok(req.send()?)
+        let resp = req.send()?;
+        if !resp.status().is_redirection() {
+            return error(&format!(
+                "expected a redirection, got {}\n{:?}",
+                resp.status(),
+                resp.text()?
+            ));
+        }
+        Ok(resp)
     }
 
     fn submit_gitlab_ldap_form(
@@ -221,7 +224,15 @@ impl Client {
         ];
         let url = reqwest::Url::parse(origin)?.join(&url_path)?;
         let req = self.client.post(url).form(&form);
-        Ok(req.send()?)
+        let resp = req.send()?;
+        if !resp.status().is_redirection() {
+            return error(&format!(
+                "expected a redirection, got {}\n{:?}",
+                resp.status(),
+                resp.text()?
+            ));
+        }
+        Ok(resp)
     }
 
     pub fn get_user(&self, user_id: &str) -> Result<User, Box<dyn Error>> {
@@ -229,7 +240,7 @@ impl Client {
         let req = self.client.get(url);
         let resp = req.send()?;
         let user = resp.json::<User>()?;
-        return Ok(user);
+        Ok(user)
     }
 }
 
@@ -254,7 +265,7 @@ pub struct User {
     notify_props: UserNotifyProps,
     //props	: object
     last_password_update: i64,
-    last_picture_update: i64,
+    last_picture_update: Option<i64>,
     failed_attempts: Option<i64>,
     mfa_active: Option<bool>,
     timezone: Timezone,
@@ -285,10 +296,13 @@ pub struct UserNotifyProps {
 #[derive(Default, Debug, Deserialize)]
 pub struct Timezone {
     /// Set to "true" to use the browser/system timezone, "false" to set manually. Defaults to "true".
-    useAutomaticTimezone: String,
+    #[serde(rename = "useAutomaticTimezone")]
+    use_automatic_timezone: String,
 
     /// Value when setting manually the timezone, i.e. "Europe/Berlin".
-    manualTimezone: String,
+    #[serde(rename = "manualTimezone")]
+    manual_timezone: String,
     /// This value is set automatically when the "useAutomaticTimezone" is set to "true".
-    automaticTimezone: String,
+    #[serde(rename = "automaticTimezone")]
+    automatic_timezone: String,
 }
