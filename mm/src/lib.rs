@@ -2,6 +2,7 @@ extern crate reqwest;
 extern crate scraper;
 
 use reqwest::blocking;
+use reqwest::Proxy;
 use std::error::Error;
 use std::fmt;
 
@@ -49,12 +50,12 @@ fn get_input_value(e: &ElementRef, name: &str) -> Result<String, String> {
 }
 
 fn get_header_location(resp: &blocking::Response) -> Result<&str, Box<dyn Error>> {
-    let value = resp
+        let value = resp
         .headers()
         .get(reqwest::header::LOCATION)
-        .ok_or("NO LOCATION");
+        .ok_or(format!("NO LOCATION: \n{:?}", resp));
     match value {
-        Err(err) => error(err),
+        Err(err) => error(&err),
         Ok(header_value) => Ok(header_value.to_str()?),
     }
 }
@@ -64,7 +65,9 @@ impl Client {
         let c = blocking::Client::builder()
             .cookie_store(true)
             .danger_accept_invalid_certs(true)
+            .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0")
             .redirect(reqwest::redirect::Policy::none())
+            .no_proxy()
             .build()
             .unwrap();
         Client {
@@ -103,7 +106,7 @@ impl Client {
         if authorize_url.path() != "/oauth/authorize" {
             return error(&format!(
                 "expected /oauth/authorize, got {}",
-                authorize_url.path()
+                authorize_url
             ));
         }
 
@@ -111,11 +114,7 @@ impl Client {
         if !resp.status().is_redirection() {
             return error(&format!("expected a redirection, got {}", resp.status()));
         }
-        let redirect_str = resp
-            .headers()
-            .get(reqwest::header::LOCATION)
-            .ok_or("NO LOCATION")?
-            .to_str()?;
+        let redirect_str = get_header_location(&resp)?;
         let login_or_complete_redirection = reqwest::Url::parse(redirect_str)?;
         if login_or_complete_redirection.path() == "/users/sign_in" {
             // do user login
@@ -123,13 +122,17 @@ impl Client {
                 .client
                 .get(login_or_complete_redirection.as_str())
                 .send()?;
+            let origin = login_or_complete_redirection.origin().unicode_serialization();
             let content = resp.text()?;
-            let resp = self.submit_gitlab_form(
-                login_or_complete_redirection.as_str(),
+            let resp = self.submit_gitlab_ldap_form(
+                &origin,
                 &content,
                 username,
                 password,
             )?;
+            if !resp.status().is_redirection() {
+                return error(&format!("expected a redirection, got {}\n{:?}", resp.status(), resp.text()?));
+            }
             // now follow to gitlab/authorize and then to complete
             return self.call_gitlab_authorize(get_header_location(&resp)?, username, password);
         }
@@ -148,9 +151,10 @@ impl Client {
         ))
     }
 
+
     fn submit_gitlab_form(
         &self,
-        url: &str,
+        origin: &str,
         page: &str,
         username: &str,
         password: &str,
@@ -161,6 +165,7 @@ impl Client {
             .select(&form_selector)
             .last()
             .ok_or("#new_user not found in form")?;
+        let url_path = form_html.value().attr("action").ok_or("form has not action attribute")?;
         let utf8 = get_input_value(&form_html, "utf8")?;
         let authenticity_token = get_input_value(&form_html, "authenticity_token")?;
 
@@ -170,7 +175,38 @@ impl Client {
             .text("user[login]", username.to_owned())
             .text("user[password]", password.to_owned())
             .text("user[remember_me]", "1");
-        Ok(self.client.post(url).multipart(form).send()?)
+        let url = reqwest::Url::parse(origin)?.join(&url_path)?;
+        let req = self.client.post(url).multipart(form);
+        Ok(req.send()?)
+    }
+
+    fn submit_gitlab_ldap_form(
+        &self,
+        origin: &str,
+        page: &str,
+        username: &str,
+        password: &str,
+    ) -> Result<blocking::Response, Box<dyn Error>> {
+        let doc = Html::parse_document(page);
+        let form_selector = Selector::parse("#new_ldap_user").unwrap();
+        let form_html = doc
+            .select(&form_selector)
+            .last()
+            .ok_or("#new_ldap_user not found in form")?;
+        let url_path = form_html.value().attr("action").ok_or("form has not action attribute")?;
+        let utf8 = get_input_value(&form_html, "utf8")?;
+        let authenticity_token = get_input_value(&form_html, "authenticity_token")?;
+
+        let form = [
+            ("utf8", utf8),
+            ("authenticity_token", authenticity_token),
+            ("username", username.to_owned()),
+            ("password", password.to_owned()),
+            ("remember_me", "1".to_owned()),
+        ];
+        let url = reqwest::Url::parse(origin)?.join(&url_path)?;
+        let req = self.client.post(url).form(&form);
+        Ok(req.send()?)
     }
 
     fn get_user(user_id: &str) -> Result<User, Box<dyn Error>> {
