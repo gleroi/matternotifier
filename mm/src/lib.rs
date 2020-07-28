@@ -1,7 +1,9 @@
+use std::collections::HashMap;
 use std::error::Error;
 use std::fmt;
 
 use reqwest::blocking;
+use reqwest::header;
 
 use serde::Deserialize;
 
@@ -13,7 +15,6 @@ use scraper::Selector;
 pub struct Client {
     client: blocking::Client,
     base_url: String,
-    token: String,
 }
 
 #[derive(Debug, Clone)]
@@ -61,7 +62,14 @@ fn get_header_location(resp: &blocking::Response) -> Result<&str, Box<dyn Error>
 }
 
 impl Client {
-    pub fn new(base_url: &str) -> Self {
+    pub fn new(base_url: &str, token: Option<&str>) -> Self {
+        let mut headers = header::HeaderMap::new();
+        if let Some(token_str) = token {
+            headers.insert(
+                header::AUTHORIZATION,
+                header::HeaderValue::from_str(&format!("Bearer {}", token_str)).unwrap(),
+            );
+        }
         let c = blocking::Client::builder()
             .cookie_store(true)
             .danger_accept_invalid_certs(true)
@@ -69,13 +77,13 @@ impl Client {
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0",
             )
             .redirect(reqwest::redirect::Policy::none())
+            .default_headers(headers)
             .no_proxy()
             .build()
             .unwrap();
         Client {
             client: c,
             base_url: base_url.to_owned(),
-            token: "".to_owned(),
         }
     }
 
@@ -88,7 +96,7 @@ impl Client {
 
     /// login_with_gitlab returns a mattermost token or else an error
     pub fn login_with_gitlab(
-        &mut self,
+        &self,
         username: &str,
         password: &str,
     ) -> Result<String, Box<dyn Error>> {
@@ -107,7 +115,7 @@ impl Client {
     }
 
     fn call_gitlab_authorize(
-        &mut self,
+        &self,
         url: &str,
         username: &str,
         password: &str,
@@ -147,7 +155,6 @@ impl Client {
                 .send()?;
             let header_token = resp.headers().get("token").ok_or("NO TOKEN!!!")?;
             let token = header_token.to_str()?.to_owned();
-            self.token = token.clone();
             return Ok(token);
         }
         error(&format!(
@@ -263,6 +270,53 @@ impl Client {
         let channels = resp.json::<Vec<Channel>>()?;
         Ok(channels)
     }
+
+    pub fn get_channel_posts(&self, channel_id: &str) -> Result<PostList, Box<dyn Error>> {
+        let url = self.url(&format!("/api/v4/channels/{}/posts", channel_id));
+        let resp = self.client.get(url).send()?;
+        let posts = resp.json::<PostList>()?;
+        Ok(posts)
+    }
+}
+
+#[derive(Default, Debug, Deserialize)]
+pub struct PostList {
+    pub order: Vec<String>,
+    pub posts: HashMap<String, Post>,
+    /// $ref: '#/components/schemas/Post'
+    /// The ID of next post. Not omitted when empty or not relevant.
+    pub next_post_id: String,
+    /// The ID of previous post. Not omitted when empty or not relevant.
+    pub prev_post_id: String,
+}
+
+#[derive(Default, Debug, Deserialize)]
+pub struct Post {
+    pub id: String,
+    /// The time in milliseconds a post was created,
+    pub create_at: i64,
+    /// The time in milliseconds a post was last updated
+    pub update_at: i64,
+    /// The time in milliseconds a post was deleted
+    pub delete_at: i64,
+    pub edit_at: i64,
+    pub user_id: String,
+    pub channel_id: String,
+    pub root_id: String,
+    pub parent_id: String,
+    pub original_id: String,
+    pub message: String,
+    #[serde(rename = "type")]
+    pub post_type: String,
+    pub props: HashMap<String, String>,
+    pub hashtag: Option<String>,
+    // This field will only appear on some posts created before Mattermost
+    // 3.5 and has since been deprecated.
+    pub filenames: Option<Vec<String>>,
+    pub file_ids: Option<Vec<String>>,
+    pub pending_post_id: String,
+    // pub metadata:
+    //     $ref: '#/components/schemas/PostMetadata'
 }
 
 #[derive(Default, Debug, Deserialize)]
