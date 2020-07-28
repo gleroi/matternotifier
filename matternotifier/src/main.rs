@@ -27,11 +27,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         channels.append(&mut chans);
     }
     channels.sort_by_key(|c| c.display_name.clone());
-    let chan1_idx =
-        channels.binary_search_by_key(&"test".to_owned(), |c| c.display_name.clone()).unwrap();
+    let channel_name = "Town Square";
+    let chan1_res = channels.binary_search_by_key(&channel_name, |c| &c.display_name);
+    if chan1_res.is_err() {
+        return mm::error(&format!("no channel named {}", channel_name));
+    }
+    let chan1_idx = chan1_res.unwrap();
     let chan1 = &channels[chan1_idx];
     let posts = c.get_channel_posts(&chan1.id)?;
-    for (_post_id, post) in posts.posts {
+    for post_id in posts.order.iter().rev() {
+        let post = &posts.posts[post_id];
         println!("{}: {}", post.user_id, post.message);
     }
     // TODO
