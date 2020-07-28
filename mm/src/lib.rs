@@ -6,6 +6,7 @@ use reqwest::blocking;
 use reqwest::header;
 
 use serde::Deserialize;
+use serde_json;
 
 use scraper::ElementRef;
 use scraper::Html;
@@ -22,7 +23,7 @@ pub struct MError {
     str: String,
 }
 
-fn error<T>(str: &str) -> Result<T, Box<dyn Error>> {
+pub fn error<T>(str: &str) -> Result<T, Box<dyn Error>> {
     Err(Box::new(MError {
         str: str.to_owned(),
     }))
@@ -308,7 +309,8 @@ pub struct Post {
     pub message: String,
     #[serde(rename = "type")]
     pub post_type: String,
-    pub props: HashMap<String, String>,
+    // TODO: is there a better way to handle this
+    pub props: serde_json::Value,
     pub hashtag: Option<String>,
     // This field will only appear on some posts created before Mattermost
     // 3.5 and has since been deprecated.
