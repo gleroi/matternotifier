@@ -1,5 +1,6 @@
-extern crate mm;
 use std::env;
+
+use mm::Gitlab;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let url = env::var_os("MM_URL").ok_or("Please define env var MM_URL")?;
