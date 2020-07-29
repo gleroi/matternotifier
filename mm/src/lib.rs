@@ -208,13 +208,14 @@ pub struct User {
     pub last_name: String,
     pub nickname: String,
     pub email: String,
+    #[serde(default)]
     pub email_verified: bool,
     pub auth_service: String,
     pub roles: String,
     pub locale: String,
-    pub notify_props: UserNotifyProps,
+    pub notify_props: Option<UserNotifyProps>,
     //props	: object
-    pub last_password_update: i64,
+    pub last_password_update: Option<i64>,
     pub last_picture_update: Option<i64>,
     pub failed_attempts: Option<i64>,
     pub mfa_active: Option<bool>,
@@ -223,6 +224,18 @@ pub struct User {
     pub terms_of_service_id: Option<String>,
     /// The time in milliseconds the user accepted the terms of service
     pub terms_of_service_create_at: Option<i64>,
+}
+
+impl User {
+    pub fn display_name(&self) -> String {
+        if !self.nickname.is_empty() {
+            return self.nickname.to_owned();
+        }
+        if !self.first_name.is_empty() && !self.last_name.is_empty() {
+            return format!("{} {}", self.first_name, self.last_name);
+        }
+        self.username.to_owned()
+    }
 }
 
 #[derive(Default, Debug, Deserialize)]

@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::env;
 
 use mm::Gitlab;
@@ -36,9 +37,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let chan1_idx = chan1_res.unwrap();
     let chan1 = &channels[chan1_idx];
     let posts = c.get_channel_posts(&chan1.id)?;
+    let mut users: HashMap<String, mm::User> = HashMap::new();
     for post_id in posts.order.iter().rev() {
         let post = &posts.posts[post_id];
-        println!("{}: {}", post.user_id, post.message);
+        let user = users
+            .entry(post.user_id.clone())
+            .or_insert(c.get_user(&post.user_id)?);
+        println!("{}: {}", user.display_name(), post.message);
     }
     // TODO
     // - websocket api
