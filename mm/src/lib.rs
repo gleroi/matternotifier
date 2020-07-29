@@ -138,7 +138,7 @@ pub struct Post {
     pub message: String,
     #[serde(rename = "type")]
     pub post_type: String,
-    // TODO: is there a better way to handle this
+    // TODO: is there a better way to handle this ?
     pub props: serde_json::Value,
     pub hashtag: Option<String>,
     // This field will only appear on some posts created before Mattermost
@@ -148,6 +148,13 @@ pub struct Post {
     pub pending_post_id: String,
     // pub metadata:
     //     $ref: '#/components/schemas/PostMetadata'
+}
+
+impl Post {
+    pub fn created(&self) -> chrono::NaiveDateTime {
+        let secs = self.create_at / 1000;
+        chrono::NaiveDateTime::from_timestamp(secs, 0)
+    }
 }
 
 #[derive(Default, Debug, Deserialize)]

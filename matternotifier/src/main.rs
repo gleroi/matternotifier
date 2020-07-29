@@ -43,7 +43,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let user = users
             .entry(post.user_id.clone())
             .or_insert(c.get_user(&post.user_id)?);
-        println!("{}: {}", user.display_name(), post.message);
+        println!(
+            "{} {}: {}",
+            post.created(),
+            user.display_name(),
+            post.message
+        );
     }
     // TODO
     // - websocket api
