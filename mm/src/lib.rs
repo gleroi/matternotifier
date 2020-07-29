@@ -107,6 +107,21 @@ impl Client {
         let posts = resp.json::<PostList>()?;
         Ok(posts)
     }
+
+    pub fn create_post(&self, channel_id: &str, msg: &str) -> Result<Post, Box<dyn Error>> {
+        let url = self.url("/api/v4/posts");
+        let mut cmd: HashMap<&str, &str> = HashMap::new();
+        cmd.insert("channel_id", channel_id);
+        cmd.insert("message", msg);
+        let resp = self
+            .client
+            .post(url)
+            .header(header::CONTENT_TYPE, "application/json")
+            .body(serde_json::to_string(&cmd)?)
+            .send()?;
+        let post = resp.json::<Post>()?;
+        Ok(post)
+    }
 }
 
 #[derive(Default, Debug, Deserialize)]

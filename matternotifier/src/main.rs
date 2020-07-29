@@ -50,7 +50,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             post.message
         );
     }
+
+    // for i in 21..500 {
+    //     let r = c.create_post(&chan1.id, &format!("{}", i));
+    //     println!("{} : {:?}", i, r)
+    // }
+
     // TODO
+    // - /api/v4/users/{user_id}/teams/members
+    //   get user's team members
     // - websocket api
     Ok(())
 }
