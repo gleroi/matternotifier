@@ -22,6 +22,12 @@ pub struct MError {
     str: String,
 }
 
+pub struct ApiError {
+    status: String,
+    message: String,
+    id: String,
+}
+
 pub fn error<T>(str: &str) -> Result<T, Box<dyn Error>> {
     Err(Box::new(MError {
         str: str.to_owned(),
@@ -85,10 +91,18 @@ impl Client {
         match http_result {
             Ok(resp) => {
                 // TODO: return OK for 4xx et 5xx
-                let parsed_result = resp.json::<T>();
-                match parsed_result {
-                    Ok(value) => Ok(value),
-                    Err(err) => Err(Box::new(err)),
+                if resp.status().is_success() {
+                    let parsed_result = resp.json::<T>();
+                    return match parsed_result {
+                        Ok(value) => Ok(value),
+                        Err(err) => Err(Box::new(err)),
+                    };
+                } else {
+                    let parsed_result = resp.json<>();
+                    return match parsed_result {
+                        Ok(value) => Ok(value),
+                        Err(err) => Err(Box::new(err)),
+                    }
                 }
             }
             Err(err) => Err(Box::new(err)),
