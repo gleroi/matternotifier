@@ -56,9 +56,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     //     println!("{} : {:?}", i, r)
     // }
 
-    // TODO
-    // - /api/v4/users/{user_id}/teams/members
-    //   get user's team members
-    // - websocket api
+    /* TODO
+       - /api/v4/users/{user_id}/teams/members
+         get user's team members
+       - websocket api
+       - rework error returned type in mm crate
+         maybe like (?) => enum mm::Error {
+             Api(status_code, id, message, request_id)
+             Http(reqwest::Error)
+             Other(String)
+         }
+    */
     Ok(())
 }

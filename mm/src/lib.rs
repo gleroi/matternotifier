@@ -1,3 +1,4 @@
+use serde::de::DeserializeOwned;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fmt;
@@ -72,6 +73,28 @@ impl Client {
             .unwrap()
     }
 
+    fn get<T>(&self, api_url: &str) -> Result<T, Box<dyn Error>>
+    where
+        T: DeserializeOwned,
+    {
+        let req = self
+            .client
+            .get(self.url(api_url))
+            .header(header::CONTENT_TYPE, "application/json");
+        let http_result = req.send();
+        match http_result {
+            Ok(resp) => {
+                // TODO: return OK for 4xx et 5xx
+                let parsed_result = resp.json::<T>();
+                match parsed_result {
+                    Ok(value) => Ok(value),
+                    Err(err) => Err(Box::new(err)),
+                }
+            }
+            Err(err) => Err(Box::new(err)),
+        }
+    }
+
     pub fn get_user(&self, user_id: &str) -> Result<User, Box<dyn Error>> {
         let url = self.url(&format!("/api/v4/users/{}", user_id));
         let req = self.client.get(url);
@@ -81,10 +104,7 @@ impl Client {
     }
 
     pub fn get_user_teams(&self, user_id: &str) -> Result<Vec<Team>, Box<dyn Error>> {
-        let url = self.url(&format!("/api/v4/users/{}/teams", user_id));
-        let resp = self.client.get(url).send()?;
-        let teams = resp.json::<Vec<Team>>()?;
-        Ok(teams)
+        self.get::<Vec<Team>>(&format!("/api/v4/users2/{}/teams", user_id))
     }
 
     pub fn get_user_channels(
