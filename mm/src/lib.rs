@@ -177,7 +177,6 @@ impl Client {
 pub struct PostList {
     pub order: Vec<String>,
     pub posts: HashMap<String, Post>,
-    /// $ref: '#/components/schemas/Post'
     /// The ID of next post. Not omitted when empty or not relevant.
     pub next_post_id: String,
     /// The ID of previous post. Not omitted when empty or not relevant.
@@ -205,13 +204,13 @@ pub struct Post {
     // TODO: is there a better way to handle this ?
     pub props: serde_json::Value,
     pub hashtag: Option<String>,
-    // This field will only appear on some posts created before Mattermost
-    // 3.5 and has since been deprecated.
+    /// This field will only appear on some posts created before Mattermost
+    /// 3.5 and has since been deprecated.
     pub filenames: Option<Vec<String>>,
     pub file_ids: Option<Vec<String>>,
     pub pending_post_id: String,
-    // pub metadata:
-    //     $ref: '#/components/schemas/PostMetadata'
+    /// $ref: '#/components/schemas/PostMetadata'
+    pub metadata: serde_json::Value,
 }
 
 impl Post {

@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 use std::env;
 
+use serde_json;
+
 use mm::Gitlab;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -44,10 +46,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .entry(post.user_id.clone())
             .or_insert(c.get_user(&post.user_id)?);
         println!(
-            "{} {}: {}",
+            "{} {}: {}\n  {}",
             post.created(),
             user.display_name(),
-            post.message
+            post.message,
+            serde_json::to_string_pretty(&post.metadata)?
         );
     }
 

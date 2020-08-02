@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 mm = { path = "../mm" }
+serde_json = { version = "1.0" }

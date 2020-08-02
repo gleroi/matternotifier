@@ -558,6 +558,7 @@ name = "matternotifier"
 version = "0.1.0"
 dependencies = [
  "mm",
+ "serde_json",
 ]
 
 [[package]]
