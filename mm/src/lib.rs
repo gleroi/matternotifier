@@ -1,4 +1,3 @@
-use serde::de::DeserializeOwned;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fmt;
@@ -6,7 +5,8 @@ use std::fmt;
 use reqwest::blocking;
 use reqwest::header;
 
-use serde::Deserialize;
+use serde::de::DeserializeOwned;
+use serde::{Deserialize, Serialize};
 
 mod gitlab;
 pub use gitlab::Gitlab;
@@ -22,11 +22,24 @@ pub struct MError {
     str: String,
 }
 
+#[derive(Default, Debug, Deserialize)]
 pub struct ApiError {
-    status: String,
+    status_code: i64,
     message: String,
     id: String,
 }
+
+impl fmt::Display for ApiError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{} ({}, id: {})",
+            self.message, self.status_code, self.id
+        )
+    }
+}
+
+impl Error for ApiError {}
 
 pub fn error<T>(str: &str) -> Result<T, Box<dyn Error>> {
     Err(Box::new(MError {
@@ -79,28 +92,24 @@ impl Client {
             .unwrap()
     }
 
-    fn get<T>(&self, api_url: &str) -> Result<T, Box<dyn Error>>
+    fn handle_response<T>(
+        http_result: reqwest::Result<blocking::Response>,
+    ) -> Result<T, Box<dyn Error>>
     where
         T: DeserializeOwned,
     {
-        let req = self
-            .client
-            .get(self.url(api_url))
-            .header(header::CONTENT_TYPE, "application/json");
-        let http_result = req.send();
         match http_result {
             Ok(resp) => {
-                // TODO: return OK for 4xx et 5xx
                 if resp.status().is_success() {
                     let parsed_result = resp.json::<T>();
-                    return match parsed_result {
+                    match parsed_result {
                         Ok(value) => Ok(value),
                         Err(err) => Err(Box::new(err)),
-                    };
+                    }
                 } else {
-                    let parsed_result = resp.json<>();
-                    return match parsed_result {
-                        Ok(value) => Ok(value),
+                    let parsed_result = resp.json::<ApiError>();
+                    match parsed_result {
+                        Ok(value) => Err(Box::new(value)),
                         Err(err) => Err(Box::new(err)),
                     }
                 }
@@ -109,16 +118,36 @@ impl Client {
         }
     }
 
+    fn get<T>(&self, api_url: &str) -> Result<T, Box<dyn Error>>
+    where
+        T: DeserializeOwned,
+    {
+        let req = self
+            .client
+            .get(self.url(api_url))
+            .header(header::CONTENT_TYPE, "application/json");
+        Client::handle_response(req.send())
+    }
+
+    fn post<TOutput, TInput>(&self, api_url: &str, body: &TInput) -> Result<TOutput, Box<dyn Error>>
+    where
+        TInput: Serialize,
+        TOutput: DeserializeOwned,
+    {
+        let req = self
+            .client
+            .post(self.url(api_url))
+            .json(&body)
+            .header(header::CONTENT_TYPE, "application/json");
+        Client::handle_response(req.send())
+    }
+
     pub fn get_user(&self, user_id: &str) -> Result<User, Box<dyn Error>> {
-        let url = self.url(&format!("/api/v4/users/{}", user_id));
-        let req = self.client.get(url);
-        let resp = req.send()?;
-        let user = resp.json::<User>()?;
-        Ok(user)
+        self.get(&format!("/api/v4/users/{}", user_id))
     }
 
     pub fn get_user_teams(&self, user_id: &str) -> Result<Vec<Team>, Box<dyn Error>> {
-        self.get::<Vec<Team>>(&format!("/api/v4/users2/{}/teams", user_id))
+        self.get(&format!("/api/v4/users/{}/teams", user_id))
     }
 
     pub fn get_user_channels(
@@ -126,35 +155,21 @@ impl Client {
         user_id: &str,
         team_id: &str,
     ) -> Result<Vec<Channel>, Box<dyn Error>> {
-        let url = self.url(&format!(
+        self.get(&format!(
             "/api/v4/users/{}/teams/{}/channels",
             user_id, team_id
-        ));
-        let resp = self.client.get(url).send()?;
-        let channels = resp.json::<Vec<Channel>>()?;
-        Ok(channels)
+        ))
     }
 
     pub fn get_channel_posts(&self, channel_id: &str) -> Result<PostList, Box<dyn Error>> {
-        let url = self.url(&format!("/api/v4/channels/{}/posts", channel_id));
-        let resp = self.client.get(url).send()?;
-        let posts = resp.json::<PostList>()?;
-        Ok(posts)
+        self.get(&format!("/api/v4/channels/{}/posts", channel_id))
     }
 
     pub fn create_post(&self, channel_id: &str, msg: &str) -> Result<Post, Box<dyn Error>> {
-        let url = self.url("/api/v4/posts");
         let mut cmd: HashMap<&str, &str> = HashMap::new();
         cmd.insert("channel_id", channel_id);
         cmd.insert("message", msg);
-        let resp = self
-            .client
-            .post(url)
-            .header(header::CONTENT_TYPE, "application/json")
-            .body(serde_json::to_string(&cmd)?)
-            .send()?;
-        let post = resp.json::<Post>()?;
-        Ok(post)
+        self.post("/api/v4/posts", &cmd)
     }
 }
 
