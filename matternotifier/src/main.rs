@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 use std::env;
 
-use serde_json;
-
 use mm::Gitlab;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -38,7 +36,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     let chan1_idx = chan1_res.unwrap();
     let chan1 = &channels[chan1_idx];
-    let posts = c.get_channel_posts(&chan1.id)?;
+    let posts = c.get_channel_posts(&chan1.id).get()?;
     let mut users: HashMap<String, mm::User> = HashMap::new();
     for post_id in posts.order.iter().rev() {
         let post = &posts.posts[post_id];
@@ -60,6 +58,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // }
 
     /* TODO
+       - /api/v4/channel/{channel_id}/post
+         implement query parameters
        - /api/v4/users/{user_id}/teams/members
          get user's team members
        - websocket api
