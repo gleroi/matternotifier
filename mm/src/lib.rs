@@ -118,14 +118,17 @@ impl Client {
         }
     }
 
+    fn get_builder(&self, api_url: &str) -> blocking::RequestBuilder {
+        self.client
+            .get(self.url(api_url))
+            .header(header::CONTENT_TYPE, "application/json")
+    }
+
     fn get<T>(&self, api_url: &str) -> Result<T, Box<dyn Error>>
     where
         T: DeserializeOwned,
     {
-        let req = self
-            .client
-            .get(self.url(api_url))
-            .header(header::CONTENT_TYPE, "application/json");
+        let req = self.get_builder(api_url);
         Client::handle_response(req.send())
     }
 
@@ -197,8 +200,13 @@ impl<'a> PageParams<'a> {
     }
 
     pub fn get(&self) -> Result<PostList, Box<dyn Error>> {
-        self.client
-            .get(&format!("/api/v4/channels/{}/posts", self.channel_id))
+        let mut req = self.client.get_builder(&format!("/api/v4/channels/{}/posts", self.channel_id));
+        if let Some(since) = self.since {
+            req = req.query(&("since", since.timestamp_millis()));
+        } else {
+
+        }
+        Client::handle_response(req.send())
     }
 
     pub fn page_before(
