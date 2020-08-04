@@ -164,8 +164,8 @@ impl Client {
         ))
     }
 
-    pub fn get_channel_posts<'a>(&'a self, channel_id: &'a str) -> PageParams<'a> {
-        PageParams::new(self, channel_id)
+    pub fn get_channel_posts<'a>(&'a self, channel_id: &'a str) -> Pager<'a> {
+        Pager::new(self, channel_id)
     }
 
     pub fn create_post(&self, channel_id: &str, msg: &str) -> Result<Post, Box<dyn Error>> {
@@ -176,35 +176,61 @@ impl Client {
     }
 }
 
-pub struct PageParams<'a> {
-    page: i64,
-    per_page: i64,
-    since: Option<chrono::NaiveDateTime>,
-    before: Option<&'a str>,
-    after: Option<&'a str>,
+pub struct Pager<'a> {
     client: &'a Client,
     channel_id: &'a str,
+    params: Option<Page<'a>>,
 }
 
-impl<'a> PageParams<'a> {
-    fn new(c: &'a Client, channel_id: &'a str) -> PageParams<'a> {
-        PageParams {
-            page: 0,
-            per_page: 60,
-            since: None,
-            before: None,
-            after: None,
+enum Page<'a> {
+    After {
+        page: i64,
+        per_page: i64,
+        post: &'a str,
+    },
+    Before {
+        page: i64,
+        per_page: i64,
+        post: &'a str,
+    },
+    Since(chrono::NaiveDateTime),
+}
+
+impl<'a> Pager<'a> {
+    fn new(c: &'a Client, channel_id: &'a str) -> Pager<'a> {
+        Pager {
             client: c,
             channel_id,
+            params: None,
         }
     }
 
     pub fn get(&self) -> Result<PostList, Box<dyn Error>> {
-        let mut req = self.client.get_builder(&format!("/api/v4/channels/{}/posts", self.channel_id));
-        if let Some(since) = self.since {
-            req = req.query(&("since", since.timestamp_millis()));
-        } else {
-
+        let mut req = self
+            .client
+            .get_builder(&format!("/api/v4/channels/{}/posts", self.channel_id));
+        if let Some(ref params) = self.params {
+            match params {
+                Page::Since(since) => req = req.query(&[("since", since.timestamp_millis())]),
+                Page::Before {
+                    page,
+                    per_page,
+                    post,
+                } => {
+                    req = req
+                        .query(&[("page", page), ("per_page", per_page)])
+                        .query(&[("before", post)])
+                }
+                Page::After {
+                    page,
+                    per_page,
+                    post,
+                } => {
+                    req = req
+                        .query(&[("page", page), ("per_page", per_page)])
+                        .query(&[("after", post)])
+                }
+            }
         }
         Client::handle_response(req.send())
     }
@@ -215,9 +241,11 @@ impl<'a> PageParams<'a> {
         page: Option<i64>,
         per_page: Option<i64>,
     ) -> Result<PostList, Box<dyn Error>> {
-        self.page = page.unwrap_or(0);
-        self.per_page = per_page.unwrap_or(60);
-        self.before = Some(post_id);
+        self.params = Some(Page::Before {
+            page: page.unwrap_or(0),
+            per_page: per_page.unwrap_or(60),
+            post: post_id,
+        });
         self.get()
     }
 
@@ -227,14 +255,16 @@ impl<'a> PageParams<'a> {
         page: Option<i64>,
         per_page: Option<i64>,
     ) -> Result<PostList, Box<dyn Error>> {
-        self.page = page.unwrap_or(0);
-        self.per_page = per_page.unwrap_or(60);
-        self.after = Some(post_id);
+        self.params = Some(Page::After {
+            page: page.unwrap_or(0),
+            per_page: per_page.unwrap_or(60),
+            post: post_id,
+        });
         self.get()
     }
 
     pub fn since(&mut self, timestamp: chrono::NaiveDateTime) -> Result<PostList, Box<dyn Error>> {
-        self.since = Some(timestamp);
+        self.params = Some(Page::Since(timestamp));
         self.get()
     }
 }
