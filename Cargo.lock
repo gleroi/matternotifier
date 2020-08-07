@@ -623,6 +623,7 @@ dependencies = [
  "scraper",
  "serde",
  "serde_json",
+ "url 2.1.1",
 ]
 
 [[package]]

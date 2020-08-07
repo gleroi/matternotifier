@@ -1,21 +1,19 @@
-use std::error::Error;
-
 use scraper::ElementRef;
 use scraper::Html;
 use scraper::Selector;
 
 use reqwest::blocking;
 
-use super::error;
 use super::Client;
+use super::{error, Error};
 
 pub trait Gitlab {
-    fn login_with_gitlab(&self, username: &str, password: &str) -> Result<String, Box<dyn Error>>;
+    fn login_with_gitlab(&self, username: &str, password: &str) -> Result<String, Error>;
 }
 
 impl Gitlab for Client {
     /// login_with_gitlab returns a mattermost token or else an error
-    fn login_with_gitlab(&self, username: &str, password: &str) -> Result<String, Box<dyn Error>> {
+    fn login_with_gitlab(&self, username: &str, password: &str) -> Result<String, Error> {
         // go to mattermost /oauth/gitlab/login, get redirected to gitlab /oauth/authorize
         let url = self.url("oauth/gitlab/login");
         let resp = self.client.get(url.as_str()).send()?;
@@ -37,7 +35,7 @@ impl Client {
         url: &str,
         username: &str,
         password: &str,
-    ) -> Result<String, Box<dyn Error>> {
+    ) -> Result<String, Error> {
         let authorize_url = reqwest::Url::parse(url)?;
         if authorize_url.path() != "/oauth/authorize" {
             return error(&format!("expected /oauth/authorize, got {}", authorize_url));
@@ -71,9 +69,18 @@ impl Client {
                 .client
                 .get(login_or_complete_redirection.as_str())
                 .send()?;
-            let header_token = resp.headers().get("token").ok_or("NO TOKEN!!!")?;
-            let token = header_token.to_str()?.to_owned();
-            return Ok(token);
+            let header_token = resp
+                .headers()
+                .get("token")
+                .ok_or("HTTP header token is missing")?;
+            let token_result = header_token.to_str();
+            return match token_result {
+                Ok(token) => Ok(token.to_owned()),
+                Err(err) => Err(Error::Other(format!(
+                    "could not read HTTP header token value: {}",
+                    err
+                ))),
+            };
         }
         error(&format!(
             "unknown url while authenticating to gitlab:\n {}",
@@ -87,7 +94,7 @@ impl Client {
         page: &str,
         username: &str,
         password: &str,
-    ) -> Result<blocking::Response, Box<dyn Error>> {
+    ) -> Result<blocking::Response, Error> {
         let doc = Html::parse_document(page);
         let form_selector = Selector::parse("#new_user").unwrap();
         let form_html = doc
@@ -126,7 +133,7 @@ impl Client {
         page: &str,
         username: &str,
         password: &str,
-    ) -> Result<blocking::Response, Box<dyn Error>> {
+    ) -> Result<blocking::Response, Error> {
         let doc = Html::parse_document(page);
         let form_selector = Selector::parse("#new_ldap_user").unwrap();
         let form_html = doc
@@ -171,13 +178,16 @@ fn get_input_value(e: &ElementRef, name: &str) -> Result<String, String> {
     Ok(value.unwrap().to_owned())
 }
 
-fn get_header_location(resp: &blocking::Response) -> Result<&str, Box<dyn Error>> {
+fn get_header_location(resp: &blocking::Response) -> Result<&str, Error> {
     let value = resp
         .headers()
         .get(reqwest::header::LOCATION)
-        .ok_or(format!("NO LOCATION: \n{:?}", resp));
-    match value {
-        Err(err) => error(&err),
-        Ok(header_value) => Ok(header_value.to_str()?),
+        .ok_or(format!("NO LOCATION: \n{:?}", resp))?;
+    match value.to_str() {
+        Ok(header_value) => Ok(header_value),
+        Err(err) => error(&format!(
+            "could not read HTTP header Location value: {}",
+            err
+        )),
     }
 }

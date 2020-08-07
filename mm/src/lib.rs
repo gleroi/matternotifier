@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::error::Error;
+use std::error::Error as StdError;
 use std::fmt;
 
 use reqwest::blocking;
@@ -17,9 +17,36 @@ pub struct Client {
     base_url: String,
 }
 
-#[derive(Debug, Clone)]
-pub struct MError {
-    str: String,
+#[derive(Debug)]
+pub enum Error {
+    Api(ApiError),
+    Http(reqwest::Error),
+    InvalidUrl(url::ParseError),
+    Other(String),
+}
+
+impl std::convert::From<reqwest::Error> for Error {
+    fn from(err: reqwest::Error) -> Self {
+        Self::Http(err)
+    }
+}
+
+impl std::convert::From<url::ParseError> for Error {
+    fn from(err: url::ParseError) -> Self {
+        Self::InvalidUrl(err)
+    }
+}
+
+impl std::convert::From<&str> for Error {
+    fn from(err: &str) -> Self {
+        Self::Other(err.to_owned())
+    }
+}
+
+impl std::convert::From<String> for Error {
+    fn from(err: String) -> Self {
+        Self::Other(err)
+    }
 }
 
 #[derive(Default, Debug, Deserialize)]
@@ -29,35 +56,22 @@ pub struct ApiError {
     id: String,
 }
 
-impl fmt::Display for ApiError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} ({}, id: {})",
-            self.message, self.status_code, self.id
-        )
-    }
+pub fn error<T>(str: &str) -> Result<T, Error> {
+    Err(Error::Other(str.to_owned()))
 }
 
-impl Error for ApiError {}
-
-pub fn error<T>(str: &str) -> Result<T, Box<dyn Error>> {
-    Err(Box::new(MError {
-        str: str.to_owned(),
-    }))
-}
-
-impl fmt::Display for MError {
+impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.str)
+        match self {
+            Error::Api(err) => write!(f, "api: {:?}", err),
+            Error::Http(err) => write!(f, "http: {}", err),
+            Error::InvalidUrl(err) => write!(f, "url: {}", err),
+            Error::Other(err) => write!(f, "error: {}", err),
+        }
     }
 }
 
-impl Error for MError {
-    fn source(&self) -> Option<&(dyn Error + 'static)> {
-        None
-    }
-}
+impl StdError for Error {}
 
 impl Client {
     pub fn new(base_url: &str, token: Option<&str>) -> Self {
@@ -92,29 +106,21 @@ impl Client {
             .unwrap()
     }
 
-    fn handle_response<T>(
-        http_result: reqwest::Result<blocking::Response>,
-    ) -> Result<T, Box<dyn Error>>
+    fn handle_response<T>(http_result: reqwest::Result<blocking::Response>) -> Result<T, Error>
     where
         T: DeserializeOwned,
     {
-        match http_result {
-            Ok(resp) => {
-                if resp.status().is_success() {
-                    let parsed_result = resp.json::<T>();
-                    match parsed_result {
-                        Ok(value) => Ok(value),
-                        Err(err) => Err(Box::new(err)),
-                    }
-                } else {
-                    let parsed_result = resp.json::<ApiError>();
-                    match parsed_result {
-                        Ok(value) => Err(Box::new(value)),
-                        Err(err) => Err(Box::new(err)),
-                    }
-                }
+        let resp = http_result?;
+        if resp.status().is_success() {
+            match resp.json::<T>() {
+                Ok(value) => Ok(value),
+                Err(err) => Err(Error::Http(err)),
             }
-            Err(err) => Err(Box::new(err)),
+        } else {
+            match resp.json::<ApiError>() {
+                Ok(err) => Err(Error::Api(err)),
+                Err(err) => Err(Error::Http(err)),
+            }
         }
     }
 
@@ -124,7 +130,7 @@ impl Client {
             .header(header::CONTENT_TYPE, "application/json")
     }
 
-    fn get<T>(&self, api_url: &str) -> Result<T, Box<dyn Error>>
+    fn get<T>(&self, api_url: &str) -> Result<T, Error>
     where
         T: DeserializeOwned,
     {
@@ -132,7 +138,7 @@ impl Client {
         Client::handle_response(req.send())
     }
 
-    fn post<TOutput, TInput>(&self, api_url: &str, body: &TInput) -> Result<TOutput, Box<dyn Error>>
+    fn post<TOutput, TInput>(&self, api_url: &str, body: &TInput) -> Result<TOutput, Error>
     where
         TInput: Serialize,
         TOutput: DeserializeOwned,
@@ -145,19 +151,15 @@ impl Client {
         Client::handle_response(req.send())
     }
 
-    pub fn get_user(&self, user_id: &str) -> Result<User, Box<dyn Error>> {
+    pub fn get_user(&self, user_id: &str) -> Result<User, Error> {
         self.get(&format!("/api/v4/users/{}", user_id))
     }
 
-    pub fn get_user_teams(&self, user_id: &str) -> Result<Vec<Team>, Box<dyn Error>> {
+    pub fn get_user_teams(&self, user_id: &str) -> Result<Vec<Team>, Error> {
         self.get(&format!("/api/v4/users/{}/teams", user_id))
     }
 
-    pub fn get_user_channels(
-        &self,
-        user_id: &str,
-        team_id: &str,
-    ) -> Result<Vec<Channel>, Box<dyn Error>> {
+    pub fn get_user_channels(&self, user_id: &str, team_id: &str) -> Result<Vec<Channel>, Error> {
         self.get(&format!(
             "/api/v4/users/{}/teams/{}/channels",
             user_id, team_id
@@ -168,7 +170,7 @@ impl Client {
         Pager::new(self, channel_id)
     }
 
-    pub fn create_post(&self, channel_id: &str, msg: &str) -> Result<Post, Box<dyn Error>> {
+    pub fn create_post(&self, channel_id: &str, msg: &str) -> Result<Post, Error> {
         let mut cmd: HashMap<&str, &str> = HashMap::new();
         cmd.insert("channel_id", channel_id);
         cmd.insert("message", msg);
@@ -205,7 +207,7 @@ impl<'a> Pager<'a> {
         }
     }
 
-    pub fn get(&self) -> Result<PostList, Box<dyn Error>> {
+    pub fn get(&self) -> Result<PostList, Error> {
         let mut req = self
             .client
             .get_builder(&format!("/api/v4/channels/{}/posts", self.channel_id));
@@ -240,7 +242,7 @@ impl<'a> Pager<'a> {
         post_id: &'a str,
         page: Option<i64>,
         per_page: Option<i64>,
-    ) -> Result<PostList, Box<dyn Error>> {
+    ) -> Result<PostList, Error> {
         self.params = Some(Page::Before {
             page: page.unwrap_or(0),
             per_page: per_page.unwrap_or(60),
@@ -254,7 +256,7 @@ impl<'a> Pager<'a> {
         post_id: &'a str,
         page: Option<i64>,
         per_page: Option<i64>,
-    ) -> Result<PostList, Box<dyn Error>> {
+    ) -> Result<PostList, Error> {
         self.params = Some(Page::After {
             page: page.unwrap_or(0),
             per_page: per_page.unwrap_or(60),
@@ -263,7 +265,7 @@ impl<'a> Pager<'a> {
         self.get()
     }
 
-    pub fn since(&mut self, timestamp: chrono::NaiveDateTime) -> Result<PostList, Box<dyn Error>> {
+    pub fn since(&mut self, timestamp: chrono::NaiveDateTime) -> Result<PostList, Error> {
         self.params = Some(Page::Since(timestamp));
         self.get()
     }

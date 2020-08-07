@@ -33,7 +33,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let channel_name = "Town Square";
     let chan1_res = channels.binary_search_by_key(&channel_name, |c| &c.display_name);
     if chan1_res.is_err() {
-        return mm::error(&format!("no channel named {}", channel_name));
+        return mm::error(&format!("no channel named {}", channel_name))?;
     }
     let chan1_idx = chan1_res.unwrap();
     let chan1 = &channels[chan1_idx];
@@ -72,12 +72,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
        - /api/v4/users/{user_id}/teams/members
          get user's team members
        - websocket api
-       - rework error returned type in mm crate
-         maybe like (?) => enum mm::Error {
-             Api(status_code, id, message, request_id)
-             Http(reqwest::Error)
-             Other(String)
-         }
     */
     Ok(())
 }
