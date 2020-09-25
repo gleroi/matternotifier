@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 mm = { path = "../mm" }
 serde_json = { version = "1.0" }
+tungstenite = { version = "0.11", features = ["tls"] }

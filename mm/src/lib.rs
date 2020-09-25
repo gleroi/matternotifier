@@ -14,6 +14,9 @@ pub use gitlab::Gitlab;
 mod posts;
 pub use posts::*;
 
+mod websocket;
+pub use websocket::*;
+
 #[derive(Default)]
 pub struct Client {
     client: blocking::Client,
@@ -25,12 +28,19 @@ pub enum Error {
     Api(ApiError),
     Http(reqwest::Error),
     InvalidUrl(url::ParseError),
+    WebSocket(tungstenite::Error),
     Other(String),
 }
 
 impl std::convert::From<reqwest::Error> for Error {
     fn from(err: reqwest::Error) -> Self {
         Self::Http(err)
+    }
+}
+
+impl std::convert::From<tungstenite::Error> for Error {
+    fn from(err: tungstenite::Error) -> Self {
+        Self::WebSocket(err)
     }
 }
 
@@ -69,6 +79,7 @@ impl fmt::Display for Error {
             Error::Api(err) => write!(f, "api: {:?}", err),
             Error::Http(err) => write!(f, "http: {}", err),
             Error::InvalidUrl(err) => write!(f, "url: {}", err),
+            Error::WebSocket(err) => write!(f, "error: {}", err),
             Error::Other(err) => write!(f, "error: {}", err),
         }
     }
@@ -107,6 +118,19 @@ impl Client {
             .unwrap()
             .join(path)
             .unwrap()
+    }
+
+    pub fn ws_url(&self) -> reqwest::Url {
+        let mut ws_api = reqwest::Url::parse(&self.base_url)
+            .unwrap()
+            .join("/api/v4/websocket")
+            .unwrap();
+        ws_api.set_scheme("wss").unwrap();
+        ws_api
+    }
+
+    pub fn ws(&self) -> Result<EventStream, Error> {
+        EventStream::connect(&self.ws_url())
     }
 
     fn handle_response<T>(http_result: reqwest::Result<blocking::Response>) -> Result<T, Error>

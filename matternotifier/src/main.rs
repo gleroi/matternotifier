@@ -2,20 +2,23 @@ use std::collections::HashMap;
 use std::env;
 use std::error::Error;
 
+use tungstenite;
+use tungstenite::Message;
+
 use mm::Gitlab;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let url = env::var_os("MM_URL").ok_or("Please define env var MM_URL")?;
     let token_var = env::var_os("MM_TOKEN");
-    let c = if let Some(token) = token_var {
-        mm::Client::new(url.to_str().unwrap(), Some(token.to_str().unwrap()))
+    let (c, token) = if let Some(token) = token_var {
+        let token = token.into_string().unwrap();
+        (mm::Client::new(url.to_str().unwrap(), Some(&token)), token)
     } else {
         let user = env::var_os("MM_USER").ok_or("Please define env var MM_USER")?;
         let pass = env::var_os("MM_PASS").ok_or("Please define env var MM_PASS")?;
         let c = mm::Client::new(url.to_str().unwrap(), None);
         let token = c.login_with_gitlab(user.to_str().unwrap(), pass.to_str().unwrap())?;
-        println!("token is {}", token);
-        c
+        (c, token)
     };
     let me = c.get_user("me")?;
     println!("Hello, {}!", me.nickname);
@@ -73,6 +76,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
          get user's team members
        - websocket api
     */
+
+    let mut ws = c.ws()?;
+    ws.login(&token)?;
+    loop {
+        let msg = ws.wait_for_event()?;
+        dbg!(msg);
+    }
     Ok(())
 }
 
