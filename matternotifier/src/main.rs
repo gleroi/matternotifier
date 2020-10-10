@@ -33,7 +33,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         channels.append(&mut chans);
     }
     channels.sort_by_key(|c| c.display_name.clone());
-    let channel_name = "Town Square";
+    let channel_name = "Suivi ZMASTER";
     let chan1_res = channels.binary_search_by_key(&channel_name, |c| &c.display_name);
     if chan1_res.is_err() {
         return mm::error(&format!("no channel named {}", channel_name))?;
