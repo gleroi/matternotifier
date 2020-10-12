@@ -8,6 +8,7 @@ use tungstenite::Message;
 use mm::Gitlab;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // test sqlite
     let url = env::var_os("MM_URL").ok_or("Please define env var MM_URL")?;
     let token_var = env::var_os("MM_TOKEN");
     let (c, token) = if let Some(token) = token_var {
@@ -22,18 +23,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
     let me = c.get_user("me")?;
     println!("Hello, {}!", me.nickname);
+
     let teams = c.get_user_teams("me")?;
-    let mut channels: Vec<mm::Channel> = Vec::new();
-    for team in teams {
-        println!("- Team {}\n  {}", team.display_name, team.description);
-        let mut chans = c.get_user_channels("me", &team.id)?;
-        for chan in &chans {
-            println!("  - {}: {}", chan.display_name, chan.header);
-        }
-        channels.append(&mut chans);
-    }
-    channels.sort_by_key(|c| c.display_name.clone());
     let channel_name = "Suivi ZMASTER";
+    let channels = get_all_channels(&c, &teams)?;
     let chan1_res = channels.binary_search_by_key(&channel_name, |c| &c.display_name);
     if chan1_res.is_err() {
         return mm::error(&format!("no channel named {}", channel_name))?;
@@ -61,16 +54,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         last_post_id = posts.prev_post_id;
     }
 
-    // list post of a PostList
-    // let posts = c.get_channel_posts(&chan1.id).get()?;
-    // let mut users: HashMap<String, mm::User> = HashMap::new();
-
-    // send a lot a post
-    // for i in 21..500 {
-    //     let r = c.create_post(&chan1.id, &format!("{}", i));
-    //     println!("{} : {:?}", i, r)
-    // }
-
     /* TODO
        - /api/v4/users/{user_id}/teams/members
          get user's team members
@@ -82,6 +65,29 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     loop {
         let msg = ws.wait_for_event()?;
         dbg!(msg);
+    }
+    Ok(())
+}
+
+fn get_all_channels(c: &mm::Client, teams: &Vec<mm::Team>) -> Result<Vec<mm::Channel>, Box<dyn Error>> {
+    let mut channels: Vec<mm::Channel> = Vec::new();
+    for team in teams {
+        println!("- Team {}\n  {}", team.display_name, team.description);
+        let mut chans = c.get_user_channels("me", &team.id)?;
+        for chan in &chans {
+            println!("  - {}: {}", chan.display_name, chan.header);
+        }
+        channels.append(&mut chans);
+    }
+    channels.sort_by_key(|c| c.display_name.clone());
+    Ok(channels)
+}
+
+fn create_500_posts(c: &mm::Client, channel: &mm::Channel) -> Result<(), Box<dyn Error>> {
+    // send a lot a post
+    for i in 21..500 {
+        let r = c.create_post(&channel.id, &format!("{}", i))?;
+        println!("{} : {:?}", i, r)
     }
     Ok(())
 }
