@@ -5,10 +5,18 @@ use std::error::Error;
 use tungstenite;
 use tungstenite::Message;
 
+use rusqlite;
+use rusqlite::{params, Connection};
+
 use mm::Gitlab;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // test sqlite
+    println!("sqlite: {}", rusqlite::version());
+    let conn = Connection::open("../../matter.db")?;
+
+    return Ok(());
+
     let url = env::var_os("MM_URL").ok_or("Please define env var MM_URL")?;
     let token_var = env::var_os("MM_TOKEN");
     let (c, token) = if let Some(token) = token_var {
