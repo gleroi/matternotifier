@@ -11,12 +11,6 @@ use rusqlite::{params, Connection};
 use mm::Gitlab;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // test sqlite
-    println!("sqlite: {}", rusqlite::version());
-    let conn = Connection::open("../../matter.db")?;
-
-    return Ok(());
-
     let url = env::var_os("MM_URL").ok_or("Please define env var MM_URL")?;
     let token_var = env::var_os("MM_TOKEN");
     let (c, token) = if let Some(token) = token_var {
@@ -77,7 +71,23 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn get_all_channels(c: &mm::Client, teams: &Vec<mm::Team>) -> Result<Vec<mm::Channel>, Box<dyn Error>> {
+fn test_sqlite() -> Result<(), Box<dyn Error>> {
+    // test sqlite
+    println!("sqlite: {}", rusqlite::version());
+    let conn = Connection::open("./matter.db")?;
+    let mut stmt =
+        conn.prepare("INSERT INTO posts (user_id, channel_id, message) values (?, ?, ?)")?;
+    stmt.execute(&["u123", "c456", "plop 1"])?;
+    stmt.execute(&["u123", "c456", "plop 2"])?;
+    stmt.execute(&["u123", "c456", "plop 3"])?;
+    stmt.execute(&["u123", "c456", "plop 4"])?;
+    return Ok(());
+}
+
+fn get_all_channels(
+    c: &mm::Client,
+    teams: &Vec<mm::Team>,
+) -> Result<Vec<mm::Channel>, Box<dyn Error>> {
     let mut channels: Vec<mm::Channel> = Vec::new();
     for team in teams {
         println!("- Team {}\n  {}", team.display_name, team.description);
