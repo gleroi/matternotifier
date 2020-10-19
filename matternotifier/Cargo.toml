@@ -13,3 +13,6 @@ serde_json = { version = "1.0" }
 tungstenite = { version = "0.11", features = ["tls"] }
 rusqlite = { version = "0.24" }
 #sqlx = { version = "0.3.5", features = ["sqlite", "time"] }
+gtk = { version = "0.9.0", features = ["v3_16"] }
+gio = { version = "", features = ["v2_44"] }
+

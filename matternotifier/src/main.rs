@@ -11,6 +11,9 @@ use rusqlite::{params, Connection};
 use mm::Gitlab;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    test_gtk();
+    return Ok(());
+
     let url = env::var_os("MM_URL").ok_or("Please define env var MM_URL")?;
     let token_var = env::var_os("MM_TOKEN");
     let (c, token) = if let Some(token) = token_var {
@@ -69,6 +72,36 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         dbg!(msg);
     }
     Ok(())
+}
+
+fn test_gtk() {
+    use gtk::prelude::*;
+    use gio::prelude::*;
+    use gtk::{Application, ApplicationWindow, Grid, Button, Label};
+    let application =
+        Application::new(Some("com.github.gtk-rs.examples.basic"), Default::default())
+            .expect("failed to initialize GTK application");
+
+    application.connect_activate(|app| {
+        let window = ApplicationWindow::new(app);
+        window.set_title("First GTK+ Program");
+        window.set_default_size(350, 70);
+
+        let grid = Grid::new();
+
+        let button = Button::with_label("Click me!");
+        button.connect_clicked(|_| {
+            println!("Clicked!");
+        });
+        grid.add(&button);
+        let label = Label::new(Some("Hello, world !"));
+        grid.add(&label);
+
+        window.add(&grid);
+        window.show_all();
+    });
+
+    application.run(&[]);
 }
 
 fn test_sqlite() -> Result<(), Box<dyn Error>> {
