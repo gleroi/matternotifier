@@ -74,10 +74,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+use gio::prelude::*;
+use gio::ListStore;
+use gtk::prelude::*;
+use gtk::{Application, ApplicationWindow, Button, Grid, Label, ListBox, Notebook};
+
 fn test_gtk() {
-    use gtk::prelude::*;
-    use gio::prelude::*;
-    use gtk::{Application, ApplicationWindow, Grid, Button, Label};
     let application =
         Application::new(Some("com.github.gtk-rs.examples.basic"), Default::default())
             .expect("failed to initialize GTK application");
@@ -87,21 +89,28 @@ fn test_gtk() {
         window.set_title("First GTK+ Program");
         window.set_default_size(350, 70);
 
-        let grid = Grid::new();
-
-        let button = Button::with_label("Click me!");
-        button.connect_clicked(|_| {
-            println!("Clicked!");
-        });
-        grid.add(&button);
-        let label = Label::new(Some("Hello, world !"));
-        grid.add(&label);
-
-        window.add(&grid);
+        let notebook = Notebook::new();
+        let g1 = create_grid("Coucou");
+        let g2 = create_grid("Hello");
+        notebook.add(&g1);
+        notebook.set_tab_label_text(&g1, "grille 1");
+        notebook.add(&g2);
+        notebook.set_tab_label_text(&g2, "grille 2");
+        window.add(&notebook);
         window.show_all();
     });
 
     application.run(&[]);
+}
+
+fn create_grid(title: &str) -> ListBox {
+    let grid = ListBox::new();
+    let store = ListStore::new();
+    // see https://github.com/gtk-rs/examples/blob/master/src/bin/list_store.rs
+    for i in 1..5 {
+        store.append(model)
+    }
+    grid
 }
 
 fn test_sqlite() -> Result<(), Box<dyn Error>> {
