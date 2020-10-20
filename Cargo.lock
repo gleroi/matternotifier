@@ -976,6 +976,7 @@ dependencies = [
  "gio",
  "gtk",
  "mm",
+ "pkg-config",
  "rusqlite",
  "serde_json",
  "tungstenite",
