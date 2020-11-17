@@ -8,6 +8,8 @@ use tungstenite::Message;
 use rusqlite;
 use rusqlite::{params, Connection};
 
+mod store;
+
 use mm::Gitlab;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
