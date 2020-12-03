@@ -87,6 +87,12 @@ impl fmt::Display for Error {
 
 impl StdError for Error {}
 
+/* TODO
+   - /api/v4/users/{user_id}/teams/members
+     get user's team members
+   - websocket api
+*/
+
 impl Client {
     pub fn new(base_url: &str, token: Option<&str>) -> Self {
         let mut headers = header::HeaderMap::new();
