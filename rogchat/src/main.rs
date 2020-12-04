@@ -4,15 +4,21 @@ use std::sync::mpsc;
 
 mod core;
 mod mattermost;
+mod ui;
 
 fn main() -> Result<()> {
     let (tx, rx) = mpsc::channel::<core::Event>();
     let plugin = mattermost::Plugin::init(tx.clone())?;
-    let thread = thread::spawn(move || {
+    let plugin_thread = thread::spawn(move || {
         plugin.run().unwrap();
     });
-    loop {
-        let m = rx.recv()?;
-        dbg!(m);
-    }
+    let core_thread = thread::spawn(move || {
+        loop {
+            let m = rx.recv().unwrap();
+            dbg!(m);
+        }
+    });
+
+    ui::test_gtk();
+    Ok(())
 }

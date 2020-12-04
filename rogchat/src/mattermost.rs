@@ -36,7 +36,7 @@ impl Plugin {
             let msg = ws.wait_for_event()?;
             match msg {
                 Message::Text(str) => self.to_core.send(core::Event::Message(str.clone()))?,
-                _ => { dbg!(msg); () },
+                _ => (),
             }
         }
     }
