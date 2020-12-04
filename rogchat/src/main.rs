@@ -1,7 +1,7 @@
 use anyhow::Result;
 use std::thread;
 use std::sync::mpsc;
-
+use gio::prelude::ApplicationExtManual;
 mod core;
 mod mattermost;
 mod ui;
@@ -19,6 +19,7 @@ fn main() -> Result<()> {
         }
     });
 
-    ui::test_gtk();
+    let app = ui::build()?;
+    app.run(&[]);
     Ok(())
 }

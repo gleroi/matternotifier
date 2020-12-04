@@ -1,10 +1,10 @@
-
+use anyhow::{Result};
 use gio::prelude::*;
 use gio::ListStore;
 use gtk::prelude::*;
 use gtk::{Application, ApplicationWindow, Button, Grid, Label, ListBox, Notebook, ScrolledWindow};
 
-pub fn test_gtk() {
+pub fn build() -> Result<Application> {
     let application =
         Application::new(Some("re.leroi.rogchat"), Default::default())
             .expect("failed to initialize GTK application");
@@ -25,7 +25,7 @@ pub fn test_gtk() {
         window.show_all();
     });
 
-    application.run(&[]);
+    Ok(application)
 }
 
 fn create_grid(title: &str) -> gtk::ScrolledWindow {
