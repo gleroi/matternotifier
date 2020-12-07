@@ -29,12 +29,8 @@ pub fn build() -> Result<Application> {
 }
 
 fn create_grid(title: &str) -> gtk::ScrolledWindow {
-    let sw = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
-    let grid = ListBox::new();
-    for i in 1..5 {
-        let label = Label::new(Some(&format!("label {}", i)));
-        grid.add(&label);    
-    }
-    sw.add(&grid);
-    sw
+    let v = gtk::TextView::new();
+    let window = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
+    window.add(&v);
+    window
 }
