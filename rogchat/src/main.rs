@@ -1,12 +1,18 @@
 use anyhow::Result;
 use std::thread;
 use std::sync::mpsc;
-use gio::prelude::ApplicationExtManual;
+use std::process;
+use gtk;
 mod core;
 mod mattermost;
 mod ui;
 
 fn main() -> Result<()> {
+    if gtk::init().is_err() {
+        eprintln!("failed to initialize GTK");
+        process::exit(1);
+    }
+
     let (tx, rx) = mpsc::channel::<core::Event>();
     let plugin = mattermost::Plugin::init(tx.clone())?;
     let plugin_thread = thread::spawn(move || {
@@ -20,6 +26,7 @@ fn main() -> Result<()> {
     });
 
     let app = ui::build()?;
-    app.run(&[]);
+    app.window.show_all();
+    gtk::main();
     Ok(())
 }
