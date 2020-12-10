@@ -1,12 +1,10 @@
 use anyhow::{Result};
-use gio::prelude::*;
-use gio::ListStore;
 use gtk::prelude::*;
-use gtk::{Window, WindowType, Grid, Label, ListBox, Notebook, ScrolledWindow};
+use gtk::{Window, WindowType, Notebook, ScrolledWindow, TextTagTable};
 
-struct RogChat {
-    window: Application,
-    textview: gtk::TextView,
+pub struct RogChat {
+    pub window: Window,
+    pub buffer: gtk::TextBuffer,
 }
 
 pub fn build() -> Result<RogChat> {
@@ -19,17 +17,17 @@ pub fn build() -> Result<RogChat> {
     window.add(&notebook);
     window.connect_delete_event(move |_,_| {
         gtk::main_quit();
-        Inhibit(false);
+        Inhibit(false)
     });
     Ok(RogChat {
         window: window,
-        textbuffer: textbuffer,
+        buffer: textbuffer,
     })
 }
 
 fn add_chat(notebook: &Notebook, title: &str) -> gtk::TextBuffer {
-    let buffer = gtk::TextBuffer::new(None);
-    let v = gtk::TextView::new_with_buffer(&buffer);
+    let buffer = gtk::TextBuffer::new(None::<&TextTagTable>);
+    let v = gtk::TextView::with_buffer(&buffer);
     let window = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
     window.add(&v);
     notebook.add(&window);

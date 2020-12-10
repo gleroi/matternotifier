@@ -3,6 +3,9 @@ use std::thread;
 use std::sync::mpsc;
 use std::process;
 use gtk;
+use gtk::{WidgetExt, TextBufferExt};
+use glib;
+
 mod core;
 mod mattermost;
 mod ui;
@@ -18,14 +21,22 @@ fn main() -> Result<()> {
     let plugin_thread = thread::spawn(move || {
         plugin.run().unwrap();
     });
+
+    let app = ui::build()?;
+
     let core_thread = thread::spawn(move || {
         loop {
             let m = rx.recv().unwrap();
             dbg!(m);
+            match m {
+                core::Event::Message(str) => glib::idle_add_local(|| {
+                    app.buffer.insert_at_cursor(&str);
+                    glib::source::Continue(false)
+                }) ,
+            };
         }
     });
 
-    let app = ui::build()?;
     app.window.show_all();
     gtk::main();
     Ok(())

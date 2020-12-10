@@ -929,6 +929,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "gio",
+ "glib",
  "gtk",
  "mm",
  "pkg-config",
