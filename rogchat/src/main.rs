@@ -25,8 +25,8 @@ fn main() -> Result<()> {
     let buffer = app.buffer;
     ui_rx.attach(None, move |m| {
         match m {
-            core::Event::Message(str) => buffer.insert_at_cursor(&format!("{}\n", str)),
-            core::Event::Info(str) => buffer.insert_at_cursor(&format!("{}\n", str)),
+            core::Event::Message(str) => buffer.insert(&mut buffer.get_end_iter(), &format!("{}\n", str)),
+            core::Event::Info(str) => buffer.insert(&mut buffer.get_end_iter(), &format!("{}\n", str)),
         };
         glib::source::Continue(true)
     });

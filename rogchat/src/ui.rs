@@ -28,6 +28,10 @@ pub fn build() -> Result<RogChat> {
 fn add_chat(notebook: &Notebook, title: &str) -> gtk::TextBuffer {
     let buffer = gtk::TextBuffer::new(None::<&TextTagTable>);
     let v = gtk::TextView::with_buffer(&buffer);
+    v.set_wrap_mode(gtk::WrapMode::Word);
+    v.set_cursor_visible(false);
+    v.set_editable(false);
+    v.set_pixels_below_lines(5);
     let window = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
     window.add(&v);
     notebook.add(&window);
