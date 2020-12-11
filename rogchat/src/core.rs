@@ -6,3 +6,5 @@ pub enum Event {
 }
 
 pub type Sender = glib::Sender<Event>;
+pub type Receiver = glib::Receiver<Event>;
+

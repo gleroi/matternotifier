@@ -1,8 +1,7 @@
 use anyhow::Result;
 use std::thread;
-use std::process;
+use gio::prelude::*;
 use gtk;
-use gtk::{WidgetExt, TextBufferExt};
 use glib;
 
 mod core;
@@ -10,28 +9,22 @@ mod mattermost;
 mod ui;
 
 fn main() -> Result<()> {
-    if gtk::init().is_err() {
-        eprintln!("failed to initialize GTK");
-        process::exit(1);
-    }
+    let application = gtk::Application::new(
+        Some("re.leroi.rogchat"),
+        Default::default(),
+    )
+    .expect("Initialization failed...");
 
-    let (ui_tx, ui_rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
-    let plugin = mattermost::Plugin::init(ui_tx.clone())?;
-    let plugin_thread = thread::spawn(move || {
-        plugin.run().unwrap();
+
+    application.connect_activate(|app| {
+        let (ui_tx, ui_rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
+        let plugin = mattermost::Plugin::init(ui_tx.clone()).unwrap();
+        let plugin_thread = thread::spawn(move || {
+            plugin.run().unwrap();
+        });
+        ui::build(app, ui_rx);
     });
-
-    let app = ui::build()?;
-    let buffer = app.buffer;
-    ui_rx.attach(None, move |m| {
-        match m {
-            core::Event::Message(str) => buffer.insert(&mut buffer.get_end_iter(), &format!("{}\n", str)),
-            core::Event::Info(str) => buffer.insert(&mut buffer.get_end_iter(), &format!("{}\n", str)),
-        };
-        glib::source::Continue(true)
-    });
-
-    app.window.show_all();
-    gtk::main();
+    
+    application.run(&[]);
     Ok(())
 }
