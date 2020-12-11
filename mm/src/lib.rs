@@ -44,6 +44,12 @@ impl std::convert::From<tungstenite::Error> for Error {
     }
 }
 
+impl std::convert::From<serde_json::Error> for Error {
+    fn from(err: serde_json::Error) -> Self {
+        Self::Other(format!("{}", err))
+    }
+}
+
 impl std::convert::From<url::ParseError> for Error {
     fn from(err: url::ParseError) -> Self {
         Self::InvalidUrl(err)

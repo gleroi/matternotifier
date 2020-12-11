@@ -4,7 +4,6 @@ use mm::Gitlab;
 use std::collections::HashMap;
 use std::env;
 use crate::core;
-use tungstenite::Message;
 
 pub struct Plugin {
     client: mm::Client,
@@ -33,10 +32,19 @@ impl Plugin {
         let mut ws = self.client.ws()?;
         ws.login(&self.token)?;
         loop {
-            let msg = ws.wait_for_event()?;
-            match msg {
-                Message::Text(str) => self.to_core.send(core::Event::Message(str.clone()))?,
-                _ => (),
+            let result = ws.wait_for_event();
+            match result {
+                Err(err) => { dbg!(err); },
+                Ok(evt) => { 
+                    if evt.event == "posted" {
+                        let posted_evt = serde_json::from_value::<mm::PostedEvent>(evt.data)?;
+                        let post = serde_json::from_str::<mm::Post>(&posted_evt.post)?;
+                        self.to_core.send(core::Event::Message(format!("{} - {} > {} : {}",
+                            post.update_at, posted_evt.channel_display_name, posted_evt.sender_name, post.message)));
+                    } else {
+                        self.to_core.send(core::Event::Info(format!("{} : {}", evt.event, evt.data))); 
+                    }
+                },
             }
         }
     }
@@ -75,7 +83,7 @@ fn create_500_posts(c: &mm::Client, channel: &mm::Channel) -> Result<()> {
     // send a lot a post
     for i in 21..500 {
         let r = c.create_post(&channel.id, &format!("{}", i))?;
-        println!("{} : {:?}", i, r)
+        println!("{} : {:#?}", i, r)
     }
     Ok(())
 }

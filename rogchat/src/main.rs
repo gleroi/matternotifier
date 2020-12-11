@@ -1,6 +1,5 @@
 use anyhow::Result;
 use std::thread;
-use std::sync::mpsc;
 use std::process;
 use gtk;
 use gtk::{WidgetExt, TextBufferExt};
@@ -16,25 +15,20 @@ fn main() -> Result<()> {
         process::exit(1);
     }
 
-    let (tx, rx) = mpsc::channel::<core::Event>();
-    let plugin = mattermost::Plugin::init(tx.clone())?;
+    let (ui_tx, ui_rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
+    let plugin = mattermost::Plugin::init(ui_tx.clone())?;
     let plugin_thread = thread::spawn(move || {
         plugin.run().unwrap();
     });
 
     let app = ui::build()?;
-
-    let core_thread = thread::spawn(move || {
-        loop {
-            let m = rx.recv().unwrap();
-            dbg!(m);
-            match m {
-                core::Event::Message(str) => glib::idle_add_local(|| {
-                    app.buffer.insert_at_cursor(&str);
-                    glib::source::Continue(false)
-                }) ,
-            };
-        }
+    let buffer = app.buffer;
+    ui_rx.attach(None, move |m| {
+        match m {
+            core::Event::Message(str) => buffer.insert_at_cursor(&format!("{}\n", str)),
+            core::Event::Info(str) => buffer.insert_at_cursor(&format!("{}\n", str)),
+        };
+        glib::source::Continue(true)
     });
 
     app.window.show_all();
