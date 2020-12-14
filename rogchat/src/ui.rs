@@ -1,15 +1,8 @@
-use anyhow::{Result};
-use gio::prelude::*;
 use gtk::prelude::*;
-use gtk::{Window, WindowType, Notebook, ScrolledWindow, TextTagTable};
+use gtk::{Notebook, ScrolledWindow, TextTagTable};
 use gtk::{Application, ApplicationWindow, WidgetExt, TextBufferExt};
 use glib;
 use super::core;
-
-pub struct RogChat {
-    pub window: Window,
-    pub buffer: gtk::TextBuffer,
-}
 
 pub fn build(app: &Application, ui_rx: core::Receiver) {
     let window = ApplicationWindow::new(app);

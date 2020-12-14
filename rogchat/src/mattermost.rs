@@ -1,7 +1,6 @@
 use anyhow::{anyhow, Result};
 use mm;
 use mm::Gitlab;
-use std::collections::HashMap;
 use std::env;
 use crate::core;
 
@@ -9,8 +8,9 @@ pub struct Plugin {
     client: mm::Client,
     token: String,
     to_core: core::Sender,
-    users: HashMap<String, mm::User>,
-    channels: HashMap<String, mm::Channel>,
+//    users: HashMap<String, mm::User>,
+    channels: Vec<mm::Channel>,
+    teams: Vec<mm::Team>
 }
 
 impl Plugin {
@@ -21,14 +21,15 @@ impl Plugin {
             client,
             token,
             to_core,
-            users: HashMap::new(),
-            channels: HashMap::new(),
+//            users: HashMap::new(),
+            channels: Vec::new(),
+            teams: Vec::new(),
         })
     }
 
-    pub fn run(self) -> Result<()> {
-        let teams = self.client.get_user_teams("me")?;
-//        self.channels = get_all_channels(&self.client, &self.teams)?;
+    pub fn run(mut self) -> Result<()> {
+        self.teams = self.client.get_user_teams("me")?;
+        self.channels = get_all_channels(&self.client, &self.teams)?;
         let mut ws = self.client.ws()?;
         ws.login(&self.token)?;
         loop {
@@ -40,9 +41,9 @@ impl Plugin {
                         let posted_evt = serde_json::from_value::<mm::PostedEvent>(evt.data)?;
                         let post = serde_json::from_str::<mm::Post>(&posted_evt.post)?;
                         self.to_core.send(core::Event::Message(format!("{} - {} > {} : {}",
-                            post.update_at, posted_evt.channel_display_name, posted_evt.sender_name, post.message)));
+                            post.update_at, posted_evt.channel_display_name, posted_evt.sender_name, post.message)))?;
                     } else {
-                        self.to_core.send(core::Event::Info(format!("{} : {}", evt.event, evt.data))); 
+                        self.to_core.send(core::Event::Info(format!("{} : {}", evt.event, evt.data)))?; 
                     }
                 },
             }
@@ -79,32 +80,3 @@ fn get_all_channels(c: &mm::Client, teams: &Vec<mm::Team>) -> Result<Vec<mm::Cha
     Ok(channels)
 }
 
-fn create_500_posts(c: &mm::Client, channel: &mm::Channel) -> Result<()> {
-    // send a lot a post
-    for i in 21..500 {
-        let r = c.create_post(&channel.id, &format!("{}", i))?;
-        println!("{} : {:#?}", i, r)
-    }
-    Ok(())
-}
-
-fn display_postlist(
-    c: &mm::Client,
-    posts: &mm::PostList,
-    users: &mut HashMap<String, mm::User>,
-) -> Result<()> {
-    for post_id in posts.order.iter() {
-        let post = &posts.posts[post_id];
-        let user = users
-            .entry(post.user_id.clone())
-            .or_insert(c.get_user(&post.user_id)?);
-        println!(
-            "{} {}: {}\n  {}",
-            post.created(),
-            user.display_name(),
-            post.message,
-            serde_json::to_string_pretty(&post.metadata)?
-        );
-    }
-    Ok(())
-}

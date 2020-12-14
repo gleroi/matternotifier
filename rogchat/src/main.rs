@@ -18,11 +18,11 @@ fn main() -> Result<()> {
 
     application.connect_activate(|app| {
         let (ui_tx, ui_rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
+        ui::build(app, ui_rx);
         let plugin = mattermost::Plugin::init(ui_tx.clone()).unwrap();
-        let plugin_thread = thread::spawn(move || {
+        let _plugin_thread = thread::spawn(move || {
             plugin.run().unwrap();
         });
-        ui::build(app, ui_rx);
     });
     
     application.run(&[]);
