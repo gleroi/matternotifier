@@ -1,8 +1,8 @@
-use gtk::prelude::*;
-use gtk::{Notebook, ScrolledWindow, TextTagTable};
-use gtk::{Application, ApplicationWindow, WidgetExt, TextBufferExt};
-use glib;
 use super::core;
+use glib;
+use gtk::prelude::*;
+use gtk::{Application, ApplicationWindow, TextBufferExt, WidgetExt};
+use gtk::{Notebook, ScrolledWindow, TextTagTable};
 
 pub fn build(app: &Application, ui_rx: core::Receiver) {
     let window = ApplicationWindow::new(app);
@@ -12,11 +12,15 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
     let textbuffer = add_chat(&notebook, "all");
     window.add(&notebook);
 
-    let buffer = textbuffer; 
+    let buffer = textbuffer;
     ui_rx.attach(None, move |m| {
         match m {
-            core::Event::Message(str) => buffer.insert(&mut buffer.get_end_iter(), &format!("{}\n", str)),
-            core::Event::Info(str) => buffer.insert(&mut buffer.get_end_iter(), &format!("{}\n", str)),
+            core::Event::Message(str) => {
+                buffer.insert(&mut buffer.get_end_iter(), &format!("{}\n", str))
+            }
+            core::Event::Info(str) => {
+                buffer.insert(&mut buffer.get_end_iter(), &format!("{}\n", str))
+            }
         };
         glib::source::Continue(true)
     });

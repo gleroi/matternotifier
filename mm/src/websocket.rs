@@ -1,9 +1,9 @@
 use reqwest;
-use tungstenite;
-use tungstenite::Message;
-use serde::{Deserialize};
+use serde::Deserialize;
 use serde_json;
 use std::collections::HashMap;
+use tungstenite;
+use tungstenite::Message;
 
 use super::Error;
 
@@ -77,7 +77,7 @@ impl EventStream {
             println!("websocket evt: {:#?}", msg);
             match msg {
                 Message::Text(str) => {
-                    let val : serde_json::Value = serde_json::from_str(&str)?;
+                    let val: serde_json::Value = serde_json::from_str(&str)?;
                     if let serde_json::Value::Object(map) = val.clone() {
                         if !map.get("event").is_none() {
                             let evt = serde_json::from_value(val)?;
@@ -85,9 +85,9 @@ impl EventStream {
                         }
                     }
                     //TODO: handle status event
-                },
+                }
                 Message::Ping(_) => continue,
-                _ => { return super::error(&format!("unknown message:\n {:#?}", &msg)) },
+                _ => return super::error(&format!("unknown message:\n {:#?}", &msg)),
             }
         }
     }

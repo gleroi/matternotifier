@@ -1,20 +1,16 @@
 use anyhow::Result;
-use std::thread;
 use gio::prelude::*;
-use gtk;
 use glib;
+use gtk;
+use std::thread;
 
 mod core;
 mod mattermost;
 mod ui;
 
 fn main() -> Result<()> {
-    let application = gtk::Application::new(
-        Some("re.leroi.rogchat"),
-        Default::default(),
-    )
-    .expect("Initialization failed...");
-
+    let application = gtk::Application::new(Some("re.leroi.rogchat"), Default::default())
+        .expect("Initialization failed...");
 
     application.connect_activate(|app| {
         let (ui_tx, ui_rx) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
@@ -24,7 +20,7 @@ fn main() -> Result<()> {
             plugin.run().unwrap();
         });
     });
-    
+
     application.run(&[]);
     Ok(())
 }

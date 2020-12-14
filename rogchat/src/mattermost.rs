@@ -1,16 +1,16 @@
+use crate::core;
 use anyhow::{anyhow, Result};
 use mm;
 use mm::Gitlab;
 use std::env;
-use crate::core;
 
 pub struct Plugin {
     client: mm::Client,
     token: String,
     to_core: core::Sender,
-//    users: HashMap<String, mm::User>,
+    //    users: HashMap<String, mm::User>,
     channels: Vec<mm::Channel>,
-    teams: Vec<mm::Team>
+    teams: Vec<mm::Team>,
 }
 
 impl Plugin {
@@ -21,7 +21,7 @@ impl Plugin {
             client,
             token,
             to_core,
-//            users: HashMap::new(),
+            //            users: HashMap::new(),
             channels: Vec::new(),
             teams: Vec::new(),
         })
@@ -35,17 +35,25 @@ impl Plugin {
         loop {
             let result = ws.wait_for_event();
             match result {
-                Err(err) => { dbg!(err); },
-                Ok(evt) => { 
+                Err(err) => {
+                    dbg!(err);
+                }
+                Ok(evt) => {
                     if evt.event == "posted" {
                         let posted_evt = serde_json::from_value::<mm::PostedEvent>(evt.data)?;
                         let post = serde_json::from_str::<mm::Post>(&posted_evt.post)?;
-                        self.to_core.send(core::Event::Message(format!("{} - {} > {} : {}",
-                            post.update_at, posted_evt.channel_display_name, posted_evt.sender_name, post.message)))?;
+                        self.to_core.send(core::Event::Message(format!(
+                            "{} - {} > {} : {}",
+                            post.update_at,
+                            posted_evt.channel_display_name,
+                            posted_evt.sender_name,
+                            post.message
+                        )))?;
                     } else {
-                        self.to_core.send(core::Event::Info(format!("{} : {}", evt.event, evt.data)))?; 
+                        self.to_core
+                            .send(core::Event::Info(format!("{} : {}", evt.event, evt.data)))?;
                     }
-                },
+                }
             }
         }
     }
@@ -79,4 +87,3 @@ fn get_all_channels(c: &mm::Client, teams: &Vec<mm::Team>) -> Result<Vec<mm::Cha
     channels.sort_by_key(|c| c.display_name.clone());
     Ok(channels)
 }
-
