@@ -932,6 +932,7 @@ dependencies = [
  "glib",
  "gtk",
  "mm",
+ "pango",
  "pkg-config",
  "serde_json",
  "tungstenite",
