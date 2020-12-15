@@ -1,10 +1,10 @@
 use super::core;
+use chrono::NaiveDateTime;
 use glib;
 use gtk::prelude::*;
 use gtk::{Application, ApplicationWindow, TextBuffer, TextBufferExt, WidgetExt};
 use gtk::{Notebook, ScrolledWindow, TextTag, TextTagExt, TextTagTable, TextTagTableExt};
 use pango;
-use chrono::NaiveDateTime;
 
 pub fn build(app: &Application, ui_rx: core::Receiver) {
     let window = ApplicationWindow::new(app);
@@ -18,11 +18,17 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
     ui_rx.attach(None, move |m| {
         match m {
             core::Event::Message(msg) => {
-                insert_with_tag(&buffer, "msg", &format!("{} {} > {} : {}\n", 
-                    NaiveDateTime::from_timestamp(msg.timestamp/1000, 0),
-                    msg.channel_name,
-                    msg.sender_name,
-                    msg.content));
+                insert_with_tag(
+                    &buffer,
+                    "msg",
+                    &format!(
+                        "{} {} > {} : {}\n",
+                        NaiveDateTime::from_timestamp(msg.timestamp / 1000, 0),
+                        msg.channel_name,
+                        msg.sender_name,
+                        msg.content
+                    ),
+                );
             }
             core::Event::Info(str) => {
                 insert_with_tag(&buffer, "info", &format!("{}\n", str));
@@ -48,7 +54,7 @@ fn add_chat(notebook: &Notebook, title: &str) -> gtk::TextBuffer {
     info_tag.set_property_background(Some("#DDDDDD"));
     info_tag.set_property_style(pango::Style::Italic);
     tags.add(&info_tag);
-    
+
     let msg_tag = TextTag::new(Some("msg"));
     msg_tag.set_property_background(Some("#e4eaf5"));
     tags.add(&msg_tag);

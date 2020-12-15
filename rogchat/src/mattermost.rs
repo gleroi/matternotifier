@@ -40,7 +40,8 @@ impl Plugin {
                 }
                 Ok(evt) => {
                     if evt.event == "posted" {
-                        self.to_core.send(core::Event::Message(core::Message::try_from(evt)?))?;
+                        self.to_core
+                            .send(core::Event::Message(core::Message::try_from(evt)?))?;
                     } else {
                         self.to_core
                             .send(core::Event::Info(format!("{} : {}", evt.event, evt.data)))?;
