@@ -4,6 +4,7 @@ use gtk::prelude::*;
 use gtk::{Application, ApplicationWindow, TextBuffer, TextBufferExt, WidgetExt};
 use gtk::{Notebook, ScrolledWindow, TextTag, TextTagExt, TextTagTable, TextTagTableExt};
 use pango;
+use chrono::NaiveDateTime;
 
 pub fn build(app: &Application, ui_rx: core::Receiver) {
     let window = ApplicationWindow::new(app);
@@ -16,8 +17,12 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
     let buffer = textbuffer;
     ui_rx.attach(None, move |m| {
         match m {
-            core::Event::Message(str) => {
-                insert_with_tag(&buffer, "msg", &format!("{}\n", str));
+            core::Event::Message(msg) => {
+                insert_with_tag(&buffer, "msg", &format!("{} {} > {} : {}\n", 
+                    NaiveDateTime::from_timestamp(msg.timestamp/1000, 0),
+                    msg.channel_name,
+                    msg.sender_name,
+                    msg.content));
             }
             core::Event::Info(str) => {
                 insert_with_tag(&buffer, "info", &format!("{}\n", str));

@@ -40,21 +40,33 @@ impl Plugin {
                 }
                 Ok(evt) => {
                     if evt.event == "posted" {
-                        let posted_evt = serde_json::from_value::<mm::PostedEvent>(evt.data)?;
-                        let post = serde_json::from_str::<mm::Post>(&posted_evt.post)?;
-                        self.to_core.send(core::Event::Message(format!(
-                            "{} - {} > {} : {}",
-                            post.update_at,
-                            posted_evt.channel_display_name,
-                            posted_evt.sender_name,
-                            post.message
-                        )))?;
+                        self.to_core.send(core::Event::Message(core::Message::try_from(evt)?))?;
                     } else {
                         self.to_core
                             .send(core::Event::Info(format!("{} : {}", evt.event, evt.data)))?;
                     }
                 }
             }
+        }
+    }
+}
+
+use std::convert::TryFrom;
+
+impl TryFrom<mm::Event> for core::Message {
+    type Error = anyhow::Error;
+    fn try_from(evt: mm::Event) -> Result<Self, Self::Error> {
+        if evt.event == "posted" {
+            let posted_evt = serde_json::from_value::<mm::PostedEvent>(evt.data)?;
+            let post = serde_json::from_str::<mm::Post>(&posted_evt.post)?;
+            Ok(core::Message {
+                timestamp: post.update_at,
+                channel_name: posted_evt.channel_display_name,
+                sender_name: posted_evt.sender_name,
+                content: post.message,
+            })
+        } else {
+            Err(anyhow!("expected 'posted' event, got '{}'", evt.event))
         }
     }
 }
