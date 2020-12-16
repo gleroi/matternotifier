@@ -1,4 +1,5 @@
 use crate::core;
+use crate::core::Event;
 use anyhow::{anyhow, Result};
 use mm;
 use mm::Gitlab;
@@ -38,15 +39,16 @@ impl Plugin {
                 Err(err) => {
                     dbg!(err);
                 }
-                Ok(evt) => {
-                    if evt.event == "posted" {
+                Ok(evt) => match evt.event.as_str() {
+                    "posted" => {
                         self.to_core
-                            .send(core::Event::Message(core::Message::try_from(evt)?))?;
-                    } else {
-                        self.to_core
-                            .send(core::Event::Info(format!("{} : {}", evt.event, evt.data)))?;
+                            .send(Event::Message(core::Message::try_from(evt)?))?;
                     }
-                }
+                    _ => {
+                        self.to_core
+                            .send(Event::Info(format!("{} : {}", evt.event, evt.data)))?;
+                    }
+                },
             }
         }
     }

@@ -10,6 +10,22 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
     let window = ApplicationWindow::new(app);
     window.set_title("rogchat");
 
+    let css = gtk::CssProvider::new();
+    css.load_from_data(
+        br#"
+            textview text {
+                background-color: #eeeeee;
+                color: #232335;
+            }
+        "#,
+    )
+    .unwrap();
+    gtk::StyleContext::add_provider_for_screen(
+        &window.get_screen().unwrap(),
+        &css,
+        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+    );
+
     let notebook = Notebook::new();
     let textbuffer = add_chat(&notebook, "all");
     window.add(&notebook);
@@ -23,7 +39,7 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
                     "msg",
                     &format!(
                         "{} {} > {} : {}\n",
-                        NaiveDateTime::from_timestamp(msg.timestamp / 1000, 0),
+                        NaiveDateTime::from_timestamp(msg.timestamp / 1000, 0).format("%X"),
                         msg.channel_name,
                         msg.sender_name,
                         msg.content
@@ -60,11 +76,14 @@ fn add_chat(notebook: &Notebook, title: &str) -> gtk::TextBuffer {
     tags.add(&msg_tag);
 
     let buffer = TextBuffer::new(Some(&tags));
+
     let v = gtk::TextView::with_buffer(&buffer);
     v.set_wrap_mode(gtk::WrapMode::Word);
     v.set_cursor_visible(false);
     v.set_editable(false);
     v.set_pixels_below_lines(5);
+    v.set_left_margin(3);
+
     let window = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
     window.add(&v);
     notebook.add(&window);
