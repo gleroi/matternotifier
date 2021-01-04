@@ -241,6 +241,15 @@ pub struct Channel {
     pub creator_id: String,
 }
 
+impl Channel {
+    pub fn pretty_name(&self) -> &String {
+        if !self.display_name.is_empty() {
+            return &self.display_name;
+        }
+        return &self.name;
+    }
+}
+
 #[derive(Default, Debug, Deserialize)]
 pub struct Team {
     pub id: String,

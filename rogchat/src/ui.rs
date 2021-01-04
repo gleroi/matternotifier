@@ -1,10 +1,11 @@
 use super::core;
 use chrono::NaiveDateTime;
 use glib;
+use glib::prelude::*;
 use gtk::prelude::*;
+use gtk::PanedExt;
 use gtk::{Application, ApplicationWindow, TextBuffer, TextBufferExt, WidgetExt};
 use gtk::{Notebook, ScrolledWindow, TextTag, TextTagExt, TextTagTable, TextTagTableExt};
-use gtk::{PanedExt};
 use pango;
 
 pub fn build(app: &Application, ui_rx: core::Receiver) {
@@ -30,23 +31,18 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
     let notebook = Notebook::new();
     let textbuffer = add_chat(&notebook, "all");
 
-    let tree = gtk::TreeStore::new(&[String::static_type()]);
-    let root = tree.append(None);
-    tree.set_value(&root, 0, &glib::Value::from("enedis"));
-    for chan in &["zmaster", "zsev2", "suivi mep", "suivi prod", "linkypilot"] {
-        let child = tree.append(Some(&root));
-        tree.set_value(&child, 0, &glib::Value::from(chan));
-    }
-
-    let treeview = gtk::TreeView::with_model(&tree);
+    let channel_tree = gtk::TreeStore::new(&[String::static_type(), String::static_type()]);
+    let channel_view = gtk::TreeView::with_model(&channel_tree);
     let col = gtk::TreeViewColumn::new();
     let cell = gtk::CellRendererText::new();
     col.pack_start(&cell, true);
     col.add_attribute(&cell, "text", 0);
-    treeview.append_column(&col);
+    channel_view.append_column(&col);
+    let channel_window = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
+    channel_window.add(&channel_view);
 
     let pane = gtk::Paned::new(gtk::Orientation::Horizontal);
-    pane.pack1(&treeview, false, false);
+    pane.pack1(&channel_window, false, false);
     pane.pack2(&notebook, true, true);
     window.add(&pane);
 
@@ -65,6 +61,23 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
                         msg.content
                     ),
                 );
+            }
+            core::Event::NewChannel(channel) => {
+                let mut root = None;
+                if let Some(parent_id) = channel.parent_id {
+                    channel_tree.foreach(|tree, _path, iter| {
+                        if let Some(id) = tree.get_value(iter, 1).get::<String>().unwrap() {
+                            if id == parent_id {
+                                root = Some(iter.to_owned());
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+                }
+                let child = channel_tree.append(root.as_ref());
+                channel_tree.set_value(&child, 0, &glib::Value::from(&channel.name));
+                channel_tree.set_value(&child, 1, &glib::Value::from(&channel.id));
             }
             core::Event::Info(str) => {
                 insert_with_tag(&buffer, "info", &format!("{}\n", str));

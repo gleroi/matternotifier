@@ -30,7 +30,23 @@ impl Plugin {
 
     pub fn run(mut self) -> Result<()> {
         self.teams = self.client.get_user_teams("me")?;
+        for team in &self.teams {
+            self.to_core.send(Event::NewChannel(core::Channel {
+                name: team.name.clone(),
+                id: team.id.clone(),
+                parent_id: None,
+            }))?;
+        }
         self.channels = get_all_channels(&self.client, &self.teams)?;
+        for channel in &self.channels {
+            if channel.channel_type != "D" {
+                self.to_core.send(Event::NewChannel(core::Channel {
+                    name: channel.pretty_name().clone(),
+                    id: channel.id.clone(),
+                    parent_id: Some(channel.team_id.clone()),
+                }))?;
+            }
+        }
         let mut ws = self.client.ws()?;
         ws.login(&self.token)?;
         loop {
@@ -95,7 +111,10 @@ fn get_all_channels(c: &mm::Client, teams: &Vec<mm::Team>) -> Result<Vec<mm::Cha
         println!("- Team {}\n  {}", team.display_name, team.description);
         let mut chans = c.get_user_channels("me", &team.id)?;
         for chan in &chans {
-            println!("  - {}: {}", chan.display_name, chan.header);
+            println!(
+                "  {} {}: {}",
+                chan.channel_type, chan.display_name, chan.header
+            );
         }
         channels.append(&mut chans);
     }
