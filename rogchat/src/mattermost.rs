@@ -80,6 +80,7 @@ impl TryFrom<mm::Event> for core::Message {
             let post = serde_json::from_str::<mm::Post>(&posted_evt.post)?;
             Ok(core::Message {
                 timestamp: post.update_at,
+                channel_id: post.channel_id,
                 channel_name: posted_evt.channel_display_name,
                 sender_name: posted_evt.sender_name,
                 content: post.message,
@@ -108,14 +109,7 @@ fn login_with_envvars() -> Result<(mm::Client, String)> {
 fn get_all_channels(c: &mm::Client, teams: &Vec<mm::Team>) -> Result<Vec<mm::Channel>> {
     let mut channels: Vec<mm::Channel> = Vec::new();
     for team in teams {
-        println!("- Team {}\n  {}", team.display_name, team.description);
         let mut chans = c.get_user_channels("me", &team.id)?;
-        for chan in &chans {
-            println!(
-                "  {} {}: {}",
-                chan.channel_type, chan.display_name, chan.header
-            );
-        }
         channels.append(&mut chans);
     }
     channels.sort_by_key(|c| c.display_name.clone());
