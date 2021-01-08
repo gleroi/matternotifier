@@ -12,51 +12,32 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
     let window = ApplicationWindow::new(app);
     window.set_title("rogchat");
 
-    let css = gtk::CssProvider::new();
-    css.load_from_data(
-        br#"
-            textview text {
-                background-color: #eeeeee;
-                color: #232335;
-            }
-        "#,
-    )
-    .unwrap();
-    gtk::StyleContext::add_provider_for_screen(
-        &window.get_screen().unwrap(),
-        &css,
-        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
-    );
-
     let notebook = Notebook::new();
-    let textbuffer = add_chat(&notebook, "all");
+    add_chat(&notebook, "all");
 
-    let channel_tree = gtk::TreeStore::new(&[String::static_type(), String::static_type()]);
-    let channel_view = gtk::TreeView::with_model(&channel_tree);
-    let col = gtk::TreeViewColumn::new();
-    let cell = gtk::CellRendererText::new();
-    col.pack_start(&cell, true);
-    col.add_attribute(&cell, "text", 0);
-    channel_view.append_column(&col);
-    let channel_window = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
-    channel_window.add(&channel_view);
+    let channel_tree = gtk::TreeStore::new(&[
+        String::static_type(),
+        String::static_type(),
+        TextBuffer::static_type(),
+    ]);
+    append_channel(&channel_tree, None, "all", "");
+    let channel_window = add_channel_list(&channel_tree, notebook.clone());
 
     let pane = gtk::Paned::new(gtk::Orientation::Horizontal);
     pane.pack1(&channel_window, false, false);
     pane.pack2(&notebook, true, true);
     window.add(&pane);
 
-    let buffer = textbuffer;
     ui_rx.attach(None, move |m| {
         match m {
             core::Event::Message(msg) => {
+                let buffer = get_buffer_or_default(&channel_tree, &msg.channel_id);
                 insert_with_tag(
                     &buffer,
                     "msg",
                     &format!(
-                        "{} {} > {} : {}\n",
+                        "{} {} : {}\n",
                         NaiveDateTime::from_timestamp(msg.timestamp / 1000, 0).format("%X"),
-                        msg.channel_name,
                         msg.sender_name,
                         msg.content
                     ),
@@ -65,27 +46,63 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
             core::Event::NewChannel(channel) => {
                 let mut root = None;
                 if let Some(parent_id) = channel.parent_id {
-                    channel_tree.foreach(|tree, _path, iter| {
-                        if let Some(id) = tree.get_value(iter, 1).get::<String>().unwrap() {
-                            if id == parent_id {
-                                root = Some(iter.to_owned());
-                                return true;
-                            }
-                        }
-                        return false;
-                    });
+                    root = find_iter_by_channel_id(&channel_tree, &parent_id);
                 }
-                let child = channel_tree.append(root.as_ref());
-                channel_tree.set_value(&child, 0, &glib::Value::from(&channel.name));
-                channel_tree.set_value(&child, 1, &glib::Value::from(&channel.id));
+                append_channel(&channel_tree, root.as_ref(), &channel.name, &channel.id);
             }
             core::Event::Info(str) => {
+                let buffer = get_buffer_or_default(&channel_tree, "");
                 insert_with_tag(&buffer, "info", &format!("{}\n", str));
             }
         };
         glib::source::Continue(true)
     });
     window.show_all();
+}
+
+fn append_channel(
+    channel_tree: &gtk::TreeStore,
+    root: Option<&gtk::TreeIter>,
+    name: &str,
+    id: &str,
+) {
+    let child = channel_tree.append(root);
+    channel_tree.set_value(&child, 0, &glib::Value::from(name));
+    channel_tree.set_value(&child, 1, &glib::Value::from(id));
+    channel_tree.set_value(&child, 2, &glib::Value::from(&create_buffer()));
+}
+
+fn get_buffer_or_default(channel_tree: &gtk::TreeStore, id: &str) -> gtk::TextBuffer {
+    if let Some(iter) = find_iter_by_channel_id(channel_tree, id) {
+        return channel_tree
+            .get_value(&iter, 2)
+            .get::<TextBuffer>()
+            .expect("expected a TextBuffer")
+            .expect("unexpected None TextBuffer");
+    }
+    let iter = find_iter_by_channel_id(channel_tree, id).unwrap();
+    channel_tree
+        .get_value(&iter, 2)
+        .get::<TextBuffer>()
+        .expect("expected a TextBuffer")
+        .expect("unexpected None TextBuffer")
+}
+
+fn find_iter_by_channel_id(
+    channel_tree: &gtk::TreeStore,
+    search_id: &str,
+) -> Option<gtk::TreeIter> {
+    let mut found_iter = None;
+    channel_tree.foreach(|tree, _path, iter| {
+        if let Some(id) = tree.get_value(iter, 1).get::<String>().unwrap() {
+            if &id == search_id {
+                found_iter = Some(iter.to_owned());
+                return true;
+            }
+        }
+        return false;
+    });
+    return found_iter;
 }
 
 fn insert_with_tag(buffer: &TextBuffer, tag_name: &str, content: &str) {
@@ -96,7 +113,42 @@ fn insert_with_tag(buffer: &TextBuffer, tag_name: &str, content: &str) {
     buffer.apply_tag_by_name(tag_name, &start, &end)
 }
 
-fn add_chat(notebook: &Notebook, title: &str) -> gtk::TextBuffer {
+fn add_channel_list(channel_tree: &gtk::TreeStore, notebook: Notebook) -> gtk::ScrolledWindow {
+    let channel_view = gtk::TreeView::with_model(channel_tree);
+    channel_view.set_activate_on_single_click(true);
+    let col = gtk::TreeViewColumn::new();
+    col.set_title("channel");
+    let cell = gtk::CellRendererText::new();
+    col.pack_start(&cell, true);
+    col.add_attribute(&cell, "text", 0);
+    channel_view.append_column(&col);
+    channel_view.connect_row_activated(move |view, path, _column| {
+        let model = view.get_model().unwrap();
+        if let Some(iter) = model.get_iter(path) {
+            let buffer = model
+                .get_value(&iter, 2)
+                .get::<TextBuffer>()
+                .unwrap()
+                .unwrap();
+            let page_index = notebook.get_current_page();
+            let page = notebook.get_nth_page(page_index).unwrap();
+            let window = page
+                .downcast::<gtk::ScrolledWindow>()
+                .expect("expected a ScrolledWindow");
+            let child = window.get_child().unwrap();
+            let textview = child
+                .downcast::<gtk::TextView>()
+                .expect("expected a TextView");
+            textview.set_buffer(Some(&buffer));
+        }
+    });
+
+    let channel_window = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
+    channel_window.add(&channel_view);
+    channel_window
+}
+
+fn create_buffer() -> gtk::TextBuffer {
     let tags = TextTagTable::new();
 
     let info_tag = TextTag::new(Some("info"));
@@ -108,9 +160,11 @@ fn add_chat(notebook: &Notebook, title: &str) -> gtk::TextBuffer {
     msg_tag.set_property_background(Some("#e4eaf5"));
     tags.add(&msg_tag);
 
-    let buffer = TextBuffer::new(Some(&tags));
+    TextBuffer::new(Some(&tags))
+}
 
-    let v = gtk::TextView::with_buffer(&buffer);
+fn add_chat(notebook: &Notebook, title: &str) {
+    let v = gtk::TextView::new();
     v.set_wrap_mode(gtk::WrapMode::Word);
     v.set_cursor_visible(false);
     v.set_editable(false);
@@ -121,5 +175,4 @@ fn add_chat(notebook: &Notebook, title: &str) -> gtk::TextBuffer {
     window.add(&v);
     notebook.add(&window);
     notebook.set_tab_label_text(&window, title);
-    buffer
 }
