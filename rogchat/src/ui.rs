@@ -5,15 +5,18 @@ use glib::prelude::*;
 use gtk::prelude::*;
 use gtk::PanedExt;
 use gtk::{Application, ApplicationWindow, TextBuffer, TextBufferExt, WidgetExt};
-use gtk::{Notebook, ScrolledWindow, TextTag, TextTagExt, TextTagTable, TextTagTableExt};
+use gtk::{ScrolledWindow, TextTag, TextTagExt, TextTagTable, TextTagTableExt};
 use pango;
 
 pub fn build(app: &Application, ui_rx: core::Receiver) {
     let window = ApplicationWindow::new(app);
     window.set_title("rogchat");
 
-    let notebook = Notebook::new();
-    add_chat(&notebook, "all");
+    let chats_pane = gtk::Paned::new(gtk::Orientation::Horizontal);
+    let chat_view1 = create_chat();
+    chats_pane.add1(&chat_view1);
+    let chat_view2 = create_chat();
+    chats_pane.add2(&chat_view2);
 
     let channel_tree = gtk::TreeStore::new(&[
         String::static_type(),
@@ -21,12 +24,14 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
         TextBuffer::static_type(),
     ]);
     append_channel(&channel_tree, None, "all", "");
-    let channel_window = add_channel_list(&channel_tree, notebook.clone());
+    let channel_window = add_channel_list(&channel_tree, chats_pane.clone());
 
     let pane = gtk::Paned::new(gtk::Orientation::Horizontal);
-    pane.pack1(&channel_window, false, false);
-    pane.pack2(&notebook, true, true);
+    pane.pack1(&channel_window, true, false);
+    pane.pack2(&chats_pane, true, true);
     window.add(&pane);
+
+    chats_pane.grab_focus();
 
     ui_rx.attach(None, move |m| {
         match m {
@@ -113,7 +118,7 @@ fn insert_with_tag(buffer: &TextBuffer, tag_name: &str, content: &str) {
     buffer.apply_tag_by_name(tag_name, &start, &end)
 }
 
-fn add_channel_list(channel_tree: &gtk::TreeStore, notebook: Notebook) -> gtk::ScrolledWindow {
+fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: gtk::Paned) -> gtk::ScrolledWindow {
     let channel_view = gtk::TreeView::with_model(channel_tree);
     channel_view.set_activate_on_single_click(true);
     let col = gtk::TreeViewColumn::new();
@@ -130,8 +135,7 @@ fn add_channel_list(channel_tree: &gtk::TreeStore, notebook: Notebook) -> gtk::S
                 .get::<TextBuffer>()
                 .unwrap()
                 .unwrap();
-            let page_index = notebook.get_current_page();
-            let page = notebook.get_nth_page(page_index).unwrap();
+            let page = chats_pane.get_focus_child().or_else(|| chats_pane.get_child1()).expect("expected a focused chat view");
             let window = page
                 .downcast::<gtk::ScrolledWindow>()
                 .expect("expected a ScrolledWindow");
@@ -163,7 +167,7 @@ fn create_buffer() -> gtk::TextBuffer {
     TextBuffer::new(Some(&tags))
 }
 
-fn add_chat(notebook: &Notebook, title: &str) {
+fn create_chat() -> ScrolledWindow {
     let v = gtk::TextView::new();
     v.set_wrap_mode(gtk::WrapMode::Word);
     v.set_cursor_visible(false);
@@ -173,6 +177,5 @@ fn add_chat(notebook: &Notebook, title: &str) {
 
     let window = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
     window.add(&v);
-    notebook.add(&window);
-    notebook.set_tab_label_text(&window, title);
+    window
 }
