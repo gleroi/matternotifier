@@ -8,6 +8,8 @@ use gtk::{Application, ApplicationWindow, TextBuffer, TextBufferExt, WidgetExt};
 use gtk::{ScrolledWindow, TextTag, TextTagExt, TextTagTable, TextTagTableExt};
 use pango;
 
+mod split_pane;
+
 pub fn build(app: &Application, ui_rx: core::Receiver) {
     let window = ApplicationWindow::new(app);
     window.set_title("rogchat");
