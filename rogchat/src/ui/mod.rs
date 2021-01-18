@@ -11,6 +11,9 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 mod split_pane;
+mod chat_view;
+
+use chat_view::{ChatView, ChatViewExt};
 
 pub fn build(app: &Application, ui_rx: core::Receiver) {
     let window = ApplicationWindow::new(app);
@@ -147,7 +150,7 @@ fn insert_with_tag(buffer: &TextBuffer, tag_name: &str, content: &str) {
     buffer.apply_tag_by_name(tag_name, &start, &end)
 }
 
-fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: gtk::Paned, active_pane: Rc<RefCell<ScrolledWindow>>) -> gtk::ScrolledWindow {
+fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: gtk::Paned, active_pane: Rc<RefCell<ChatView>>) -> gtk::ScrolledWindow {
     let channel_view = gtk::TreeView::with_model(channel_tree);
     channel_view.set_activate_on_single_click(true);
     let col = gtk::TreeViewColumn::new();
@@ -164,14 +167,8 @@ fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: gtk::Paned, activ
                 .get::<TextBuffer>()
                 .unwrap()
                 .unwrap();
-            let page = active_pane.borrow();
-//            let page = chats_pane.get_focus_child().or_else(|| chats_pane.get_child1()).expect("expected a focused chat view");
-            let window = page.clone();
-            let child = window.get_child().unwrap();
-            let textview = child
-                .downcast::<gtk::TextView>()
-                .expect("expected a TextView");
-            textview.set_buffer(Some(&buffer));
+            let chatview = active_pane.borrow();
+            chatview.set_buffer(&buffer);
         }
     });
 
@@ -195,18 +192,8 @@ fn create_buffer() -> gtk::TextBuffer {
     TextBuffer::new(Some(&tags))
 }
 
-fn create_chat() -> ScrolledWindow {
-    let v = gtk::TextView::new();
-    v.set_wrap_mode(gtk::WrapMode::Word);
-    v.set_cursor_visible(false);
-    v.set_editable(false);
-    v.set_pixels_below_lines(5);
-    v.set_left_margin(3);
-    print_focus("textview", &v);
-    let window = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
-    print_focus("scrolledwindow", &window);
-    window.add(&v);
-    window
+fn create_chat() -> ChatView {
+    ChatView::new()
 }
 
 fn print_focus<W: IsA<gtk::Widget>>(name: &str, w: &W) {
