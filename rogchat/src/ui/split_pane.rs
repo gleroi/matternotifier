@@ -95,6 +95,10 @@ impl ObjectSubclass for SplitPanePriv {
 impl ObjectImpl for SplitPanePriv {
     glib::glib_object_impl!();
 
+    //TODO:
+    // - remplacer les Paned par des Box
+    // - gerer le set_buffer et active ici plutot que dans la chatview pour mettre une mise en
+    // valeur du chat actif
     fn constructed(&self, obj: &glib::Object) {
         self.parent_constructed(obj);
         
