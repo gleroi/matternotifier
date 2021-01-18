@@ -138,8 +138,14 @@ fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: SplitPane) -> gtk
                 .get::<TextBuffer>()
                 .unwrap()
                 .unwrap();
+            let title_value = model
+                .get_value(&iter, 0);
+            let title = title_value
+                .get::<&str>()
+                .unwrap()
+                .unwrap();
             let chatview = chats_pane.get_active_pane().unwrap().downcast::<ChatView>().unwrap();
-            chatview.set_buffer(&buffer);
+            chatview.set_buffer(&buffer, title);
         }
     });
 

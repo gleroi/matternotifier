@@ -29,16 +29,23 @@ impl ChatView {
 }
 
 pub trait ChatViewExt {
-    fn set_buffer(&self, buffer: &gtk::TextBuffer);
+    fn set_buffer(&self, buffer: &gtk::TextBuffer, title: &str);
 }
 
 impl ChatViewExt for ChatView {
 
-    fn set_buffer(&self, buffer: &gtk::TextBuffer) {
+    fn set_buffer(&self, buffer: &gtk::TextBuffer, title: &str) {
         let text = self.get_child().unwrap()
+            .downcast::<gtk::Paned>().expect("ChatView expected a Paned")
+            .get_child2().unwrap()
             .downcast::<gtk::ScrolledWindow>().expect("ChatView expected a scrolledwindow")
             .get_child().unwrap().downcast::<gtk::TextView>().expect("ChatView expected a TextView");
         text.set_buffer(Some(buffer));
+        let label = self.get_child().unwrap()
+            .downcast::<gtk::Paned>().expect("ChatView expected a Paned")
+            .get_child1().unwrap()
+            .downcast::<gtk::Label>().expect("ChatView expected a Label");
+        label.set_label(title);
     }
 }
 
@@ -78,8 +85,16 @@ impl ObjectImpl for ChatViewPriv {
         v.set_left_margin(3);
         let window = gtk::ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
         window.add(&v);
+
+        let label = gtk::Label::new(Some(""));
+        label.set_justify(gtk::Justification::Left);
+
+        let pane = gtk::Paned::new(gtk::Orientation::Vertical);
+        pane.pack1(&label, false, false);
+        pane.pack2(&window, true, false);
+
         let self_ = obj.downcast_ref::<ChatView>().unwrap();
-        self_.add(&window);
+        self_.add(&pane);
     }
 }
 
