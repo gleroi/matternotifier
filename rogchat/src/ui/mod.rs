@@ -7,6 +7,8 @@ use gtk::PanedExt;
 use gtk::{Application, ApplicationWindow, TextBuffer, TextBufferExt, WidgetExt};
 use gtk::{ScrolledWindow, TextTag, TextTagExt, TextTagTable, TextTagTableExt};
 use pango;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 mod split_pane;
 
@@ -16,9 +18,33 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
 
     let chats_pane = gtk::Paned::new(gtk::Orientation::Horizontal);
     let chat_view1 = create_chat();
-    chats_pane.add1(&chat_view1);
+    let active_pane = Rc::new(RefCell::new(chat_view1.clone()));
+    let active_pane1 = active_pane.clone();
+    chat_view1.connect_button_press_event(move |widget, _| {
+        println!("widget: {:?}", widget);
+        active_pane1.replace(widget.clone());
+        Inhibit(false)
+    });
+    chat_view1.connect_grab_focus(|widget| {
+        println!("grab focus: {:?}", widget);
+    });
+    chats_pane.pack1(&chat_view1, true, false);
     let chat_view2 = create_chat();
-    chats_pane.add2(&chat_view2);
+    let active_pane2 = active_pane.clone();
+    chat_view2.connect_button_press_event(move |widget, _| {
+        println!("widget: {:?}", widget);
+        active_pane2.replace(widget.clone());
+        Inhibit(false)
+    });
+    chat_view2.connect_grab_focus(|widget| {
+        println!("grab focus: {:?}", widget);
+    });
+    chats_pane.pack2(&chat_view2, true, false);
+    print_focus("paned", &chats_pane);
+
+    chats_pane.connect_grab_focus(|widget| {
+        println!("grab focus: {:?}", widget);
+    });
 
     let channel_tree = gtk::TreeStore::new(&[
         String::static_type(),
@@ -26,7 +52,7 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
         TextBuffer::static_type(),
     ]);
     append_channel(&channel_tree, None, "all", "");
-    let channel_window = add_channel_list(&channel_tree, chats_pane.clone());
+    let channel_window = add_channel_list(&channel_tree, chats_pane.clone(), active_pane.clone());
 
     let pane = gtk::Paned::new(gtk::Orientation::Horizontal);
     pane.pack1(&channel_window, true, false);
@@ -65,6 +91,7 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
         glib::source::Continue(true)
     });
     window.show_all();
+    println!("windows type hint {:?}", window.get_type_hint());
 }
 
 fn append_channel(
@@ -120,7 +147,7 @@ fn insert_with_tag(buffer: &TextBuffer, tag_name: &str, content: &str) {
     buffer.apply_tag_by_name(tag_name, &start, &end)
 }
 
-fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: gtk::Paned) -> gtk::ScrolledWindow {
+fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: gtk::Paned, active_pane: Rc<RefCell<ScrolledWindow>>) -> gtk::ScrolledWindow {
     let channel_view = gtk::TreeView::with_model(channel_tree);
     channel_view.set_activate_on_single_click(true);
     let col = gtk::TreeViewColumn::new();
@@ -137,10 +164,9 @@ fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: gtk::Paned) -> gt
                 .get::<TextBuffer>()
                 .unwrap()
                 .unwrap();
-            let page = chats_pane.get_focus_child().or_else(|| chats_pane.get_child1()).expect("expected a focused chat view");
-            let window = page
-                .downcast::<gtk::ScrolledWindow>()
-                .expect("expected a ScrolledWindow");
+            let page = active_pane.borrow();
+//            let page = chats_pane.get_focus_child().or_else(|| chats_pane.get_child1()).expect("expected a focused chat view");
+            let window = page.clone();
             let child = window.get_child().unwrap();
             let textview = child
                 .downcast::<gtk::TextView>()
@@ -176,8 +202,14 @@ fn create_chat() -> ScrolledWindow {
     v.set_editable(false);
     v.set_pixels_below_lines(5);
     v.set_left_margin(3);
-
+    print_focus("textview", &v);
     let window = ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
+    print_focus("scrolledwindow", &window);
     window.add(&v);
     window
 }
+
+fn print_focus<W: IsA<gtk::Widget>>(name: &str, w: &W) {
+    println!("{} on_click: {}, can_focus: {}", name, w.get_focus_on_click(), w.get_can_focus());
+}
+
