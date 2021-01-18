@@ -7,47 +7,18 @@ use gtk::PanedExt;
 use gtk::{Application, ApplicationWindow, TextBuffer, TextBufferExt, WidgetExt};
 use gtk::{ScrolledWindow, TextTag, TextTagExt, TextTagTable, TextTagTableExt};
 use pango;
-use std::cell::RefCell;
-use std::rc::Rc;
 
 mod split_pane;
 mod chat_view;
 
 use chat_view::{ChatView, ChatViewExt};
+use split_pane::{SplitPane, SplitPaneExt};
 
 pub fn build(app: &Application, ui_rx: core::Receiver) {
     let window = ApplicationWindow::new(app);
     window.set_title("rogchat");
 
-    let chats_pane = gtk::Paned::new(gtk::Orientation::Horizontal);
-    let chat_view1 = create_chat();
-    let active_pane = Rc::new(RefCell::new(chat_view1.clone()));
-    let active_pane1 = active_pane.clone();
-    chat_view1.connect_button_press_event(move |widget, _| {
-        println!("widget: {:?}", widget);
-        active_pane1.replace(widget.clone());
-        Inhibit(false)
-    });
-    chat_view1.connect_grab_focus(|widget| {
-        println!("grab focus: {:?}", widget);
-    });
-    chats_pane.pack1(&chat_view1, true, false);
-    let chat_view2 = create_chat();
-    let active_pane2 = active_pane.clone();
-    chat_view2.connect_button_press_event(move |widget, _| {
-        println!("widget: {:?}", widget);
-        active_pane2.replace(widget.clone());
-        Inhibit(false)
-    });
-    chat_view2.connect_grab_focus(|widget| {
-        println!("grab focus: {:?}", widget);
-    });
-    chats_pane.pack2(&chat_view2, true, false);
-    print_focus("paned", &chats_pane);
-
-    chats_pane.connect_grab_focus(|widget| {
-        println!("grab focus: {:?}", widget);
-    });
+    let chats_pane = SplitPane::new();
 
     let channel_tree = gtk::TreeStore::new(&[
         String::static_type(),
@@ -55,7 +26,7 @@ pub fn build(app: &Application, ui_rx: core::Receiver) {
         TextBuffer::static_type(),
     ]);
     append_channel(&channel_tree, None, "all", "");
-    let channel_window = add_channel_list(&channel_tree, chats_pane.clone(), active_pane.clone());
+    let channel_window = add_channel_list(&channel_tree, chats_pane.clone());
 
     let pane = gtk::Paned::new(gtk::Orientation::Horizontal);
     pane.pack1(&channel_window, true, false);
@@ -150,7 +121,7 @@ fn insert_with_tag(buffer: &TextBuffer, tag_name: &str, content: &str) {
     buffer.apply_tag_by_name(tag_name, &start, &end)
 }
 
-fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: gtk::Paned, active_pane: Rc<RefCell<ChatView>>) -> gtk::ScrolledWindow {
+fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: SplitPane) -> gtk::ScrolledWindow {
     let channel_view = gtk::TreeView::with_model(channel_tree);
     channel_view.set_activate_on_single_click(true);
     let col = gtk::TreeViewColumn::new();
@@ -167,7 +138,7 @@ fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: gtk::Paned, activ
                 .get::<TextBuffer>()
                 .unwrap()
                 .unwrap();
-            let chatview = active_pane.borrow();
+            let chatview = chats_pane.get_active_pane().unwrap().downcast::<ChatView>().unwrap();
             chatview.set_buffer(&buffer);
         }
     });
@@ -190,13 +161,5 @@ fn create_buffer() -> gtk::TextBuffer {
     tags.add(&msg_tag);
 
     TextBuffer::new(Some(&tags))
-}
-
-fn create_chat() -> ChatView {
-    ChatView::new()
-}
-
-fn print_focus<W: IsA<gtk::Widget>>(name: &str, w: &W) {
-    println!("{} on_click: {}, can_focus: {}", name, w.get_focus_on_click(), w.get_can_focus());
 }
 

@@ -5,14 +5,15 @@ use glib::translate::*;
 use gtk;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-
+use std::cell::RefCell;
+use super::chat_view::ChatView;
 
 glib::glib_wrapper! {
 	pub struct SplitPane(
 		Object<subclass::simple::InstanceStruct<SplitPanePriv>,
 		subclass::simple::ClassStruct<SplitPanePriv>,
 		SplitPaneClass>)
-		@extends gtk::Widget, gtk::Container;
+		@extends gtk::Widget, gtk::Container, gtk::Bin;
 
 	match fn {
 		get_type => || SplitPanePriv::get_type().to_glib(),
@@ -29,14 +30,52 @@ impl SplitPane {
     }
 }
 
-pub struct SplitPanePriv {
+pub trait SplitPaneExt {
+    fn set_active_pane(&self, w: Option<gtk::Widget>);
+    fn get_active_pane(&self) -> Option<gtk::Widget>;
 }
 
-static PROPERTIES: [subclass::Property; 0] = [];
+impl SplitPaneExt for SplitPane {
+    fn set_active_pane(&self, w: Option<gtk::Widget>) {
+        let priv_ = SplitPanePriv::from_instance(self);
+        priv_.set_active_pane(w);
+    }
+
+    fn get_active_pane(&self) -> Option<gtk::Widget> {
+        let priv_ = SplitPanePriv::from_instance(self);
+        let active_pane_ref = priv_.active_pane.borrow();
+        active_pane_ref.clone()
+    }
+}
+
+pub struct SplitPanePriv {
+    active_pane: RefCell<Option<gtk::Widget>>,
+}
+
+impl SplitPanePriv {
+
+    fn set_active_pane(&self, w: Option<gtk::Widget>) {
+        let mut active_pane_ref = self.active_pane.borrow_mut();
+        *active_pane_ref = w;
+    }
+
+}
+
+static PROPERTIES: [subclass::Property; 1] = [
+    subclass::Property("active-pane", |active_pane| {
+        glib::ParamSpec::object(
+            active_pane,
+            "Last active pane of this container",
+            "Last widget that has been clicked on",
+            gtk::Widget::static_type(),
+            glib::ParamFlags::READWRITE,
+        )
+    }),
+];
 
 impl ObjectSubclass for SplitPanePriv {
     const NAME: &'static str = "SplitPane";
-    type ParentType = gtk::Container;
+    type ParentType = gtk::Bin;
     type Instance = subclass::simple::InstanceStruct<Self>;
     type Class = subclass::simple::ClassStruct<Self>;
 
@@ -47,7 +86,9 @@ impl ObjectSubclass for SplitPanePriv {
     }
 
     fn new() -> Self {
-        Self {}
+        Self {
+            active_pane: RefCell::new(None),
+        }
     }
 }
 
@@ -56,10 +97,51 @@ impl ObjectImpl for SplitPanePriv {
 
     fn constructed(&self, obj: &glib::Object) {
         self.parent_constructed(obj);
+        
+        let self_ = obj.downcast_ref::<SplitPane>().unwrap();
+
+        let chats_pane = gtk::Paned::new(gtk::Orientation::Horizontal);
+        let chat_view1 = ChatView::new();
+        let self1 = self_.clone();
+        chat_view1.connect_button_press_event(move |widget, _| {
+            self1.set_active_pane(Some(widget.clone().upcast::<gtk::Widget>()));
+            Inhibit(false)
+        });
+        chats_pane.pack1(&chat_view1, true, false);
+
+        let chat_view2 = ChatView::new();
+        let self2 = self_.clone();
+        chat_view2.connect_button_press_event(move |widget, _| {
+            self2.set_active_pane(Some(widget.clone().upcast::<gtk::Widget>()));
+            Inhibit(false)
+        });
+        chats_pane.pack2(&chat_view2, true, false);
+
+        self_.set_active_pane(Some(chat_view1.upcast::<gtk::Widget>()));
+        self_.add(&chats_pane);
+    }
+
+    fn set_property(&self, _obj: &glib::Object, id: usize, value: &glib::Value) {
+        let prop = &PROPERTIES[id];
+        match *prop {
+            subclass::Property("active-pane", ..) => {
+                let active_pane = value.get().expect("SplitPane::active-pane property expect a gtk::Widget");
+                self.set_active_pane(active_pane);
+            }
+            _ => unimplemented!(),
+        }
+    }
+
+    fn get_property(&self, _obj: &glib::Object, id: usize) -> Result<glib::Value, ()> {
+        let prop = &PROPERTIES[id];
+        match *prop {
+            subclass::Property("active-pane", ..) => Ok(self.active_pane.borrow().to_value()),
+            _ => unimplemented!(),
+        }
     }
 }
 
 
-impl BoxImpl for SplitPanePriv {}
+impl BinImpl for SplitPanePriv {}
 impl ContainerImpl for SplitPanePriv {}
 impl WidgetImpl for SplitPanePriv {}
