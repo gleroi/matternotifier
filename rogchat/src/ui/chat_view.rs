@@ -5,8 +5,8 @@ use glib::translate::*;
 use gtk;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-
 use gtk::{ContainerExt};
+use std::cell::RefCell;
 
 glib::glib_wrapper! {
     pub struct ChatView(
@@ -35,22 +35,42 @@ pub trait ChatViewExt {
 impl ChatViewExt for ChatView {
 
     fn set_buffer(&self, buffer: &gtk::TextBuffer, title: &str) {
-        let text = self.get_child().unwrap()
-            .downcast::<gtk::Paned>().expect("ChatView expected a Paned")
-            .get_child2().unwrap()
-            .downcast::<gtk::ScrolledWindow>().expect("ChatView expected a scrolledwindow")
-            .get_child().unwrap().downcast::<gtk::TextView>().expect("ChatView expected a TextView");
+        let priv_ = ChatViewPriv::from_instance(self);
+
+        let text = priv_.get_text_view().unwrap();
         text.set_buffer(Some(buffer));
-        let label = self.get_child().unwrap()
-            .downcast::<gtk::Paned>().expect("ChatView expected a Paned")
-            .get_child1().unwrap()
-            .downcast::<gtk::Label>().expect("ChatView expected a Label");
+        let label = priv_.get_title().unwrap();
         label.set_label(title);
     }
 }
 
 pub struct ChatViewPriv {
+    text_view: RefCell<Option<gtk::TextView>>,
+    title: RefCell<Option<gtk::Label>>,
+}
 
+impl ChatViewPriv {
+    fn set_text_view(&self, tv: Option<gtk::TextView>) {
+        let mut tv_ref = self.text_view.borrow_mut();
+        *tv_ref = tv;
+    }
+    fn get_text_view(&self) -> Option<gtk::TextView> {
+        match *self.text_view.borrow() {
+            Some(ref tv) => Some(tv.clone()),
+            None => None
+        }
+    }
+
+    fn set_title(&self, label: Option<gtk::Label>) {
+        let mut title_ref = self.title.borrow_mut();
+        *title_ref = label;
+    }
+    fn get_title(&self) -> Option<gtk::Label> {
+        match *self.title.borrow() {
+            Some(ref tv) => Some(tv.clone()),
+            None => None
+        }
+    }
 }
 
 static PROPERTIES : [subclass::Property; 0] = [];
@@ -68,7 +88,10 @@ impl ObjectSubclass for ChatViewPriv {
     }
 
     fn new() -> Self {
-        Self {}
+        Self {
+            text_view: RefCell::new(None),
+            title: RefCell::new(None)
+        }
     }
 }
 
@@ -83,15 +106,18 @@ impl ObjectImpl for ChatViewPriv {
         v.set_editable(false);
         v.set_pixels_below_lines(5);
         v.set_left_margin(3);
+        self.set_text_view(Some(v.clone()));
+
         let window = gtk::ScrolledWindow::new(None::<&gtk::Adjustment>, None::<&gtk::Adjustment>);
         window.add(&v);
 
         let label = gtk::Label::new(Some(""));
         label.set_justify(gtk::Justification::Left);
+        self.set_title(Some(label.clone()));
 
-        let pane = gtk::Paned::new(gtk::Orientation::Vertical);
-        pane.pack1(&label, false, false);
-        pane.pack2(&window, true, false);
+        let pane = gtk::Box::new(gtk::Orientation::Vertical, 0);
+        pane.pack_start(&label, false, false, 0);
+        pane.pack_start(&window, true, true, 0);
 
         let self_ = obj.downcast_ref::<ChatView>().unwrap();
         self_.add(&pane);
