@@ -28,6 +28,16 @@ impl SplitPane {
           .downcast()
           .expect("Created SplitPane is of wrong type")
     }
+
+    fn remove_active_class(w: &gtk::Widget) {
+        let context= w.get_style_context();
+        context.remove_class("active");
+    }
+
+    fn add_active_class(w: &gtk::Widget) {
+        let context = w.get_style_context();
+        context.add_class("active");
+    }
 }
 
 pub trait SplitPaneExt {
@@ -38,6 +48,13 @@ pub trait SplitPaneExt {
 impl SplitPaneExt for SplitPane {
     fn set_active_pane(&self, w: Option<gtk::Widget>) {
         let priv_ = SplitPanePriv::from_instance(self);
+        let previous = self.get_active_pane();
+        if let Some(previous_widget) = previous {
+            Self::remove_active_class(&previous_widget);
+        }
+        if let Some(ref widget) = w {
+            Self::add_active_class(widget);
+        }
         priv_.set_active_pane(w);
     }
 
@@ -103,6 +120,19 @@ impl ObjectImpl for SplitPanePriv {
         self.parent_constructed(obj);
         
         let self_ = obj.downcast_ref::<SplitPane>().unwrap();
+        let context = self_.get_style_context();
+        let css = gtk::CssProvider::new();
+        css.load_from_data(br#"
+            .active {
+                border-width: 3px;
+                border-color: red;
+            }
+            .active label {
+                font-weight: bold;
+            }
+        "#).unwrap();
+        context.add_provider(&css, 1);
+
 
         let chats_pane = gtk::Paned::new(gtk::Orientation::Horizontal);
         let chat_view1 = ChatView::new();
