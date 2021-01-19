@@ -1,5 +1,6 @@
 use crate::core;
 use crate::core::Event;
+use crate::config;
 use anyhow::{anyhow, Result};
 use mm;
 use mm::Gitlab;
@@ -15,7 +16,7 @@ pub struct Plugin {
 }
 
 impl Plugin {
-    pub fn init(to_core: core::Sender) -> Result<Self> {
+    pub fn init(to_core: core::Sender, cfg: config::Server) -> Result<Self> {
         let (client, token) = login_with_envvars()?;
         println!("token: {}", token);
         Ok(Plugin {

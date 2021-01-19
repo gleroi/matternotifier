@@ -1,0 +1,8 @@
+[[servers]]
+name = "home"
+host = "https://betty.local:8065"
+username = "test@home.local"
+password = "$MM_PASS"
+
+[servers.plugin]
+name = mattermost
