@@ -15,7 +15,7 @@ pub struct Server {
     pub name: String,
     pub host: String,
     pub username: String,
-    pub password: Option<String>,
+    pub password: String,
     pub plugin: Plugin,
 }
 

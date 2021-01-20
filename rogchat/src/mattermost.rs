@@ -17,7 +17,7 @@ pub struct Plugin {
 
 impl Plugin {
     pub fn init(to_core: core::Sender, cfg: config::Server) -> Result<Self> {
-        let (client, token) = login_with_envvars()?;
+        let (client, token) = login_with_config(&cfg)?;
         println!("token: {}", token);
         Ok(Plugin {
             client,
@@ -104,6 +104,22 @@ fn login_with_envvars() -> Result<(mm::Client, String)> {
         let c = mm::Client::new(url.to_str().unwrap(), None);
         let token = c.login_with_gitlab(user.to_str().unwrap(), pass.to_str().unwrap())?;
         Ok((c, token))
+    }
+}
+
+fn login_with_config(cfg: &config::Server) -> Result<(mm::Client, String)> {
+    let method = cfg.plugin.attributes.get("method").ok_or(anyhow!("plugin.method configuration field is required"))?;
+    let client = mm::Client::new(&cfg.host, None);
+    match method.as_str() {
+        "gitlab" => {
+            let token = client.login_with_gitlab(&cfg.username, &cfg.password)?;
+            Ok((client, token))
+        }
+        "email" => {
+            let (_user, token) = client.login_with_email(&cfg.username, &cfg.password)?;
+            Ok((client, token))
+        }
+        _ => Err(anyhow!("mattermost: unknown authentification method '{}'", method))
     }
 }
 
