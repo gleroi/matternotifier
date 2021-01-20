@@ -115,21 +115,19 @@ impl ObjectImpl for SplitPanePriv {
         self.parent_constructed(obj);
 
         let self_ = obj.downcast_ref::<SplitPane>().unwrap();
-        let context = self_.get_style_context();
+        //let context = self_.get_style_context();
         let css = gtk::CssProvider::new();
         css.load_from_data(
             br#"
-            .active {
-                border-width: 3px;
-                border-color: red;
-            }
             .active label {
                 font-weight: bold;
             }
         "#,
         )
         .unwrap();
-        context.add_provider(&css, 1);
+        //context.add_provider(&css, 800);
+        let screen = self_.get_screen().unwrap();
+        gtk::StyleContext::add_provider_for_screen(&screen, &css, 800);
 
         let chats_pane = gtk::Paned::new(gtk::Orientation::Horizontal);
         let chat_view1 = ChatView::new();
