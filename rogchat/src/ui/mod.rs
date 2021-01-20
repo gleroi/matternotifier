@@ -8,8 +8,8 @@ use gtk::{Application, ApplicationWindow, TextBuffer, TextBufferExt, WidgetExt};
 use gtk::{ScrolledWindow, TextTag, TextTagExt, TextTagTable, TextTagTableExt};
 use pango;
 
-mod split_pane;
 mod chat_view;
+mod split_pane;
 
 use chat_view::{ChatView, ChatViewExt};
 use split_pane::{SplitPane, SplitPaneExt};
@@ -138,13 +138,13 @@ fn add_channel_list(channel_tree: &gtk::TreeStore, chats_pane: SplitPane) -> gtk
                 .get::<TextBuffer>()
                 .unwrap()
                 .unwrap();
-            let title_value = model
-                .get_value(&iter, 0);
-            let title = title_value
-                .get::<&str>()
+            let title_value = model.get_value(&iter, 0);
+            let title = title_value.get::<&str>().unwrap().unwrap();
+            let chatview = chats_pane
+                .get_active_pane()
                 .unwrap()
+                .downcast::<ChatView>()
                 .unwrap();
-            let chatview = chats_pane.get_active_pane().unwrap().downcast::<ChatView>().unwrap();
             chatview.set_buffer(&buffer, title);
         }
     });
@@ -168,4 +168,3 @@ fn create_buffer() -> gtk::TextBuffer {
 
     TextBuffer::new(Some(&tags))
 }
-

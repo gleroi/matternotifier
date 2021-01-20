@@ -5,7 +5,7 @@ use glib::translate::*;
 use gtk;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::{ContainerExt};
+use gtk::ContainerExt;
 use std::cell::RefCell;
 
 glib::glib_wrapper! {
@@ -33,7 +33,6 @@ pub trait ChatViewExt {
 }
 
 impl ChatViewExt for ChatView {
-
     fn set_buffer(&self, buffer: &gtk::TextBuffer, title: &str) {
         let priv_ = ChatViewPriv::from_instance(self);
 
@@ -57,7 +56,7 @@ impl ChatViewPriv {
     fn get_text_view(&self) -> Option<gtk::TextView> {
         match *self.text_view.borrow() {
             Some(ref tv) => Some(tv.clone()),
-            None => None
+            None => None,
         }
     }
 
@@ -68,12 +67,12 @@ impl ChatViewPriv {
     fn get_title(&self) -> Option<gtk::Label> {
         match *self.title.borrow() {
             Some(ref tv) => Some(tv.clone()),
-            None => None
+            None => None,
         }
     }
 }
 
-static PROPERTIES : [subclass::Property; 0] = [];
+static PROPERTIES: [subclass::Property; 0] = [];
 
 impl ObjectSubclass for ChatViewPriv {
     const NAME: &'static str = "ChatView";
@@ -90,7 +89,7 @@ impl ObjectSubclass for ChatViewPriv {
     fn new() -> Self {
         Self {
             text_view: RefCell::new(None),
-            title: RefCell::new(None)
+            title: RefCell::new(None),
         }
     }
 }
@@ -123,7 +122,6 @@ impl ObjectImpl for ChatViewPriv {
         self_.add(&pane);
     }
 }
-
 
 impl BinImpl for ChatViewPriv {}
 impl ContainerImpl for ChatViewPriv {}

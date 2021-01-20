@@ -1,15 +1,16 @@
-use serde::{Deserialize};
-use anyhow::{Result};
-use toml;
+use anyhow::Result;
+use serde::Deserialize;
 use std::fs;
 use std::path::Path;
+use std::collections::HashMap;
+use toml;
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Config {
     pub servers: Vec<Server>,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Server {
     pub name: String,
     pub host: String,
@@ -18,9 +19,12 @@ pub struct Server {
     pub plugin: Plugin,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Plugin {
     pub name: String,
+
+    #[serde(flatten)]
+    pub attributes: HashMap<String, String>,
 }
 
 pub fn read_file<P: AsRef<Path>>(filepath: P) -> Result<Config> {

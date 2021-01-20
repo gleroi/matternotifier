@@ -1,6 +1,6 @@
+use crate::config;
 use crate::core;
 use crate::core::Event;
-use crate::config;
 use anyhow::{anyhow, Result};
 use mm;
 use mm::Gitlab;

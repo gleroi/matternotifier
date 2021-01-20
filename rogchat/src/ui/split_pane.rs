@@ -1,3 +1,4 @@
+use super::chat_view::ChatView;
 use glib;
 use glib::subclass;
 use glib::subclass::prelude::*;
@@ -6,31 +7,29 @@ use gtk;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use std::cell::RefCell;
-use super::chat_view::ChatView;
 
 glib::glib_wrapper! {
-	pub struct SplitPane(
-		Object<subclass::simple::InstanceStruct<SplitPanePriv>,
-		subclass::simple::ClassStruct<SplitPanePriv>,
-		SplitPaneClass>)
-		@extends gtk::Widget, gtk::Container, gtk::Bin;
+    pub struct SplitPane(
+        Object<subclass::simple::InstanceStruct<SplitPanePriv>,
+        subclass::simple::ClassStruct<SplitPanePriv>,
+        SplitPaneClass>)
+        @extends gtk::Widget, gtk::Container, gtk::Bin;
 
-	match fn {
-		get_type => || SplitPanePriv::get_type().to_glib(),
-	}
+    match fn {
+        get_type => || SplitPanePriv::get_type().to_glib(),
+    }
 }
-
 
 impl SplitPane {
     pub fn new() -> SplitPane {
         glib::Object::new(Self::static_type(), &[])
-          .expect("Failed to create SplitPane")
-          .downcast()
-          .expect("Created SplitPane is of wrong type")
+            .expect("Failed to create SplitPane")
+            .downcast()
+            .expect("Created SplitPane is of wrong type")
     }
 
     fn remove_active_class(w: &gtk::Widget) {
-        let context= w.get_style_context();
+        let context = w.get_style_context();
         context.remove_class("active");
     }
 
@@ -49,8 +48,8 @@ impl SplitPaneExt for SplitPane {
     fn set_active_pane(&self, w: Option<gtk::Widget>) {
         let priv_ = SplitPanePriv::from_instance(self);
         let previous = self.get_active_pane();
-        if let Some(previous_widget) = previous {
-            Self::remove_active_class(&previous_widget);
+        if let Some(ref previous_widget) = previous {
+            Self::remove_active_class(previous_widget);
         }
         if let Some(ref widget) = w {
             Self::add_active_class(widget);
@@ -70,25 +69,21 @@ pub struct SplitPanePriv {
 }
 
 impl SplitPanePriv {
-
     fn set_active_pane(&self, w: Option<gtk::Widget>) {
         let mut active_pane_ref = self.active_pane.borrow_mut();
         *active_pane_ref = w;
     }
-
 }
 
-static PROPERTIES: [subclass::Property; 1] = [
-    subclass::Property("active-pane", |active_pane| {
-        glib::ParamSpec::object(
-            active_pane,
-            "Last active pane of this container",
-            "Last widget that has been clicked on",
-            gtk::Widget::static_type(),
-            glib::ParamFlags::READWRITE,
-        )
-    }),
-];
+static PROPERTIES: [subclass::Property; 1] = [subclass::Property("active-pane", |active_pane| {
+    glib::ParamSpec::object(
+        active_pane,
+        "Last active pane of this container",
+        "Last widget that has been clicked on",
+        gtk::Widget::static_type(),
+        glib::ParamFlags::READWRITE,
+    )
+})];
 
 impl ObjectSubclass for SplitPanePriv {
     const NAME: &'static str = "SplitPane";
@@ -118,11 +113,12 @@ impl ObjectImpl for SplitPanePriv {
     // valeur du chat actif
     fn constructed(&self, obj: &glib::Object) {
         self.parent_constructed(obj);
-        
+
         let self_ = obj.downcast_ref::<SplitPane>().unwrap();
         let context = self_.get_style_context();
         let css = gtk::CssProvider::new();
-        css.load_from_data(br#"
+        css.load_from_data(
+            br#"
             .active {
                 border-width: 3px;
                 border-color: red;
@@ -130,9 +126,10 @@ impl ObjectImpl for SplitPanePriv {
             .active label {
                 font-weight: bold;
             }
-        "#).unwrap();
+        "#,
+        )
+        .unwrap();
         context.add_provider(&css, 1);
-
 
         let chats_pane = gtk::Paned::new(gtk::Orientation::Horizontal);
         let chat_view1 = ChatView::new();
@@ -159,7 +156,9 @@ impl ObjectImpl for SplitPanePriv {
         let prop = &PROPERTIES[id];
         match *prop {
             subclass::Property("active-pane", ..) => {
-                let active_pane = value.get().expect("SplitPane::active-pane property expect a gtk::Widget");
+                let active_pane = value
+                    .get()
+                    .expect("SplitPane::active-pane property expect a gtk::Widget");
                 self.set_active_pane(active_pane);
             }
             _ => unimplemented!(),
@@ -174,7 +173,6 @@ impl ObjectImpl for SplitPanePriv {
         }
     }
 }
-
 
 impl BinImpl for SplitPanePriv {}
 impl ContainerImpl for SplitPanePriv {}

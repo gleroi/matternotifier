@@ -5,4 +5,5 @@ username = "test@home.local"
 password = "$MM_PASS"
 
 [servers.plugin]
-name = mattermost
+name = "mattermost"
+method = "gitlab"
