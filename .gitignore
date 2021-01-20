@@ -2,3 +2,4 @@
 **/*.rs.bk
 *.db
 run.ps1
+rogchat.toml
