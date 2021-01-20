@@ -143,7 +143,12 @@ impl Client {
     where
         T: DeserializeOwned,
     {
-        let resp = http_result?;
+        Client::handle_resp(http_result?)
+    }
+
+    fn handle_resp<T>(resp: blocking::Response) -> Result<T, Error>
+        where T: DeserializeOwned,
+    {
         if resp.status().is_success() {
             match resp.json::<T>() {
                 Ok(value) => Ok(value),
@@ -182,6 +187,26 @@ impl Client {
             .json(&body)
             .header(header::CONTENT_TYPE, "application/json");
         Client::handle_response(req.send())
+    }
+
+    pub fn login_with_email(&self, username: &str, password: &str) -> Result<(User, String), Error> {
+        let mut cmd = HashMap::new();
+        cmd.insert("device_id", "");
+        cmd.insert("login_id", username);
+        cmd.insert("password", password);
+        let resp = self
+            .client
+            .post(self.url("/api/v4/users/login"))
+            .json(&cmd)
+            .header(header::CONTENT_TYPE, "application/json")
+            .send()?;
+        let header_token = resp.headers()
+            .get("token")
+            .ok_or("HTTP header token is missing")?;
+        let token = header_token.to_str()
+            .or(Err(Error::Other("could not read HTTP header token value".to_string())))?.to_owned();
+        let user = Client::handle_resp(resp)?;
+        Ok((user, token))
     }
 
     pub fn get_user(&self, user_id: &str) -> Result<User, Error> {
