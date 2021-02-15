@@ -22,3 +22,19 @@ pub struct Channel {
 
 pub type Sender = glib::Sender<Event>;
 pub type Receiver = glib::Receiver<Event>;
+
+pub struct User {
+    pub id: String,
+    pub name: String,
+}
+
+trait Ui {
+    fn create_channel(id: String, name: String, parent: String, users: Vec<User>);
+}
+
+// should go to ui probably
+pub struct Buffer {
+    channel: Channel,
+    users: Vec<User>,
+    messages: Vec<Message>,
+}
