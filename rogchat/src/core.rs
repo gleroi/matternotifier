@@ -9,7 +9,6 @@ pub enum Event {
 pub struct Message {
     pub timestamp: i64,
     pub channel_id: String,
-    pub channel_name: String,
     pub sender_name: String,
     pub content: String,
 }

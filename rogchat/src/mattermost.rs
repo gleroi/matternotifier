@@ -82,7 +82,6 @@ impl TryFrom<mm::Event> for core::Message {
             Ok(core::Message {
                 timestamp: post.update_at,
                 channel_id: post.channel_id,
-                channel_name: posted_evt.channel_display_name,
                 sender_name: posted_evt.sender_name,
                 content: post.message,
             })
